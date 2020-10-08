@@ -1,4 +1,4 @@
-library(xml)
+library(XML)
 
 
 doc2 <- xmlParse("fictitious_toy.xml")
