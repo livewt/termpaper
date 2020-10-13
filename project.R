@@ -1,7 +1,17 @@
 library(XML)
 
 
-doc2 <- xmlParse("fictitious_toy.xml")
-dataframe <- xmlToDataFrame(nodes = getNodeSet(doc2, "//n1:Account"))
+doc2 <- xmlParse("SAF-T new example.xml")
+
+namespace <- xmlNamespaceDefinitions(doc2)[1]
+namespace[[1]][1] == "nl"
+namespace <- as.character(namespace[[1]][1])
+
+namespace <- paste("//", namespace, sep = "", ":Account")
+
+
+
+dataframe <- xmlToDataFrame(nodes = getNodeSet(doc2, namespace))
 dataframe[is.na(dataframe)] <- 0
+
 
