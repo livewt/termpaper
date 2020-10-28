@@ -3,59 +3,71 @@ library(tidyverse)
 library(taRifx)
 
 #making DF from saf-t xml file
-doc2 <- xmlParse("SAF-T new example2.xml")
+main <- xmlParse("SAF-T Telenor 2019 (fictious).xml")
 
-namespace <- xmlNamespaceDefinitions(doc2)[1]
+namespace <- xmlNamespaceDefinitions(main)[1]
 namespace[[1]][1] == "nl"
 namespace <- as.character(namespace[[1]][1])
 
 namespace <- paste("//", namespace, sep = "", ":Account")
 
 
-dataframe <- xmlToDataFrame(nodes = getNodeSet(doc2, namespace))
-###
+main_df <- xmlToDataFrame(nodes = getNodeSet(main, namespace))
+#removing "helping account"
+main_df <- main_df %>%
+  filter(AccountDescription!="Hjelpekonto")
 
-#making df from GeneralLedger specification posted on saf-t git
-# "https://github.com/Skatteetaten/saf-t/tree/master/General%20Ledger%20Standard%20Accounts/XML"
-GL_accounts_check <- xmlParse("General_Ledger_Standard_Accounts_4_character.xml")
-GL_accounts_check_df <- xmlToDataFrame(nodes = getNodeSet(GL_accounts_check, "//AccountID")) %>%
+
+#Making sure all account IDS from specification by skatteetaten is in our data
+
+#vektor1 contais account IDS from SAF-T file
+dataframe_check_STD <- data.frame(main_df$StandardAccountID) %>%
   remove.factors(.)
-
-dataframe_check <- data.frame(dataframe$AccountID) %>%
-  remove.factors(.)
-#making a chr vector from the skatteetaten GL df
-vektor <- character()
-for (chr in dataframe_check){
-  vektor <- c(vektor, chr)
+vektor1 <- character()
+for (chr in dataframe_check_STD){
+  vektor1 <- c(vektor1, chr)
 }
-#checking if the saf-t file contains accountIDs similar to the specification from skatteetaten
-vektor2 <- character()
-vektor3 <- character()
-for (chr in vektor){
-  ifelse(chr %in% GL_accounts_check_df$text, vektor2 <- c(vektor2, chr), 
-         vektor3 <- c(vektor3, chr))
-}
-#letting the user know what accounts in their SAF-T file, which is not consistent with spesification from skatteetaten
-paste("the accountID", vektor3, "is not in the general ledger specification by skatteetaten")
+vektor1 <- vektor1 %>% unique()
 
-#doing the same thing with StandardAccountIDs
+#importing specification from skatteetaten
 STD_accounts_check <- xmlParse("General_Ledger_Standard_Accounts_2_character.xml")
 STD_accounts_check_df <- xmlToDataFrame(nodes = getNodeSet(STD_accounts_check, "//AccountID")) %>%
   remove.factors(.)
-dataframe_check_STD <- data.frame(dataframe$StandardAccountID) %>%
-  remove.factors(.)
-vektor_STD <- character()
-for (chr in dataframe_check_STD){
-  vektor_STD <- c(vektor_STD, chr)
-}
-vektor_STD <- vektor_STD %>% unique()
-vektor2_STD <- character()
-vektor3_STD <- character()
-for (chr in vektor_STD){
-  ifelse(chr %in% STD_accounts_check_df$text, vektor2_STD <- c(vektor2_STD, chr), 
-         vektor3_STD <- c(vektor3_STD, chr))
-}
-paste("The StandardAccountID", vektor3_STD, "is not in the skatteetaten spesification")
 
-dataframe[dataframe$StandardAccountID==vektor3_STD, ] %>%
-  select(AccountID, AccountDescription) 
+skatteetaten_unique <- unique(STD_accounts_check_df$text)
+vektor2 <- character()
+#adding IDs to vektor 2 if IDs from our data is in the specification by skatteetaten
+for (i in 1:length(skatteetaten_unique)){
+  if (vektor1[i] %in% skatteetaten_unique){
+    vektor2 <- c(vektor2, vektor1[i])
+  }
+}
+#making sure IDs from our data is equal to the IDS by skatteetaten
+#Giving error message if its not true
+for (i in 1:length(vektor1)){
+  if (vektor2[i] != vektor1[i]){
+    print("Your SAF-T file is not compatible with this program")
+  }
+}
+#IDEA: making sure data is correct by asking user to verify accounts
+
+######## Financial ratios #################
+
+##current ratio
+test <- main_df %>% subset(StandardAccountID == c("10","11","12"))%>%
+  summarise(OpeningDebitBalance,ClosingDebitBalance)
+
+
+main_df %>% subset(StandardAccountID == "11") %>%
+  summarise(OpeningDebitBalance, ClosingDebitBalance)
+
+
+
+
+
+
+
+
+
+
+
