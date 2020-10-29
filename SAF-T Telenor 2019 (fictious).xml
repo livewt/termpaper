@@ -184,8 +184,8 @@
                 <nl:AccountDescription>Forretningsbygg</nl:AccountDescription>
                 <nl:StandardAccountID>11</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
-                <nl:OpeningDebitBalance>1584000000‬</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>1652000000‬</nl:ClosingDebitBalance>
+                <nl:OpeningDebitBalance>1584000000</nl:OpeningDebitBalance>
+                <nl:ClosingDebitBalance>1652000000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -244,8 +244,8 @@
                 <nl:AccountDescription>Tomter</nl:AccountDescription>
                 <nl:StandardAccountID>11</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
-                <nl:OpeningDebitBalance>1584000000‬</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>1652000000‬</nl:ClosingDebitBalance>
+                <nl:OpeningDebitBalance>1584000000</nl:OpeningDebitBalance>
+                <nl:ClosingDebitBalance>1652000000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -295,7 +295,7 @@
                 <nl:StandardAccountID>12</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>3254000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>3729800000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>3729800000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -315,7 +315,7 @@
                 <nl:StandardAccountID>12</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>3254000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>3729800000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>3729800000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -345,7 +345,7 @@
                 <nl:StandardAccountID>12</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>3254000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>3729800000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>3729800000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -415,7 +415,7 @@
                 <nl:StandardAccountID>12</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>3254000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>3729800000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>3729800000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -455,7 +455,7 @@
                 <nl:StandardAccountID>12</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>3254000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>3729800000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>3729800000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -655,7 +655,7 @@
                 <nl:StandardAccountID>14</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>101000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>79500000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>79500000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -665,7 +665,7 @@
                 <nl:StandardAccountID>14</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>101000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>79500000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>79500000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -685,7 +685,7 @@
                 <nl:StandardAccountID>14</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>101000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>79500000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>79500000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -705,7 +705,7 @@
                 <nl:StandardAccountID>14</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
                 <nl:OpeningDebitBalance>101000000</nl:OpeningDebitBalance>
-                <nl:ClosingDebitBalance>79500000‬</nl:ClosingDebitBalance>
+                <nl:ClosingDebitBalance>79500000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
             </nl:Account>
@@ -1324,7 +1324,7 @@
                 <nl:AccountDescription>Kontanter NOK</nl:AccountDescription>
                 <nl:StandardAccountID>19</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
-                <nl:OpeningDebitBalance>1654000000‬</nl:OpeningDebitBalance>
+                <nl:OpeningDebitBalance>1654000000</nl:OpeningDebitBalance>
                 <nl:ClosingDebitBalance>28000000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
@@ -1354,7 +1354,7 @@
                 <nl:AccountDescription>Bankinnskudd</nl:AccountDescription>
                 <nl:StandardAccountID>19</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
-                <nl:OpeningDebitBalance>1654000000‬</nl:OpeningDebitBalance>
+                <nl:OpeningDebitBalance>1654000000</nl:OpeningDebitBalance>
                 <nl:ClosingDebitBalance>28000000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>
@@ -2854,7 +2854,7 @@
                 <nl:AccountDescription>Innkjøp av råvarer og halvfabrikater</nl:AccountDescription>
                 <nl:StandardAccountID>40</nl:StandardAccountID>
                 <nl:AccountType>GL</nl:AccountType>
-                <nl:OpeningDebitBalance>1295750000‬</nl:OpeningDebitBalance>
+                <nl:OpeningDebitBalance>1295750000</nl:OpeningDebitBalance>
                 <nl:ClosingDebitBalance>1451500000</nl:ClosingDebitBalance>
 				<nl:OpeningCreditBalance>0.0</nl:OpeningCreditBalance>
                 <nl:ClosingCreditBalance>0.0</nl:ClosingCreditBalance>

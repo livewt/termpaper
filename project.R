@@ -1,6 +1,7 @@
 library(XML)
 library(tidyverse)
 library(taRifx)
+library(bit64)
 
 #making DF from saf-t xml file
 main <- xmlParse("SAF-T Telenor 2019 (fictious).xml")
@@ -54,20 +55,61 @@ for (i in 1:length(vektor1)){
 ######## Financial ratios #################
 
 ##current ratio
-test <- main_df %>% subset(StandardAccountID == c("10","11","12"))%>%
-  summarise(OpeningDebitBalance,ClosingDebitBalance)
+
+#problem that interger converts character "0.0" to NA's and base 32bit integer has 
+#restricted value of 2*10^9. Some numbers in this example file exceeds this
+#made function to convert "0.0" to 32bit integer (gives 0 and not NA as 64bit integer)
+#all other numbers uses integer 64
+
+charToInt64 <- function(s){
+  stopifnot( is.character(s) )
+  x <- character()
+  for (i in s){
+    if (i == "0.0"){
+      x <- c(x, "0")
+    } else {
+      x <- c(x, i)
+    }
+  }
+  x
+}
 
 
-main_df %>% subset(StandardAccountID == "11") %>%
-  summarise(OpeningDebitBalance, ClosingDebitBalance)
+#test
+testvektor <- c("0.0", "0", "10", "20000000000", "0.0")
+charToInt64(testvektor)
 
 
 
 
+#finally no bugs with numbers
+#unfinshed code to start working on calculating fincancial numbers
+main_df %>%
+  select(OpeningDebitBalance,
+         OpeningCreditBalance,
+         ClosingDebitBalance,
+         ClosingCreditBalance) %>%
+  transmute(charToInt64(OpeningDebitBalance),
+            charToInt64(OpeningCreditBalance),
+            charToInt64(ClosingDebitBalance),
+            charToInt64(ClosingCreditBalance)
+            )
+as.numeric(main_df$ClosingDebitBalance)
+main_df %>%
+  select(StandardAccountID,
+         OpeningDebitBalance,
+         OpeningCreditBalance,
+         ClosingDebitBalance,
+         ClosingCreditBalance) %>%
+  filter(StandardAccountID== 10 |
+           StandardAccountID == 11 |
+           StandardAccountID == 12) %>%
+  mutate(sum = (OpeningDebitBalance - OpeningCreditBalance))
+  
 
-
-
-
-
-
+convert_vector <- character()
+for (i in 1:length(main_df$ClosingDebitBalance)){
+  print(main_df$AccountID[i])
+  print(as.numeric(main_df$OpeningDebitBalance)[i])
+}
 
