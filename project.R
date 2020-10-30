@@ -64,12 +64,12 @@ for (i in 1:length(vektor1)){
 charToInt64 <- function(s){
   stopifnot( is.character(s) )
   s <- s %>%
-    strsplit("\\D")
+    strsplit("\\D") #splits decimals e.g "0.0" to "0" "0" and returns list
   x <- character()  
   for (i in s){
-    x <- c(x, i[1])
+    x <- c(x, i[1]) #extracting only first element of list. E.g only "0" of the "0" "0" vector
   }
-  x <- as.integer64(x)
+  x <- as.integer64(x) #converts the char to integer 64 bit version
   x
 }
 
