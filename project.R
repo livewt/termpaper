@@ -56,27 +56,26 @@ for (i in 1:length(vektor1)){
 
 ##current ratio
 
-#problem that interger converts character "0.0" to NA's and base 32bit integer has 
-#restricted value of 2*10^9. Some numbers in this example file exceeds this
-#made function to convert "0.0" to 32bit integer (gives 0 and not NA as 64bit integer)
-#all other numbers uses integer 64
+#base "as.integer()" has max value of +/-2*10^9. Base integer convert decimal right e.g "0.0" to 0
+#"as.integer64()" has higher max value, but converts decimal chr to NA's. E.G "0.0" to NA
+#Function to remove decimal from chr and return the "as.integer64" of it to do calcs later on
+#Even on numbers exeeding 2*10^9
 
 charToInt64 <- function(s){
   stopifnot( is.character(s) )
-  x <- character()
+  s <- s %>%
+    strsplit("\\D")
+  x <- character()  
   for (i in s){
-    if (i == "0.0"){
-      x <- c(x, "0")
-    } else {
-      x <- c(x, i)
-    }
+    x <- c(x, i[1])
   }
+  x <- as.integer64(x)
   x
 }
 
 
 #test
-testvektor <- c("0.0", "0", "10", "20000000000", "0.0")
+testvektor <- c("0.0", "0", "10", "20000000000", "0.011", "1.1", "4,5")
 charToInt64(testvektor)
 
 
