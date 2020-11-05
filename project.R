@@ -86,8 +86,8 @@ charToInt64(testvektor)
 #Converting chr to integer64 for all balances
 main_df$OpeningDebitBalance <- charToInt64(main_df$OpeningDebitBalance)
 main_df$OpeningCreditBalance <- charToInt64(main_df$OpeningCreditBalance)
-main_df$OpeningCreditBalance <- charToInt64(main_df$ClosingDebitBalance)
-main_df$OpeningCreditBalance <- charToInt64(main_df$ClosingCreditBalance)
+main_df$ClosingDebitBalance <- charToInt64(main_df$ClosingDebitBalance)
+main_df$ClosingCreditBalance <- charToInt64(main_df$ClosingCreditBalance)
 
 #Functions to make financial figures calculations!
 #Function to subset main_df based on standard account ID for Opening balance for assets (IDs 10-19)
@@ -140,3 +140,26 @@ Open_Current_ratio <-
   Open_credit_func(29)
   )
 
+
+
+##closing balance financial ratios
+#current ratio
+Close_Current_ratio <- 
+  (
+    Close_asset_func(14)+
+      Close_asset_func(15)+
+      Close_asset_func(16)+
+      Close_asset_func(17)+
+      Close_asset_func(18)+
+      Close_asset_func(19)
+  )/(
+    Close_credit_func(23)+
+      Close_credit_func(24)+
+      Close_credit_func(25)+
+      Close_credit_func(26)+
+      Close_credit_func(27)+
+      Close_credit_func(28)+
+      Close_credit_func(29)
+  )
+class(main_df$ClosingDebitBalance
+      )
