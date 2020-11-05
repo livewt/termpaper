@@ -83,32 +83,60 @@ charToInt64(testvektor)
 
 #finally no bugs with numbers
 #unfinshed code to start working on calculating fincancial numbers
-main_df %>%
-  select(OpeningDebitBalance,
-         OpeningCreditBalance,
-         ClosingDebitBalance,
-         ClosingCreditBalance) %>%
-  transmute(charToInt64(OpeningDebitBalance),
-            charToInt64(OpeningCreditBalance),
-            charToInt64(ClosingDebitBalance),
-            charToInt64(ClosingCreditBalance)
-            )
-as.numeric(main_df$ClosingDebitBalance)
-main_df %>%
-  select(StandardAccountID,
-         OpeningDebitBalance,
-         OpeningCreditBalance,
-         ClosingDebitBalance,
-         ClosingCreditBalance) %>%
-  filter(StandardAccountID== 10 |
-           StandardAccountID == 11 |
-           StandardAccountID == 12) %>%
-  mutate(sum = (OpeningDebitBalance - OpeningCreditBalance))
-  
+#Converting chr to integer64 for all balances
+main_df$OpeningDebitBalance <- charToInt64(main_df$OpeningDebitBalance)
+main_df$OpeningCreditBalance <- charToInt64(main_df$OpeningCreditBalance)
+main_df$OpeningCreditBalance <- charToInt64(main_df$ClosingDebitBalance)
+main_df$OpeningCreditBalance <- charToInt64(main_df$ClosingCreditBalance)
 
-convert_vector <- character()
-for (i in 1:length(main_df$ClosingDebitBalance)){
-  print(main_df$AccountID[i])
-  print(as.numeric(main_df$OpeningDebitBalance)[i])
+#Functions to make financial figures calculations!
+#Function to subset main_df based on standard account ID for Opening balance for assets (IDs 10-19)
+Open_asset_func <- function (std_id){
+  a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
+  rownames(a) <- NULL #resetting rows
+  b <- sum(a$OpeningDebitBalance) - sum(a$OpeningCreditBalance)
+  b
 }
+#same but with closing blanace
+Close_asset_func <- function (std_id){
+  a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
+  rownames(a) <- NULL #resetting rows
+  b <- sum(a$ClosingDebitBalance) - sum(a$ClosingCreditBalance)
+  b
+}
+#Function to subset main_df on standard acc IDs for opening balance for equity, liabilites and income/loss
+Open_credit_func <- function (std_id){
+  a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
+  rownames(a) <- NULL #resetting rows
+  b <- sum(a$OpeningCreditBalance) - sum(a$OpeningDebitBalance)
+  b
+}
+#Same with closing balance
+Close_credit_func <- function (std_id){
+  a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
+  rownames(a) <- NULL #resetting rows
+  b <- sum(a$ClosingCreditBalance) - sum(a$ClosingDebitBalance)
+  b
+}
+
+####Financial figure calculations:
+##Opening balance figures:
+#Current ratio
+Open_Current_ratio <- 
+  (
+  Open_asset_func(14)+
+  Open_asset_func(15)+
+  Open_asset_func(16)+
+  Open_asset_func(17)+
+  Open_asset_func(18)+
+  Open_asset_func(19)
+  )/(
+  Open_credit_func(23)+
+  Open_credit_func(24)+
+  Open_credit_func(25)+
+  Open_credit_func(26)+
+  Open_credit_func(27)+
+  Open_credit_func(28)+
+  Open_credit_func(29)
+  )
 
