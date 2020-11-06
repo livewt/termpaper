@@ -60,7 +60,7 @@ for (i in 1:length(vektor1)){
 #"as.integer64()" has higher max value, but converts decimal chr to NA's. E.G "0.0" to NA
 #Function to remove decimal from chr and return the "as.integer64" of it to do calcs later on
 #Even on numbers exeeding 2*10^9
-
+#Problem that it chops off decimals and does not round numbers up if example number is 10.6
 charToInt64 <- function(s){
   stopifnot( is.character(s) )
   s <- s %>%
@@ -119,47 +119,96 @@ Close_credit_func <- function (std_id){
   b
 }
 
-####Financial figure calculations:
-##Opening balance figures:
-#Current ratio
+
+#Function to sum accounts with different account IDS for Opening balance IDs 10-19 (Assets)
+Sum_Open_asset_func <- function(start, end){
+  x <- integer64()
+  for (i in start:end){
+    x <- c(x, Open_asset_func(i)) #uses the subset function above
+  }
+  x <- sum(x)
+  x
+}
+#same but for closing balance
+Sum_Close_asset_func <- function(start, end){
+  x <- integer64()
+  for (i in start:end){
+    x <- c(x, Close_asset_func(i)) #uses the subset function above
+  }
+  x <- sum(x)
+  x
+}
+
+#function to sum all OPENING balance with ID from 20 and beyond for equity,liability and income/loss
+Sum_Open_credit_func <- function(start, end){
+  x <- integer64()
+  for (i in start:end){
+    x <- c(x, Open_credit_func(i)) #uses the subset function above
+  }
+  x <- sum(x)
+  x
+}
+#Same but for CLOSING balance for ids 20 and beyond
+Sum_Close_credit_func <- function(start, end){
+  x <- integer64()
+  for (i in start:end){
+    x <- c(x, Close_credit_func(i)) #uses the subset function above
+  }
+  x <- sum(x)
+  x
+}
+
+
+### FINANCIAL RATIOS ###
+#Remember to always switch - to + in equation since our functions already treats costs(debit) as -
+##Opening balances
+
+#Current ratio for opening balance (Likviditetsgrad 1)
 Open_Current_ratio <- 
-  (
-  Open_asset_func(14)+
-  Open_asset_func(15)+
-  Open_asset_func(16)+
-  Open_asset_func(17)+
-  Open_asset_func(18)+
-  Open_asset_func(19)
-  )/(
-  Open_credit_func(23)+
-  Open_credit_func(24)+
-  Open_credit_func(25)+
-  Open_credit_func(26)+
-  Open_credit_func(27)+
-  Open_credit_func(28)+
-  Open_credit_func(29)
-  )
+  Sum_Open_asset_func(14,19)/
+  Sum_Open_credit_func(23,29)
+
+#Acid test for opening balance (Likviditetsgrad 2)
+Open_Acid_test <-
+  Sum_Open_asset_func(15,19)/
+  Sum_Open_credit_func(23,29)
+
+#Gross profit % (Bruttofortjeneste i %)
+Open_GrossProfit_percent <- # + since our function already treats costs as -
+  (Sum_Open_credit_func(30,32) + Sum_Open_credit_func(40,49))/
+  Sum_Open_credit_func(30,32)
+#Gross profit (Bruttofortjeneste)
+Open_GrossProfit <- # + since our function already treats costs as -
+  (Sum_Open_credit_func(30,32) + Sum_Open_credit_func(40,49))
+#Operating margin (Driftsmargin i %)
+Open_Operating_margin <-
+  (Sum_Open_credit_func(30,39)+ Sum_Open_credit_func(40,79))/
+  Sum_Open_credit_func(30,39)
+#Profit margin 1? (Resultatgrad i %)
+Open_profit_margin1 <-
+  (Sum_Open_credit_func(30,39) + Sum_Open_credit_func(40,79)+Open_credit_func(80))/
+  Sum_Open_credit_func(30,39)
+#Profit margin 2? (Resultatmargin i %)
+Open_profit_margin2 <- #- since here we add tax and special costs to acc 88 to get pretax result
+  (Open_credit_func(88) - Sum_Open_credit_func(83,85))/
+  Sum_Open_credit_func(30,39)
+#Wages / sale income (Lønnskostnader i % av salgsinntekt)
+Open_wages_sale_inc <-
+  (Sum_Open_credit_func(50,59)*-1)/ # * -1 since costs is negative..
+  Sum_Open_credit_func(30,32)
 
 
 
-##closing balance financial ratios
-#current ratio
-Close_Current_ratio <- 
-  (
-    Close_asset_func(14)+
-      Close_asset_func(15)+
-      Close_asset_func(16)+
-      Close_asset_func(17)+
-      Close_asset_func(18)+
-      Close_asset_func(19)
-  )/(
-    Close_credit_func(23)+
-      Close_credit_func(24)+
-      Close_credit_func(25)+
-      Close_credit_func(26)+
-      Close_credit_func(27)+
-      Close_credit_func(28)+
-      Close_credit_func(29)
-  )
-class(main_df$ClosingDebitBalance
-      )
+
+
+##Closing balances
+
+#Current ratio for closing balance (Likviditetsgrad 1)
+Close_Current_ratio <-
+  Sum_Close_asset_func(14,19)/
+  Sum_Close_credit_func(23,29)
+
+#Acid test for closing balance (Likviditetsgrad 2)
+Close_Acid_test <-
+  Sum_Close_asset_func(15,19)/
+  Sum_Close_credit_func(23,29)
