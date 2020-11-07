@@ -175,11 +175,11 @@ Open_Acid_test <-
 
 #Gross profit % (Bruttofortjeneste i %)
 Open_GrossProfit_percent <- # + since our function already treats costs as -
-  (Sum_Open_credit_func(30,32) + Sum_Open_credit_func(40,49))/
-  Sum_Open_credit_func(30,32)
+  (Sum_Open_credit_func(30,37) + Sum_Open_credit_func(40,49))/
+  Sum_Open_credit_func(30,37)
 #Gross profit (Bruttofortjeneste)
 Open_GrossProfit <- # + since our function already treats costs as -
-  (Sum_Open_credit_func(30,32) + Sum_Open_credit_func(40,49))
+  (Sum_Open_credit_func(30,37) + Sum_Open_credit_func(40,49))
 #Operating margin (Driftsmargin i %)
 Open_Operating_margin <-
   (Sum_Open_credit_func(30,39)+ Sum_Open_credit_func(40,79))/
