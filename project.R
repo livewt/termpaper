@@ -195,7 +195,7 @@ Open_profit_margin2 <- #- since here we add tax and special costs to acc 88 to g
 #Wages / sale income (Lønnskostnader i % av salgsinntekt)
 Open_wages_sale_inc <-
   (Sum_Open_credit_func(50,59)*-1)/ # * -1 since costs is negative..
-  Sum_Open_credit_func(30,32)
+  Sum_Open_credit_func(30,37)
 
 
 
