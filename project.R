@@ -161,14 +161,15 @@ Sum_Close_credit_func <- function(start, end){
 
 ### FINANCIAL RATIOS ###
 #Remember to always switch - to + in equation since our functions already treats costs(debit) as -
-##Opening balances
 
-#Current ratio for opening balance (Likviditetsgrad 1)
+##Opening balances###
+
+#Current ratio (Likviditetsgrad 1)
 Open_Current_ratio <- 
   Sum_Open_asset_func(14,19)/
   Sum_Open_credit_func(23,29)
 
-#Acid test for opening balance (Likviditetsgrad 2)
+#Acid test for(Likviditetsgrad 2)
 Open_Acid_test <-
   Sum_Open_asset_func(15,19)/
   Sum_Open_credit_func(23,29)
@@ -197,18 +198,89 @@ Open_wages_sale_inc <-
   (Sum_Open_credit_func(50,59)*-1)/ # * -1 since costs is negative..
   Sum_Open_credit_func(30,37)
 
+#Interest coverage ratio (Rentedekningsgrad)
+Open_interest_ratio <- #- since add costs back to get ordinary profit pretax
+  (Open_credit_func(88) -Sum_Open_credit_func(83,86) - Open_credit_func(81))/
+  -Open_credit_func(81)
 
+#Equity Ratio (Egenkapitalandel)
+Open_equity_ratio <- 
+  Open_credit_func(20)/
+  Sum_Open_asset_func(10,19)
 
+#Debt ratio (Gjeldsgrad)
+Open_debt_ratio <-
+  Sum_Open_credit_func(21,29)/
+  Open_credit_func(20)
 
+###Closing balances###
 
-##Closing balances
-
-#Current ratio for closing balance (Likviditetsgrad 1)
+#Current ratio (Likviditetsgrad 1)
 Close_Current_ratio <-
   Sum_Close_asset_func(14,19)/
   Sum_Close_credit_func(23,29)
 
-#Acid test for closing balance (Likviditetsgrad 2)
+#Acid test (Likviditetsgrad 2)
 Close_Acid_test <-
   Sum_Close_asset_func(15,19)/
   Sum_Close_credit_func(23,29)
+#Gross profit % (Bruttofortjeneste i %)
+Close_GrossProfit_percent <- 
+  (Sum_Close_credit_func(30,37)+Sum_Close_credit_func(40,49))/
+  Sum_Close_credit_func(30,37)
+#Gross profit (Bruttofortjeneste)
+Close_GrossProfit <- 
+  Sum_Close_credit_func(30,37) + Sum_Close_credit_func(40,49)
+#Operating margin (Driftsmargin i %)
+Close_Operating_margin <- 
+  (Sum_Close_credit_func(30,39) + Sum_Close_credit_func(40,79))/
+  Sum_Close_credit_func(30,39)
+#Profitmargin 1 (Resultatgrad i %)
+Close_profit_margin1 <-
+  (Sum_Close_credit_func(30,39) + Sum_Close_credit_func(40,49) + Close_credit_func(80))/
+  Sum_Close_credit_func(30,39)
+#Profitmargin 2 (Resultatmargin i %)
+Close_profit_margin2 <-
+  (Close_credit_func(88) - Sum_Close_credit_func(83,85))/
+  Sum_Close_credit_func(30,39)
+#Wages/sale income (Lønnskostnader i % av salgsinntekt)
+Close_wages_sale_inc <- 
+  -Sum_Close_credit_func(50,59)/
+  Sum_Close_credit_func(30,37)
+#Interest Coverage Ratio (Rentedekningsgrad)
+Close_interest_ratio <- 
+  (Close_credit_func(88) -Sum_Close_credit_func(83,86) - Close_credit_func(81))/
+  -Close_credit_func(81)
+
+#Equity Ratio (Egenkapitalandel)
+Close_equity_ratio <- 
+  Close_credit_func(20)/
+  Sum_Close_asset_func(10,19)
+
+#Debt ratio (Gjeldsgrad)
+Close_debt_ratio <-
+  Sum_Close_credit_func(21,29)/
+  Close_credit_func(20)
+
+##Financial ratios exclusive to closing balance##
+
+#Return on assets (Totalkapitalens rentabilitet)
+Return_assets <- 
+  (Close_credit_func(88) - Sum_Close_credit_func(83,86) - Close_credit_func(81))/
+  ((Sum_Open_asset_func(10,19)+Sum_Close_asset_func(10,19))/2)
+
+#Capital turn over rate (Kapitalens omløpshastighet)
+Capital_turnover <-
+  Sum_Close_credit_func(30,39)/
+  ((Sum_Open_asset_func(10,19)+Sum_Close_asset_func(10,19))/2)
+
+#Inventory turnover rate
+Inventory_turnover <-
+  -Sum_Close_credit_func(40,49)/
+  ((Open_asset_func(14)+ Close_asset_func(14))/2)
+
+#Equity return pre tax (Egenkapitalens rentabilitet)
+Return_equity <-
+  (Close_credit_func(88) - Sum_Close_credit_func(83,86))/
+  ((Open_credit_func(20)+ Close_credit_func(20))/2)
+
