@@ -3,8 +3,9 @@ library(tidyverse)
 library(taRifx)
 library(bit64)
 
+choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
-main <- xmlParse("SAF-T Telenor 2019 (fictious).xml")
+main <- xmlParse(choose_file)
 
 namespace <- xmlNamespaceDefinitions(main)[1]
 namespace[[1]][1] == "nl"
