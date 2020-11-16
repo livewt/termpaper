@@ -60,25 +60,37 @@ for (i in 1:length(vektor1)){
 #"as.integer64()" has higher max value, but converts decimal chr to NA's. E.G "0.0" to NA
 #Function to remove decimal from chr and return the "as.integer64" of it to do calcs later on
 #Even on numbers exeeding 2*10^9
-#Problem that it chops off decimals and does not round numbers up if example number is 10.6
+#Fixed problem with rounding!
 charToInt64 <- function(s){
   stopifnot( is.character(s) )
-  s <- s %>%
-    strsplit("\\D") #splits decimals e.g "0.0" to "0" "0" and returns list
-  x <- character()  
+  x <- character() #placeholder for the number
+  y <- character() #placeholder for the decimals
+  z <- list()
   for (i in s){
-    x <- c(x, i[1]) #extracting only first element of list. E.g only "0" of the "0" "0" vector
+    z <- c(z, strsplit(i, "\\D")) #splits , and . and adds to list
   }
-  x <- as.integer64(x) #converts the char to integer 64 bit version
-  x
+  for (i in z){ #for every first element add to x (e.g 10.1, then 10 will be added)
+    x <- c(x, i[[1]])
+    x <- as.integer64(x)
+    
+    if(!is.na(i[2])){ #Checks if there is a split (decimal)
+      y <- c(y, i[[2]])
+    }
+    else {
+      y <- c(y,0) #adds 0 as decimal if not
+    }
+  }
+  for (i in 1:length(x)){ #checks if the first chr of the decimal is >= 5 for rounding
+    if (substr(y[i],1,1) >=5){
+      x[i] <- x[i]+1
+    }
+  }
+  x #return the number
 }
 
-
 #test
-testvektor <- c("0.0", "0", "10", "20000000000", "0.011", "1.1", "4,5")
+testvektor <- c("0.0", "0", "10", "20000000000", "0.011", "1.1", "4,5") #last one should be rounded
 charToInt64(testvektor)
-
-
 
 
 #finally no bugs with numbers
