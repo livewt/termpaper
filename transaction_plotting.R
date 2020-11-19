@@ -72,13 +72,13 @@ mva_test$cluster <- as.character(KM$cluster)
 mva_test$Line.Amount.1 <- as.numeric(mva_test$Line.Amount.1)
 mva_test$TransactionID <- as.numeric(mva_test$TransactionID)
 
-tooltip_ <- c(paste0("Description = ", mva_test$Description, "\n Transaction ID = ", mva_test$TransactionID))
+tooltip_ <- c(paste0("Description: ", mva_test$Description, "\n Transaction ID: = ", mva_test$TransactionID, "\n Amount: ", mva_test$Line.Amount.1, " NOK"))
 
 testplot <- ggplot(data = mva_test) +
-  geom_point_interactive(aes(x = Line.Amount.1, y = Line.Amount.1, color = cluster,
+  geom_point_interactive(aes(x = 1:length(Line.Amount.1), y = Line.Amount.1, color = cluster,
                              tooltip = tooltip_, data_id = TransactionID))+
   ylab("Transcation amount")+
-  xlab("Transcation amount")+
+  xlab("Transcations")+
   ggtitle("Hover over points to view description of the transcation")+
 scale_x_continuous(labels = scales::comma)+
   scale_y_continuous(labels = scales::comma)
