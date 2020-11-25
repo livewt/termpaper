@@ -1,5 +1,8 @@
 library(shiny)
 library(shinydashboard)
+library(plotly)
+
+source("Project.R")
 
 # Create ui
 ui =
@@ -22,8 +25,10 @@ ui =
       tabItems(
         tabItem(tabName = "dashboard",
                 h4(
-                  " This is the default starting page.
-                  We will put some visualizations here.")),
+                  " I just put this visual here to test
+                  if the source function worked."),
+                roe,
+                ),
         tabItem(tabName = "about",
                 h4(
                    " Here, we can write some information

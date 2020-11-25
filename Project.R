@@ -299,3 +299,45 @@ Return_equity <-
   (Close_credit_func(88) - Sum_Close_credit_func(83,86))/
   ((Open_credit_func(20)+ Close_credit_func(20))/2)
 
+# VISUALIZATIONS
+
+# Return on equity
+
+roe = plot_ly(
+  domain = list(x = c(0,1), y = c(0,1)),
+  value = Return_equity * 100,
+  title = list(text = "Return on Equity",
+               font = list(size = 30)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis = list(range = list(NULL, 100),
+                tickcolor = "darkblue"),
+    bar = list(color = "darkblue"),
+    borderwidth = 1))
+
+roe = 
+  roe %>% 
+  layout(margin = list(l = 20, r = 30),
+         font = list(color = "darkblue"))
+
+# Return on assets
+
+
+roa = plot_ly(
+  domain = list(x = c(0,1), y = c(0,1)),
+  value = Return_assets * 100,
+  title = list(text = "Return on Assets",
+               font = list(size = 30)),
+  type = "indicator",
+  mode = "gauge+number",
+  gauge = list(
+    axis = list(range = list(NULL, 100),
+                tickcolor = "darkgreen"),
+    bar = list(color = "darkgreen"),
+    borderwidth = 1))
+
+roa =
+  roa %>% 
+  layout(margin = list(l = 20, r = 30),
+         font = list(color = "darkgreen"))
