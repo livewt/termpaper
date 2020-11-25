@@ -1,6 +1,9 @@
 library(shiny)
 library(shinydashboard)
 
+# I lost all my work from yesterday so this file is almost
+# identical to the one on the master branch :(
+
 # Create ui
 ui =
   dashboardPage(
