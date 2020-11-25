@@ -4,15 +4,15 @@ library(taRifx)
 library(bit64)
 #for example 3yrs old
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
+
 #making DF from saf-t xml file
 
 main <- xmlParse(choose_file)
-main <- (choose_file)
+main <- xmlParse("saf-t example (3yrs old).xml") #placeholder to skip choosing manually
+#main <- (choose_file)
 
 list <- 
   xmlToList(main)
-
-
 
 
 main_list <- xmlToList(main)
@@ -33,22 +33,26 @@ sum[is.na(sum)] <- 0
 
 
 sum <- sum %>%
-  mutate(Sum = rowSums(.))
+  mutate(Sum = rowSums(.)) %>%
+  mutate(Amounts = Sum/2)
+test <- cbind(test, sum$Amounts)
 
 mva_test <- test%>%
-  select(Description, TransactionID, Line.TaxInformation.TaxType, Line.Amount.1)
+  select(Description, TransactionID,`sum$Amounts`)
 
+#mva_test <- mva_test %>%
+ # drop_na(Line.TaxInformation.TaxType)
 mva_test <- mva_test %>%
-  drop_na(Line.TaxInformation.TaxType)
-
-mva_test2 <- mva_test$Line.Amount.1 %>%
+ drop_na(TransactionID)
+mva_test2 <- mva_test$`sum$Amounts` %>%
   as.numeric()
 mva_test2 <- as.data.frame(mva_test2)
 mva_test2$mva_test22 <- mva_test2$mva_test2
 
 mva_test %>%
   head
-wssplot <- function(data, nc=15, seed=1234){ #function found online
+#For colouring purposes?
+wssplot <- function(data, nc=15, seed=1234){ #function found online!!!
   wss <- (nrow(data)-1)*sum(apply(data,2,var))
   for (i in 2:nc){
     set.seed(seed)
@@ -59,23 +63,23 @@ wssplot <- function(data, nc=15, seed=1234){ #function found online
 }
 
 wssplot(mva_test2)
-
-KM = kmeans(mva_test2, 3)
+cluster_amount <- as.numeric(readline(prompt = "How many clusters do you want? "))
+KM = kmeans(mva_test2, cluster_amount)
 KM$betweenss
 KM$centers
 #cluster <- KM$cluster
-autoplot(KM,mva_test2, frame=TRUE)
+#autoplot(KM,mva_test2, frame=TRUE)
 
 #install.packages("ggiraph")
 library(ggiraph)
 mva_test$cluster <- as.character(KM$cluster)
-mva_test$Line.Amount.1 <- as.numeric(mva_test$Line.Amount.1)
+#mva_test$Line.Amount.1 <- as.numeric(mva_test$Line.Amount.1)
 mva_test$TransactionID <- as.numeric(mva_test$TransactionID)
 
-tooltip_ <- c(paste0("Description: ", mva_test$Description, "\n Transaction ID: = ", mva_test$TransactionID, "\n Amount: ", mva_test$Line.Amount.1, " NOK"))
+tooltip_ <- c(paste0("Description: ", mva_test$Description, "\n Transaction ID: = ", mva_test$TransactionID, "\n Amount: ", mva_test$`sum$Amounts`, " NOK"))
 
 testplot <- ggplot(data = mva_test) +
-  geom_point_interactive(aes(x = 1:length(Line.Amount.1), y = Line.Amount.1, color = cluster,
+  geom_point_interactive(aes(x = 1:length(`sum$Amounts`), y = `sum$Amounts`, color = cluster,
                              tooltip = tooltip_, data_id = TransactionID))+
   ylab("Transcation amount")+
   xlab("Transcations")+
@@ -88,3 +92,8 @@ testplot
 #girafe(code = print(testplot))
 girafe(ggobj = testplot)
 
+
+#check if all transcations are included (53 in this case)
+as.numeric(list[[3]][[1]]) == length(mva_test$`sum$Amounts`)
+#check if sum of transcations is right
+sum(mva_test$`sum$Amounts`)== as.numeric(list[[3]][[2]])
