@@ -62,15 +62,18 @@ ui =
           tabItem(tabName = "dashboard",
                   h4(
                     "Welcome to this financial dashboard!"),
+                  h6(
+                    "*Return on equity is calculated pre-tax"),
                   tabBox(
-                    side = "topleft",
+                    side = "left",
                     height = "100px",
                     tabPanel("Return on Assets (%)", roa),
                     tabPanel("Return on Equity* (%)", roe)),
                   h6(
-                    "*Return on equity is calculated pre-tax"),
+                    "I will make different types of charts for capital
+                    and inventory turnover rate, these don't really fit!"),
                   tabBox(
-                    side = "bottomleft",
+                    side = "left",
                     height = "100px",
                     tabPanel("Capital Turnover Rate", capital_t),
                     tabPanel("Inventory Turnover Rate", inventory_t))),

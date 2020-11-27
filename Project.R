@@ -304,15 +304,14 @@ Return_equity <-
 # Return on equity
 
 roe = plot_ly(
-  domain = list(x = c(0,1), y = c(0,1)),
   value = Return_equity * 100,
-#  title = list(text = "Return on Equity",
-#               font = list(size = 30)),
+  number = list(suffix = "%"),
   type = "indicator",
   mode = "gauge+number",
   gauge = list(
     axis = list(range = list(NULL, 100),
-                tickcolor = "darkblue"),
+                tickcolor = "darkblue",
+                ticksuffix = "%"),
     bar = list(color = "darkblue"),
     borderwidth = 1))
 
@@ -326,15 +325,14 @@ roe =
 
 roa = 
   plot_ly(
-    domain = list(x = c(0,1), y = c(0,1)),
     value = Return_assets * 100,
-#   title = list(text = "Return on Assets",
-#               font = list(size = 30)),
+    number = list(suffix = "%"),
     type = "indicator",
     mode = "gauge+number",
     gauge = list(
       axis = list(range = list(NULL, 100),
-                  tickcolor = "darkgreen"),
+                  tickcolor = "darkgreen",
+                  ticksuffix = "%"),
       bar = list(color = "darkgreen"),
       borderwidth = 1))
 
