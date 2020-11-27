@@ -306,8 +306,8 @@ Return_equity <-
 roe = plot_ly(
   domain = list(x = c(0,1), y = c(0,1)),
   value = Return_equity * 100,
-  title = list(text = "Return on Equity",
-               font = list(size = 30)),
+#  title = list(text = "Return on Equity",
+#               font = list(size = 30)),
   type = "indicator",
   mode = "gauge+number",
   gauge = list(
@@ -324,20 +324,62 @@ roe =
 # Return on assets
 
 
-roa = plot_ly(
-  domain = list(x = c(0,1), y = c(0,1)),
-  value = Return_assets * 100,
-  title = list(text = "Return on Assets",
-               font = list(size = 30)),
-  type = "indicator",
-  mode = "gauge+number",
-  gauge = list(
-    axis = list(range = list(NULL, 100),
-                tickcolor = "darkgreen"),
-    bar = list(color = "darkgreen"),
-    borderwidth = 1))
+roa = 
+  plot_ly(
+    domain = list(x = c(0,1), y = c(0,1)),
+    value = Return_assets * 100,
+#   title = list(text = "Return on Assets",
+#               font = list(size = 30)),
+    type = "indicator",
+    mode = "gauge+number",
+    gauge = list(
+      axis = list(range = list(NULL, 100),
+                  tickcolor = "darkgreen"),
+      bar = list(color = "darkgreen"),
+      borderwidth = 1))
 
 roa =
   roa %>% 
   layout(margin = list(l = 20, r = 30),
          font = list(color = "darkgreen"))
+
+
+# Capital turnover rate
+
+capital_t =
+  plot_ly(
+    domain = list(x = c(0,1), y = c(0,1)),
+    value = Capital_turnover,
+    type = "indicator",
+    mode = "gauge+number",
+    gauge = list(
+      axis = list(range = list(NULL, 100),
+                  tickcolor = "darkred"),
+      bar = list(color = "darkred"),
+      borderwidth = 1))
+
+capital_t =
+  capital_t %>% 
+  layout(margin = list(l = 20, r = 30),
+         font = list(color = "darkred"))
+
+# Inventory turnover rate
+
+inventory_t =
+  plot_ly(
+    domain = list(x = c(0,1), y = c(0,1)),
+    value = Inventory_turnover,
+    type = "indicator",
+    mode = "gauge+number",
+    gauge = list(
+      axis = list(range = list(NULL, 30),
+                  tickcolor = "purple"),
+      bar = list(color = "purple"),
+      borderwidth = 1))
+
+inventory_t =
+  inventory_t %>% 
+  layout(margin = list(l = 20, r = 30),
+         font = list(color = "purple"))
+
+inventory_t

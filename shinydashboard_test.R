@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(plotly)
 
 # Here, we choose the Telenor file as we run the app
 
@@ -62,12 +63,17 @@ ui =
                   h4(
                     "Welcome to this financial dashboard!"),
                   tabBox(
-                    title = "Return",
-                    side = "left", height = "250px",
-                    tabPanel("Assets (%)", roa),
-                    tabPanel("Equity (%)", roe)
-                  )
-                  ),
+                    side = "topleft",
+                    height = "100px",
+                    tabPanel("Return on Assets (%)", roa),
+                    tabPanel("Return on Equity* (%)", roe)),
+                  h6(
+                    "*Return on equity is calculated pre-tax"),
+                  tabBox(
+                    side = "bottomleft",
+                    height = "100px",
+                    tabPanel("Capital Turnover Rate", capital_t),
+                    tabPanel("Inventory Turnover Rate", inventory_t))),
           tabItem(tabName = "balancestatement",
                   h4(
                     "Balance statement"),
