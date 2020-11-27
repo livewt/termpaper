@@ -1,6 +1,10 @@
 library(shiny)
 library(shinydashboard)
 
+# Here, we choose the Telenor file as we run the app
+
+source("Project.R")
+
 # create dataset
 Art <- c('Salgsinntekt','Annen driftsinntekt',
             'Endring i beholdning av varer under tilvirkning og ferdig tilvirkede varer',
@@ -40,30 +44,30 @@ ui =
         menuItem("Dashboard",
                  tabName = "dashboard",
                  icon = icon("dashboard")),
-        menuItem("About",
-                 tabName = "about",
-                 icon = icon("info-circle")),
-        menuItem("Balance statement",
+        menuItem("Income Statement",
+                 tabName = "incomestatement",
+                 icon = icon("cash-register")),
+        menuItem("Balance Statement",
                  tabName = "balancestatement",
                  icon = icon("cash-register")),
-        menuItem("Income statement",
-                 tabName = "incomestatement",
-                 icon = icon("cash-register")))),
+        menuItem("About",
+                 tabName = "about",
+                 icon = icon("info-circle")))),
+
     
     dashboardBody(
       fluidRow(
         tabItems(
           tabItem(tabName = "dashboard",
                   h4(
-                    " This is the default starting page.
-                  We will put some visualizations here.")),
-          tabItem(tabName = "about",
-                  h4(
-                    " Here, we can write some information
-                   about the financial ratios or about how
-                   the dashboard was made."),
-                  h5(
-                    "We can also write our names.")),
+                    "Welcome to this financial dashboard!"),
+                  tabBox(
+                    title = "Return",
+                    side = "left", height = "250px",
+                    tabPanel("Assets (%)", roa),
+                    tabPanel("Equity (%)", roe)
+                  )
+                  ),
           tabItem(tabName = "balancestatement",
                   h4(
                     "Balance statement"),
@@ -71,7 +75,15 @@ ui =
           tabItem(tabName = "incomestatement",
                   h4(
                     "Income statement"),
-                  tabPanel("art.data", DT::dataTableOutput("art.data")))),
+                  tabPanel("art.data", DT::dataTableOutput("art.data"))),
+          tabItem(tabName = "about",
+                  h4(
+                    " Here, we can write some information
+                   about the financial ratios or about how
+                   the dashboard was made."),
+                  h5(
+                    "We can also write our names.")))
+        
     )
   )
 )
