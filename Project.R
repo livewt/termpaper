@@ -2,6 +2,7 @@ library(XML)
 library(tidyverse)
 library(taRifx)
 library(bit64)
+library(magrittr)
 
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
@@ -306,19 +307,21 @@ Return_equity <-
 roe = plot_ly(
   value = Return_equity * 100,
   number = list(suffix = "%"),
+  height = 200,
   type = "indicator",
   mode = "gauge+number",
   gauge = list(
     axis = list(range = list(NULL, 100),
-                tickcolor = "darkblue",
+                tickcolor = "darkorange",
                 ticksuffix = "%"),
-    bar = list(color = "darkblue"),
+    bar = list(color = "darkorange"),
     borderwidth = 1))
 
 roe = 
   roe %>% 
   layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkblue"))
+         font = list(color = "darkorange"))
+  
 
 # Return on assets
 
@@ -327,57 +330,17 @@ roa =
   plot_ly(
     value = Return_assets * 100,
     number = list(suffix = "%"),
+    height = 200,
     type = "indicator",
     mode = "gauge+number",
     gauge = list(
       axis = list(range = list(NULL, 100),
-                  tickcolor = "darkgreen",
+                  tickcolor = "darkorange",
                   ticksuffix = "%"),
-      bar = list(color = "darkgreen"),
+      bar = list(color = "darkorange"),
       borderwidth = 1))
 
 roa =
   roa %>% 
   layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkgreen"))
-
-
-# Capital turnover rate
-
-capital_t =
-  plot_ly(
-    domain = list(x = c(0,1), y = c(0,1)),
-    value = Capital_turnover,
-    type = "indicator",
-    mode = "gauge+number",
-    gauge = list(
-      axis = list(range = list(NULL, 100),
-                  tickcolor = "darkred"),
-      bar = list(color = "darkred"),
-      borderwidth = 1))
-
-capital_t =
-  capital_t %>% 
-  layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkred"))
-
-# Inventory turnover rate
-
-inventory_t =
-  plot_ly(
-    domain = list(x = c(0,1), y = c(0,1)),
-    value = Inventory_turnover,
-    type = "indicator",
-    mode = "gauge+number",
-    gauge = list(
-      axis = list(range = list(NULL, 30),
-                  tickcolor = "purple"),
-      bar = list(color = "purple"),
-      borderwidth = 1))
-
-inventory_t =
-  inventory_t %>% 
-  layout(margin = list(l = 20, r = 30),
-         font = list(color = "purple"))
-
-inventory_t
+         font = list(color = "darkorange"))

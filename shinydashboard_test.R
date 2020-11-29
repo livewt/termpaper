@@ -60,23 +60,26 @@ ui =
       fluidRow(
         tabItems(
           tabItem(tabName = "dashboard",
-                  h4(
-                    "Welcome to this financial dashboard!"),
-                  h6(
-                    "*Return on equity is calculated pre-tax"),
                   tabBox(
                     side = "left",
-                    height = "100px",
-                    tabPanel("Return on Assets (%)", roa),
-                    tabPanel("Return on Equity* (%)", roe)),
-                  h6(
-                    "I will make different types of charts for capital
-                    and inventory turnover rate, these don't really fit!"),
-                  tabBox(
-                    side = "left",
-                    height = "100px",
-                    tabPanel("Capital Turnover Rate", capital_t),
-                    tabPanel("Inventory Turnover Rate", inventory_t))),
+                    width = 6,
+                    tabPanel(h6("Return on Assets"), roa),
+                    tabPanel(h6("Return on Equity*"), roe,
+                             h6("*Return on equity is calculated pre-tax"))),
+                  valueBox(
+                    round(Capital_turnover, digits = 2),
+                    "Capital Turnover Rate",
+                    icon = icon("hand-holding-usd"),
+                    width = 3,
+                    color = "purple"),
+                  valueBox(
+                    round(Inventory_turnover, digits = 2),
+                    "Inventory Turnover Rate",
+                    icon = icon("warehouse"),
+                    width = 3,
+                    color = "purple")),
+        
+          
           tabItem(tabName = "balancestatement",
                   h4(
                     "Balance statement"),
