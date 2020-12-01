@@ -3,6 +3,8 @@ library(tidyverse)
 library(taRifx)
 library(bit64)
 library(magrittr)
+library(docstring)
+library(devtools)
 
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
@@ -66,6 +68,13 @@ for (i in 1:length(vektor1)){
 #Even on numbers exeeding 2*10^9
 #Fixed problem with rounding!
 charToInt64 <- function(s){
+  #' Convert char elements in vector into int64
+  #' 
+  #' Removes decimal(s), rounds and converts to closest integer64 
+  #'
+  #'
+  #' @param s the vector to be converted
+  #' 
   stopifnot( is.character(s) )
   x <- character() #placeholder for the number
   y <- character() #placeholder for the decimals
@@ -95,7 +104,8 @@ charToInt64 <- function(s){
 #test
 testvektor <- c("0.0", "0", "10", "20000000000", "0.011", "1.1", "4,5") #last one should be rounded
 charToInt64(testvektor)
-
+docstring(charToInt64)
+?charToInt64
 
 #finally no bugs with numbers
 #unfinshed code to start working on calculating fincancial numbers
@@ -108,36 +118,74 @@ main_df$ClosingCreditBalance <- charToInt64(main_df$ClosingCreditBalance)
 #Functions to make financial figures calculations!
 #Function to subset main_df based on standard account ID for Opening balance for assets (IDs 10-19)
 Open_asset_func <- function (std_id){
+  #' Output opening balance for assets
+  #' 
+  #' Subsets main_df based on standard account ID for Opening balance for assets. Returns the sum of subset$OpeningDebitBalance minus the sum of subset$OpeningCreditBalance
+  #'
+  #' @param std_id the standard account ID(s) for opening balance for assets
+  #' 
   a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
   rownames(a) <- NULL #resetting rows
   b <- sum(a$OpeningDebitBalance) - sum(a$OpeningCreditBalance)
   b
 }
+#test
+?Open_asset_func
+
 #same but with closing blanace
 Close_asset_func <- function (std_id){
+  #' Output closing balance for assets
+  #' 
+  #' Subsets main_df based on standard account IDs for closing balance for assets. Returns the sum of subset$ClosingDebitBalance minus the sum of subset$ClosingCreditBalance
+  #'
+  #' @param std_id the standard account IDs for closing balance for assets
+  #' 
   a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
   rownames(a) <- NULL #resetting rows
   b <- sum(a$ClosingDebitBalance) - sum(a$ClosingCreditBalance)
   b
 }
+docstring(Close_asset_func)
+
 #Function to subset main_df on standard acc IDs for opening balance for equity, liabilites and income/loss
 Open_credit_func <- function (std_id){
+  #' Output opening balance for equity, liabilities and income/loss
+  #' 
+  #' Subsets main_df based on standard account ID for opening balance for equity, liabilities and income/loss. Returns the sum of subset$OpeningCreditBalance minus the sum of subset$OpeningDebitBalance
+  #'
+  #' @param std_id the standard account IDs for opening balance for equity, liabilities and income/loss
+  #' 
   a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
   rownames(a) <- NULL #resetting rows
   b <- sum(a$OpeningCreditBalance) - sum(a$OpeningDebitBalance)
   b
 }
+docstring(Open_credit_func)
+
 #Same with closing balance
 Close_credit_func <- function (std_id){
+  #' Output closing balance for equity, liabilities and income/loss
+  #' 
+  #' Subsets main_df based on standard account ID for opening balance for equity, liabilities and income/loss. Returns the sum of subset$ClosingCreditBalance minus the sum of subset$ClosingDebitBalance
+  #'
+  #' @param std_id the standard account IDs for closing balance for equity, liabilities and income/loss
+  #' 
   a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
   rownames(a) <- NULL #resetting rows
   b <- sum(a$ClosingCreditBalance) - sum(a$ClosingDebitBalance)
   b
 }
-
+docstring(Close_credit_func)
 
 #Function to sum accounts with different account IDS for Opening balance IDs 10-19 (Assets)
 Sum_Open_asset_func <- function(start, end){
+  #' Sums accounts with account IDs for Opening balance assets (IDs 10-19)
+  #' 
+  #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
+  #'
+  #' @param start the standard account ID to start loop
+  #' @param end the standard account ID to stop loop
+  #' 
   x <- integer64()
   for (i in start:end){
     x <- c(x, Open_asset_func(i)) #uses the subset function above
@@ -145,8 +193,17 @@ Sum_Open_asset_func <- function(start, end){
   x <- sum(x)
   x
 }
+docstring(Sum_Open_asset_func)
+
 #same but for closing balance
 Sum_Close_asset_func <- function(start, end){
+  #' Sums accounts with account IDs for closing balance assets
+  #' 
+  #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
+  #'
+  #' @param start the standard account ID to start loop
+  #' @param end the standard account ID to stop loop
+  #' 
   x <- integer64()
   for (i in start:end){
     x <- c(x, Close_asset_func(i)) #uses the subset function above
@@ -154,9 +211,17 @@ Sum_Close_asset_func <- function(start, end){
   x <- sum(x)
   x
 }
+docstring(Sum_Close_asset_func)
 
 #function to sum all OPENING balance with ID from 20 and beyond for equity,liability and income/loss
 Sum_Open_credit_func <- function(start, end){
+  #' Sums accounts with account IDs for opening balance for equity, liability and income/loss (IDs 20+)
+  #' 
+  #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
+  #'
+  #' @param start the standard account ID to start loop
+  #' @param end the standard account ID to stop loop
+  #' 
   x <- integer64()
   for (i in start:end){
     x <- c(x, Open_credit_func(i)) #uses the subset function above
@@ -164,8 +229,17 @@ Sum_Open_credit_func <- function(start, end){
   x <- sum(x)
   x
 }
+docstring(Sum_Open_credit_func)
+
 #Same but for CLOSING balance for ids 20 and beyond
 Sum_Close_credit_func <- function(start, end){
+  #' Sums accounts with account IDs for closing balance for equity, liability and income/loss (IDs 20+)
+  #' 
+  #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
+  #'
+  #' @param start the standard account ID to start loop
+  #' @param end the standard account ID to stop loop
+  #' 
   x <- integer64()
   for (i in start:end){
     x <- c(x, Close_credit_func(i)) #uses the subset function above
@@ -173,7 +247,7 @@ Sum_Close_credit_func <- function(start, end){
   x <- sum(x)
   x
 }
-
+docstring(Sum_Close_credit_func)
 
 ### FINANCIAL RATIOS ###
 #Remember to always switch - to + in equation since our functions already treats costs(debit) as -
@@ -209,7 +283,7 @@ Open_profit_margin1 <-
 Open_profit_margin2 <- #- since here we add tax and special costs to acc 88 to get pretax result
   (Open_credit_func(88) - Sum_Open_credit_func(83,85))/
   Sum_Open_credit_func(30,39)
-#Wages / sale income (Lønnskostnader i % av salgsinntekt)
+#Wages / sale income (L?nnskostnader i % av salgsinntekt)
 Open_wages_sale_inc <-
   (Sum_Open_credit_func(50,59)*-1)/ # * -1 since costs is negative..
   Sum_Open_credit_func(30,37)
@@ -259,7 +333,7 @@ Close_profit_margin1 <-
 Close_profit_margin2 <-
   (Close_credit_func(88) - Sum_Close_credit_func(83,85))/
   Sum_Close_credit_func(30,39)
-#Wages/sale income (Lønnskostnader i % av salgsinntekt)
+#Wages/sale income (L?nnskostnader i % av salgsinntekt)
 Close_wages_sale_inc <- 
   -Sum_Close_credit_func(50,59)/
   Sum_Close_credit_func(30,37)
@@ -285,7 +359,7 @@ Return_assets <-
   (Close_credit_func(88) - Sum_Close_credit_func(83,86) - Close_credit_func(81))/
   ((Sum_Open_asset_func(10,19)+Sum_Close_asset_func(10,19))/2)
 
-#Capital turn over rate (Kapitalens omløpshastighet)
+#Capital turn over rate (Kapitalens oml?pshastighet)
 Capital_turnover <-
   Sum_Close_credit_func(30,39)/
   ((Sum_Open_asset_func(10,19)+Sum_Close_asset_func(10,19))/2)
@@ -344,3 +418,4 @@ roa =
   roa %>% 
   layout(margin = list(l = 20, r = 30),
          font = list(color = "darkorange"))
+
