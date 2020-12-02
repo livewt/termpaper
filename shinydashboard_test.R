@@ -114,6 +114,7 @@ BalanseEKGJ$StandardAccountID <- NULL
 # Create ui
 ui =
   dashboardPage(
+    skin = "black",
     dashboardHeader(
       title = "Financial Report",
       titleWidth = 250),
@@ -123,12 +124,18 @@ ui =
         menuItem("Dashboard",
                  tabName = "dashboard",
                  icon = icon("dashboard")),
+        menuItem("Liquidity",
+                 tabName = "liquidity",
+                 icon = icon("water")),
+        menuItem("Transactions",
+                 tabName = "transactions",
+                 icon = icon("people-arrows")),
         menuItem("Income Statement",
                  tabName = "incomestatement",
                  icon = icon("cash-register")),
         menuItem("Balance Statement",
                  tabName = "balancestatement",
-                 icon = icon("credit-card")),
+                 icon = icon("balance-scale")),
         menuItem("About",
                  tabName = "about",
                  icon = icon("info-circle")))),
@@ -153,12 +160,16 @@ ui =
                              h6("*Return on equity is calculated pre-tax"))),
                   valueBox(
                     round(Capital_turnover, digits = 2),
+                  valueBox(
+                    round(Capital_turnover,
+                          digits = 4),
                     "Capital Turnover Rate",
                     icon = icon("hand-holding-usd"),
                     width = 3,
                     color = "purple"),
                   valueBox(
-                    round(Inventory_turnover, digits = 2),
+                    round(Inventory_turnover,
+                          digits = 4),
                     "Inventory Turnover Rate",
                     icon = icon("warehouse"),
                     width = 3,
@@ -200,11 +211,11 @@ ui =
                       w_to_s_chart))),
           tabItem(tabName = "transactions",
                   box(
-                    title = "Transaction Plot",
+                    title = "Transactions",
                     status = "primary",
                     solidHeader = TRUE,
                     height = 275
-#                   ,name of the transaction plot here!
+#                    ,*plot name here*
                   )),
         
           
@@ -219,6 +230,7 @@ ui =
                     "Income statement"),
                   tabPanel("art.data", DT::dataTableOutput("art.data"))),
           tabItem(tabName = "about",
+                  
                   h4(
                     " Here, we can write some information
                    about the financial ratios or about how

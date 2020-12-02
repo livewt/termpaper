@@ -5,6 +5,9 @@ library(bit64)
 library(magrittr)
 library(docstring)
 library(devtools)
+library(plotly)
+library(ggplot2)
+
 
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
@@ -129,8 +132,7 @@ Open_asset_func <- function (std_id){
   b <- sum(a$OpeningDebitBalance) - sum(a$OpeningCreditBalance)
   b
 }
-#test
-?Open_asset_func
+
 
 #same but with closing blanace
 Close_asset_func <- function (std_id){
@@ -374,7 +376,8 @@ Return_equity <-
   (Close_credit_func(88) - Sum_Close_credit_func(83,86))/
   ((Open_credit_func(20)+ Close_credit_func(20))/2)
 
-# VISUALIZATIONS
+# Visualizations for ratios exclusive to closing blance
+
 
 # Return on equity
 
@@ -384,6 +387,7 @@ roe = plot_ly(
   height = 200,
   type = "indicator",
   mode = "gauge+number",
+  height = 200,
   gauge = list(
     axis = list(range = list(NULL, 100),
                 tickcolor = "darkorange",
@@ -396,9 +400,8 @@ roe =
   layout(margin = list(l = 20, r = 30),
          font = list(color = "darkorange"))
   
-
+  
 # Return on assets
-
 
 roa = 
   plot_ly(
@@ -419,3 +422,44 @@ roa =
   layout(margin = list(l = 20, r = 30),
          font = list(color = "darkorange"))
 
+# Wages to sales ratio
+
+Open_wages_sale_inc
+Close_wages_sale_inc
+
+
+timi = c("Beginning of Year", "End of Year")
+
+gildi = c(Open_wages_sale_inc*100,
+          Close_wages_sale_inc*100)
+
+w_to_s = 
+  data.frame(timi,
+             gildi)
+
+w_to_s$gildi = round(w_to_s$gildi,
+                     digits = 2)
+
+w_to_s =
+  w_to_s %>% 
+  group_by(timi)
+
+
+w_to_s_chart = 
+ggplot(data = w_to_s,
+           aes(x = timi,
+               y = gildi,
+               group = timi))+
+  geom_col(aes(fill = timi),
+           position = "dodge")+
+  xlab("")+
+  ylab("")+
+  theme(legend.position = "none")+
+  geom_text(
+    aes(label = gildi,
+        y = gildi + 0.5),
+    position = position_dodge(0.9),
+    vjust = 0)
+
+w_to_s_chart
+    
