@@ -384,23 +384,3 @@ plot_ly(
                 digits = 2),
   domain = list(x = c(0, 1), y = c(0, 1)),
   height = 150)
-
-# DÆMI
-
-roe = plot_ly(
-  value = Return_equity * 100,
-  number = list(suffix = "%"),
-  type = "indicator",
-  mode = "gauge+number",
-  height = 200,
-  gauge = list(
-    axis = list(range = list(NULL, 100),
-                tickcolor = "darkorange",
-                ticksuffix = "%"),
-    bar = list(color = "darkorange"),
-    borderwidth = 1))
-
-roe = 
-  roe %>% 
-  layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkorange"))
