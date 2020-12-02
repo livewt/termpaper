@@ -163,6 +163,51 @@ ui =
                     icon = icon("warehouse"),
                     width = 3,
                     color = "purple")),
+          
+          tabItem(tabName = "liquidity",
+                  box(
+                    title = 
+                      "Return on Equity",
+                    status =
+                      "warning",
+                    solidHeader = 
+                      TRUE,
+                    height = 
+                      275,
+                    roe),
+                  valueBox(
+                    round(
+                      Capital_turnover,
+                      digits = 3),
+                    "Capital Turnover",
+                    icon = icon("hand-holding-usd"),
+                    width = 3,
+                    color = "orange"),
+                  valueBox(
+                    round(
+                      Inventory_turnover,
+                      digits = 3),
+                    "Inventory Turnover",
+                    icon = icon("warehouse"),
+                    width = 3,
+                    color = "orange"),
+                  box(
+                    title = "Wages to Salary Ratio",
+                    status = "warning",
+                    solidHeader = TRUE,
+                    height = 275,
+                    renderPlot(
+                      w_to_s_chart))),
+          tabItem(tabName = "transactions",
+                  box(
+                    title = "Transaction Plot",
+                    status = "primary",
+                    solidHeader = TRUE,
+                    height = 275
+#                   ,name of the transaction plot here!
+                  )),
+        
+          
           tabItem(tabName = "balancestatement",
                   h2(
                     "Balance statement"),
