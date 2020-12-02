@@ -301,8 +301,7 @@ Return_equity <-
   (Close_credit_func(88) - Sum_Close_credit_func(83,86))/
   ((Open_credit_func(20)+ Close_credit_func(20))/2)
 
-# Visualizations for ratios exclusive to closing blance
-
+# Visualizations!
 
 # Return on equity
 
@@ -344,45 +343,32 @@ roa =
          font = list(color = "darkgreen"))
 
 # Wages to sales ratio
+# Created data frame to plot
 
-Open_wages_sale_inc
-Close_wages_sale_inc
-
-
-timi = c("Beginning of Year", "End of Year")
-
-gildi = c(Open_wages_sale_inc*100,
+wtos_when = c("Beginning of Year", "End of Year")
+wtos_value = c(Open_wages_sale_inc*100,
           Close_wages_sale_inc*100)
-
 w_to_s = 
-  data.frame(timi,
-             gildi)
+  data.frame(wtos_when,
+             wtos_value)
 
-w_to_s$gildi = round(w_to_s$gildi,
+w_to_s$wtos_value = round(w_to_s$wtos_value,
                      digits = 2)
 
-w_to_s =
-  w_to_s %>% 
-  group_by(timi)
+# Plotted information with Plotly
 
-
-w_to_s_chart = 
-ggplot(data = w_to_s,
-           aes(x = timi,
-               y = gildi,
-               fill = timi))+
-  geom_col(aes(alpha = 0.5),
-           color = "white",
-           fill = c("orange","yellow"),
-           position = "dodge")+
-  xlab("")+
-  ylab("")+
-  theme(legend.position = "none")+
-  geom_text(
-    aes(label = gildi,
-        y = gildi + 0.7,
-        color = "white"),
-    position = position_dodge(0.9))
+mytext = c("15.19%","16.26%")
 
 w_to_s_chart = 
-  ggplotly(w_to_s_chart)
+  plot_ly(w_to_s,
+          x = c("Beginning of Year","End of Year"),
+          y = wtos_value,
+          type = "bar",
+          marker = list(color = 
+                          c("yellow","orange")),
+          opacity = 0.6)
+
+w_to_s_chart = 
+  w_to_s_chart %>% 
+  add_annotations(text = mytext)
+          
