@@ -36,6 +36,7 @@ Balanse <- data.frame(Eiendeler, Eiendeler.tall, `Egenkapital og Gjeld`, EKGJ.ta
 # Create ui
 ui =
   dashboardPage(
+    skin = "black",
     dashboardHeader(
       title = "Financial Report",
       titleWidth = 250),
@@ -45,6 +46,9 @@ ui =
         menuItem("Dashboard",
                  tabName = "dashboard",
                  icon = icon("dashboard")),
+        menuItem("Liquidity",
+                 tabName = "liquidity",
+                 icon = icon("water")),
         menuItem("Income Statement",
                  tabName = "incomestatement",
                  icon = icon("cash-register")),
@@ -60,23 +64,66 @@ ui =
       fluidRow(
         tabItems(
           tabItem(tabName = "dashboard",
-                  h4(
-                    "Welcome to this financial dashboard!"),
-                  h6(
-                    "*Return on equity is calculated pre-tax"),
                   tabBox(
                     side = "left",
-                    height = "100px",
-                    tabPanel("Return on Assets (%)", roa),
-                    tabPanel("Return on Equity* (%)", roe)),
-                  h6(
-                    "I will make different types of charts for capital
-                    and inventory turnover rate, these don't really fit!"),
-                  tabBox(
-                    side = "left",
-                    height = "100px",
-                    tabPanel("Capital Turnover Rate", capital_t),
-                    tabPanel("Inventory Turnover Rate", inventory_t))),
+                    width = 6,
+                    tabPanel("Return on Assets", roa),
+                    tabPanel("Return on Equity*", roe,
+                             h5("*Return on equity is calculated pre-tax"))),
+                  valueBox(
+                    round(Capital_turnover,
+                          digits = 4),
+                    "Capital Turnover Rate",
+                    icon = icon("hand-holding-usd"),
+                    width = 3,
+                    color = "purple"),
+                  valueBox(
+                    round(Inventory_turnover,
+                          digits = 4),
+                    "Inventory Turnover Rate",
+                    icon = icon("warehouse"),
+                    width = 3,
+                    color = "purple")),
+          
+          tabItem(tabName = "liquidity",
+                  box(
+                    title = 
+                      "Return on Equity",
+                    status =
+                      "warning",
+                    solidHeader = 
+                      TRUE,
+                    height = 
+                      275,
+                    roe),
+                  valueBox(
+                    round(
+                      Capital_turnover,
+                      digits = 3),
+                    "Capital Turnover",
+                    icon = icon("hand-holding-usd"),
+                    width = 3,
+                    color = "orange"),
+                  valueBox(
+                    round(
+                      Inventory_turnover,
+                      digits = 3),
+                    "Inventory Turnover",
+                    icon = icon("warehouse"),
+                    width = 3,
+                    color = "orange"),
+                  box(
+                    title = "Wages to Salary Ratio",
+                    status = "warning",
+                    solidHeader = TRUE,
+                    height = 275,
+                    renderPlot(
+                      w_to_s_chart,
+                      width = "auto",
+                      height = "auto",
+                      res = 72))),
+        
+          
           tabItem(tabName = "balancestatement",
                   h4(
                     "Balance statement"),
@@ -86,6 +133,7 @@ ui =
                     "Income statement"),
                   tabPanel("art.data", DT::dataTableOutput("art.data"))),
           tabItem(tabName = "about",
+                  
                   h4(
                     " Here, we can write some information
                    about the financial ratios or about how

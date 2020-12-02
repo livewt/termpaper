@@ -2,6 +2,9 @@ library(XML)
 library(tidyverse)
 library(taRifx)
 library(bit64)
+library(plotly)
+library(ggplot2)
+
 
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
@@ -299,7 +302,8 @@ Return_equity <-
   (Close_credit_func(88) - Sum_Close_credit_func(83,86))/
   ((Open_credit_func(20)+ Close_credit_func(20))/2)
 
-# VISUALIZATIONS
+# Visualizations for ratios exclusive to closing blance
+
 
 # Return on equity
 
@@ -318,10 +322,10 @@ roe = plot_ly(
 roe = 
   roe %>% 
   layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkblue"))
 
+                  font = list(color = "darkblue"))
+  
 # Return on assets
-
 
 roa = 
   plot_ly(
@@ -380,4 +384,124 @@ inventory_t =
   layout(margin = list(l = 20, r = 30),
          font = list(color = "purple"))
 
-inventory_t
+
+
+# Wages to sales ratio
+
+Open_wages_sale_inc
+Close_wages_sale_inc
+
+
+timi = c("Beginning of Year", "End of Year")
+
+gildi = c(Open_wages_sale_inc*100,
+          Close_wages_sale_inc*100)
+
+w_to_s = 
+  data.frame(timi,
+             gildi)
+
+w_to_s$gildi = round(w_to_s$gildi,
+                     digits = 2)
+
+w_to_s =
+  w_to_s %>% 
+  group_by(timi)
+
+
+# uuu
+
+w_to_s_chart = 
+ggplot(data = w_to_s,
+           aes(x = timi,
+               y = gildi,
+               group = timi))+
+  geom_col(aes(fill = timi),
+           position = "dodge")+
+  xlab("")+
+  ylab("")+
+  theme(legend.position = "none")+
+  geom_text(
+    aes(label = gildi,
+        y = gildi + 0.5),
+    position = position_dodge(0.9),
+    vjust = 0)
+
+
+w_to_s_chart =
+ggplotly(
+  p = w_to_s_chart,
+  tooltip = "all",
+  dynamicTicks = FALSE,
+  originalData = FALSE)
+
+w_to_s_chart
+    
+
+
+
+# Making data frame to compare relevant financial ratios
+# from beginning of the year to the end of the year
+# (trying something)
+
+open_ratios = 
+  c(Open_Current_ratio,
+    Open_Acid_test,
+    Open_GrossProfit_percent,
+    Open_GrossProfit,
+    Open_Operating_margin,
+    Open_profit_margin1,
+    Open_profit_margin2,
+    Open_wages_sale_inc,
+    Open_interest_ratio,
+    Open_equity_ratio,
+    Open_debt_ratio)
+
+close_ratios =
+  c(Close_Current_ratio,
+    Close_Acid_test,
+    Close_GrossProfit_percent,
+    Close_GrossProfit,
+    Close_Operating_margin,
+    Close_profit_margin1,
+    Close_profit_margin2,
+    Close_wages_sale_inc,
+    Close_interest_ratio,
+    Close_equity_ratio,
+    Close_debt_ratio)
+
+alltsaman = 
+  c(open_ratios,
+    close_ratios)
+
+myrows = 
+  c("Current Ratio",
+    "Acid Test",
+    "Gross Profit (%)",
+    "Gross profit",
+    "Operating Margin (%)",
+    "Profit Margin 1?",
+    "Profit Margin 2?",
+    "Wages/Sale income",
+    "Interest Coverage Ratio",
+    "Equity Ratio",
+    "Debt Ratio")
+
+mycols = 
+  c("Beginning of year",
+    "End of year")
+
+all_ratios =
+  data.frame(
+    "Beginning of year" = round(open_ratios,
+                                digits = 4),
+    "End of year" = round(close_ratios,
+                          digits = 4),
+    row.names = myrows)
+
+roe
+
+t_all_ratios =
+  t(all_ratios)
+
+t_all_ratios
