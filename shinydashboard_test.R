@@ -122,6 +122,14 @@ ui =
                     height = 275,
                     renderPlot(
                       w_to_s_chart))),
+          tabItem(tabName = "transactions",
+                  box(
+                    title = "Transactions",
+                    status = "primary",
+                    solidHeader = TRUE,
+                    height = 275
+#                    ,*plot name here*
+                  )),
         
           
           tabItem(tabName = "balancestatement",
