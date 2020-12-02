@@ -23,6 +23,8 @@ namespace <- paste("//", namespace, sep = "", ":Account")
 
 
 main_df <- xmlToDataFrame(nodes = getNodeSet(main, namespace))
+main_df <- main_df %>%
+  replace(is.na(.), 0) #theres not always registered numbers on the nodes.
 #removing "helping account"
 main_df <- main_df %>%
   filter(AccountDescription!="Hjelpekonto")
@@ -119,69 +121,23 @@ main_df$ClosingDebitBalance <- charToInt64(main_df$ClosingDebitBalance)
 main_df$ClosingCreditBalance <- charToInt64(main_df$ClosingCreditBalance)
 
 #Functions to make financial figures calculations!
-#Function to subset main_df based on standard account ID for Opening balance for assets (IDs 10-19)
-Open_asset_func <- function (std_id){
-  #' Output opening balance for assets
+
+Open_func <- function (std_id){
+  #' Output opening balance.
   #' 
   #' Subsets main_df based on standard account ID for Opening balance for assets. Returns the sum of subset$OpeningDebitBalance minus the sum of subset$OpeningCreditBalance
   #'
   #' @param std_id the standard account ID(s) for opening balance for assets
   #' 
   a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
-  rownames(a) <- NULL #resetting rows
+  #rownames(a) <- NULL #resetting rows
   b <- sum(a$OpeningDebitBalance) - sum(a$OpeningCreditBalance)
   b
 }
+docstring(Open_func)
 
-
-#same but with closing blanace
-Close_asset_func <- function (std_id){
-  #' Output closing balance for assets
-  #' 
-  #' Subsets main_df based on standard account IDs for closing balance for assets. Returns the sum of subset$ClosingDebitBalance minus the sum of subset$ClosingCreditBalance
-  #'
-  #' @param std_id the standard account IDs for closing balance for assets
-  #' 
-  a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
-  rownames(a) <- NULL #resetting rows
-  b <- sum(a$ClosingDebitBalance) - sum(a$ClosingCreditBalance)
-  b
-}
-docstring(Close_asset_func)
-
-#Function to subset main_df on standard acc IDs for opening balance for equity, liabilites and income/loss
-Open_credit_func <- function (std_id){
-  #' Output opening balance for equity, liabilities and income/loss
-  #' 
-  #' Subsets main_df based on standard account ID for opening balance for equity, liabilities and income/loss. Returns the sum of subset$OpeningCreditBalance minus the sum of subset$OpeningDebitBalance
-  #'
-  #' @param std_id the standard account IDs for opening balance for equity, liabilities and income/loss
-  #' 
-  a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
-  rownames(a) <- NULL #resetting rows
-  b <- sum(a$OpeningCreditBalance) - sum(a$OpeningDebitBalance)
-  b
-}
-docstring(Open_credit_func)
-
-#Same with closing balance
-Close_credit_func <- function (std_id){
-  #' Output closing balance for equity, liabilities and income/loss
-  #' 
-  #' Subsets main_df based on standard account ID for opening balance for equity, liabilities and income/loss. Returns the sum of subset$ClosingCreditBalance minus the sum of subset$ClosingDebitBalance
-  #'
-  #' @param std_id the standard account IDs for closing balance for equity, liabilities and income/loss
-  #' 
-  a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
-  rownames(a) <- NULL #resetting rows
-  b <- sum(a$ClosingCreditBalance) - sum(a$ClosingDebitBalance)
-  b
-}
-docstring(Close_credit_func)
-
-#Function to sum accounts with different account IDS for Opening balance IDs 10-19 (Assets)
-Sum_Open_asset_func <- function(start, end){
-  #' Sums accounts with account IDs for Opening balance assets (IDs 10-19)
+Sum_Open_func <- function(start, end){
+  #' Sums accounts with account IDs for Opening balance assets.
   #' 
   #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
   #'
@@ -195,11 +151,25 @@ Sum_Open_asset_func <- function(start, end){
   x <- sum(x)
   x
 }
-docstring(Sum_Open_asset_func)
+docstring(Sum_Open_func)
 
-#same but for closing balance
-Sum_Close_asset_func <- function(start, end){
-  #' Sums accounts with account IDs for closing balance assets
+
+Close_func <- function (std_id){
+  #' Output closing balance.
+  #' 
+  #' Subsets main_df based on standard account IDs for closing balance for assets. Returns the sum of subset$ClosingDebitBalance minus the sum of subset$ClosingCreditBalance
+  #'
+  #' @param std_id the standard account IDs for closing balance for assets
+  #' 
+  a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
+  #rownames(a) <- NULL #resetting rows
+  b <- sum(a$ClosingDebitBalance) - sum(a$ClosingCreditBalance)
+  b
+}
+docstring(Close_func)
+
+Sum_Close_func <- function(start, end){
+  #' Sums accounts with account IDs for closing balance.
   #' 
   #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
   #'
@@ -208,49 +178,12 @@ Sum_Close_asset_func <- function(start, end){
   #' 
   x <- integer64()
   for (i in start:end){
-    x <- c(x, Close_asset_func(i)) #uses the subset function above
+    x <- c(x, Close_func(i)) #uses the subset function above
   }
   x <- sum(x)
   x
 }
-docstring(Sum_Close_asset_func)
-
-#function to sum all OPENING balance with ID from 20 and beyond for equity,liability and income/loss
-Sum_Open_credit_func <- function(start, end){
-  #' Sums accounts with account IDs for opening balance for equity, liability and income/loss (IDs 20+)
-  #' 
-  #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
-  #'
-  #' @param start the standard account ID to start loop
-  #' @param end the standard account ID to stop loop
-  #' 
-  x <- integer64()
-  for (i in start:end){
-    x <- c(x, Open_credit_func(i)) #uses the subset function above
-  }
-  x <- sum(x)
-  x
-}
-docstring(Sum_Open_credit_func)
-
-#Same but for CLOSING balance for ids 20 and beyond
-Sum_Close_credit_func <- function(start, end){
-  #' Sums accounts with account IDs for closing balance for equity, liability and income/loss (IDs 20+)
-  #' 
-  #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
-  #'
-  #' @param start the standard account ID to start loop
-  #' @param end the standard account ID to stop loop
-  #' 
-  x <- integer64()
-  for (i in start:end){
-    x <- c(x, Close_credit_func(i)) #uses the subset function above
-  }
-  x <- sum(x)
-  x
-}
-docstring(Sum_Close_credit_func)
-
+docstring(Sum_Close_func)
 ### FINANCIAL RATIOS ###
 #Remember to always switch - to + in equation since our functions already treats costs(debit) as -
 
@@ -258,123 +191,123 @@ docstring(Sum_Close_credit_func)
 
 #Current ratio (Likviditetsgrad 1)
 Open_Current_ratio <- 
-  Sum_Open_asset_func(14,19)/
-  Sum_Open_credit_func(23,29)
+  Sum_Open_func(14,19)/
+  -Sum_Open_func(23,29)
 
 #Acid test for(Likviditetsgrad 2)
 Open_Acid_test <-
-  Sum_Open_asset_func(15,19)/
-  Sum_Open_credit_func(23,29)
+  Sum_Open_func(15,19)/
+  -Sum_Open_func(23,29)
 
 #Gross profit % (Bruttofortjeneste i %)
 Open_GrossProfit_percent <- # + since our function already treats costs as -
-  (Sum_Open_credit_func(30,37) + Sum_Open_credit_func(40,49))/
-  Sum_Open_credit_func(30,37)
+  (-Sum_Open_func(30,37) -Sum_Open_func(40,49))/
+  -Sum_Open_func(30,37)
 #Gross profit (Bruttofortjeneste)
 Open_GrossProfit <- # + since our function already treats costs as -
-  (Sum_Open_credit_func(30,37) + Sum_Open_credit_func(40,49))
+  (-Sum_Open_func(30,37) - Sum_Open_func(40,49))
 #Operating margin (Driftsmargin i %)
 Open_Operating_margin <-
-  (Sum_Open_credit_func(30,39)+ Sum_Open_credit_func(40,79))/
-  Sum_Open_credit_func(30,39)
+  (-Sum_Open_func(30,39) - Sum_Open_func(40,79))/
+  -Sum_Open_func(30,39)
 #Profit margin 1? (Resultatgrad i %)
 Open_profit_margin1 <-
-  (Sum_Open_credit_func(30,39) + Sum_Open_credit_func(40,79)+Open_credit_func(80))/
-  Sum_Open_credit_func(30,39)
+  (-Sum_Open_func(30,39) - Sum_Open_func(40,79)-Open_func(80))/
+  -Sum_Open_func(30,39)
 #Profit margin 2? (Resultatmargin i %)
 Open_profit_margin2 <- #- since here we add tax and special costs to acc 88 to get pretax result
-  (Open_credit_func(88) - Sum_Open_credit_func(83,85))/
-  Sum_Open_credit_func(30,39)
+  (-Open_func(88) + Sum_Open_func(83,85))/
+  -Sum_Open_func(30,39)
 #Wages / sale income (L?nnskostnader i % av salgsinntekt)
 Open_wages_sale_inc <-
-  (Sum_Open_credit_func(50,59)*-1)/ # * -1 since costs is negative..
-  Sum_Open_credit_func(30,37)
+  Sum_Open_func(50,59)/ # * -1 since costs is negative..
+  -Sum_Open_func(30,37)
 
 #Interest coverage ratio (Rentedekningsgrad)
 Open_interest_ratio <- #- since add costs back to get ordinary profit pretax
-  (Open_credit_func(88) -Sum_Open_credit_func(83,86) - Open_credit_func(81))/
-  -Open_credit_func(81)
+  (-Open_func(88) + Sum_Open_func(83,86) + Open_func(81))/
+  Open_func(81)
 
 #Equity Ratio (Egenkapitalandel)
 Open_equity_ratio <- 
-  Open_credit_func(20)/
-  Sum_Open_asset_func(10,19)
+  -Open_func(20)/
+  Sum_Open_func(10,19)
 
 #Debt ratio (Gjeldsgrad)
 Open_debt_ratio <-
-  Sum_Open_credit_func(21,29)/
-  Open_credit_func(20)
+  -Sum_Open_func(21,29)/
+  -Open_func(20)
 
 ###Closing balances###
 
 #Current ratio (Likviditetsgrad 1)
 Close_Current_ratio <-
-  Sum_Close_asset_func(14,19)/
-  Sum_Close_credit_func(23,29)
+  Sum_Close_func(14,19)/
+  -Sum_Close_func(23,29)
 
 #Acid test (Likviditetsgrad 2)
 Close_Acid_test <-
-  Sum_Close_asset_func(15,19)/
-  Sum_Close_credit_func(23,29)
+  Sum_Close_func(15,19)/
+  -Sum_Close_func(23,29)
 #Gross profit % (Bruttofortjeneste i %)
 Close_GrossProfit_percent <- 
-  (Sum_Close_credit_func(30,37)+Sum_Close_credit_func(40,49))/
-  Sum_Close_credit_func(30,37)
+  (-Sum_Close_func(30,37) - Sum_Close_func(40,49))/
+  -Sum_Close_func(30,37)
 #Gross profit (Bruttofortjeneste)
 Close_GrossProfit <- 
-  Sum_Close_credit_func(30,37) + Sum_Close_credit_func(40,49)
+  -Sum_Close_func(30,37) - Sum_Close_func(40,49)
 #Operating margin (Driftsmargin i %)
 Close_Operating_margin <- 
-  (Sum_Close_credit_func(30,39) + Sum_Close_credit_func(40,79))/
-  Sum_Close_credit_func(30,39)
+  (-Sum_Close_func(30,39) - Sum_Close_func(40,79))/
+  -Sum_Close_func(30,39)
 #Profitmargin 1 (Resultatgrad i %)
 Close_profit_margin1 <-
-  (Sum_Close_credit_func(30,39) + Sum_Close_credit_func(40,49) + Close_credit_func(80))/
-  Sum_Close_credit_func(30,39)
+  (-Sum_Close_func(30,39) - Sum_Close_func(40,49) - Close_func(80))/
+  -Sum_Close_func(30,39)
 #Profitmargin 2 (Resultatmargin i %)
 Close_profit_margin2 <-
-  (Close_credit_func(88) - Sum_Close_credit_func(83,85))/
-  Sum_Close_credit_func(30,39)
+  (-Close_func(88) + Sum_Close_func(83,85))/
+  -Sum_Close_func(30,39)
 #Wages/sale income (L?nnskostnader i % av salgsinntekt)
 Close_wages_sale_inc <- 
-  -Sum_Close_credit_func(50,59)/
-  Sum_Close_credit_func(30,37)
+  Sum_Close_func(50,59)/
+  -Sum_Close_func(30,37)
 #Interest Coverage Ratio (Rentedekningsgrad)
 Close_interest_ratio <- 
-  (Close_credit_func(88) -Sum_Close_credit_func(83,86) - Close_credit_func(81))/
-  -Close_credit_func(81)
+  (-Close_func(88) + Sum_Close_func(83,86) + Close_func(81))/
+  Close_func(81)
 
 #Equity Ratio (Egenkapitalandel)
 Close_equity_ratio <- 
-  Close_credit_func(20)/
-  Sum_Close_asset_func(10,19)
+  -Close_func(20)/
+  Sum_Close_func(10,19)
 
 #Debt ratio (Gjeldsgrad)
 Close_debt_ratio <-
-  Sum_Close_credit_func(21,29)/
-  Close_credit_func(20)
+  -Sum_Close_func(21,29)/
+  -Close_func(20)
 
 ##Financial ratios exclusive to closing balance##
 
 #Return on assets (Totalkapitalens rentabilitet)
 Return_assets <- 
-  (Close_credit_func(88) - Sum_Close_credit_func(83,86) - Close_credit_func(81))/
-  ((Sum_Open_asset_func(10,19)+Sum_Close_asset_func(10,19))/2)
+  (-Close_func(88) + Sum_Close_func(83,86) + Close_func(81))/
+  ((Sum_Open_func(10,19) + Sum_Close_func(10,19))/2)
 
 #Capital turn over rate (Kapitalens oml?pshastighet)
 Capital_turnover <-
-  Sum_Close_credit_func(30,39)/
-  ((Sum_Open_asset_func(10,19)+Sum_Close_asset_func(10,19))/2)
+  -Sum_Close_func(30,39)/
+  ((Sum_Open_func(10,19)+Sum_Close_func(10,19))/2)
 
 #Inventory turnover rate
 Inventory_turnover <-
-  -Sum_Close_credit_func(40,49)/
-  ((Open_asset_func(14)+ Close_asset_func(14))/2)
+  Sum_Close_func(40,49)/
+  ((Open_func(14)+ Close_func(14))/2)
 
 #Equity return pre tax (Egenkapitalens rentabilitet)
 Return_equity <-
-  (Close_credit_func(88) - Sum_Close_credit_func(83,86))/
-  ((Open_credit_func(20)+ Close_credit_func(20))/2)
+  (-Close_func(88) + Sum_Close_func(83,86))/
+  ((-Open_func(20) - Close_func(20))/2)
 
 # Visualizations for ratios exclusive to closing blance
 
