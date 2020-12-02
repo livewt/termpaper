@@ -5,7 +5,6 @@ library(bit64)
 library(plotly)
 library(ggplot2)
 
-
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
 main <- xmlParse(choose_file)
@@ -319,7 +318,6 @@ roe = plot_ly(
                 ticksuffix = "%"),
     bar = list(color = "darkorange"),
     borderwidth = 1))
-
 roe = 
   roe %>% 
   layout(margin = list(l = 20, r = 30),
@@ -372,17 +370,19 @@ w_to_s_chart =
 ggplot(data = w_to_s,
            aes(x = timi,
                y = gildi,
-               group = timi))+
-  geom_col(aes(fill = timi),
+               fill = timi))+
+  geom_col(aes(alpha = 0.5),
+           color = "white",
+           fill = c("orange","yellow"),
            position = "dodge")+
   xlab("")+
   ylab("")+
   theme(legend.position = "none")+
   geom_text(
     aes(label = gildi,
-        y = gildi + 0.5),
-    position = position_dodge(0.9),
-    vjust = 0)
+        y = gildi + 0.7,
+        color = "white"),
+    position = position_dodge(0.9))
 
-w_to_s_chart
-    
+w_to_s_chart = 
+  ggplotly(w_to_s_chart)

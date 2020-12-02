@@ -1,3 +1,4 @@
+
 library(shiny)
 library(shinydashboard)
 library(plotly)
@@ -147,9 +148,6 @@ ui =
         menuItem("Dashboard",
                  tabName = "dashboard",
                  icon = icon("dashboard")),
-        menuItem("Liquidity",
-                 tabName = "liquidity",
-                 icon = icon("water")),
         menuItem("Transactions",
                  tabName = "transactions",
                  icon = icon("people-arrows")),
@@ -168,60 +166,40 @@ ui =
       fluidRow(
         tabItems(
           tabItem(tabName = "dashboard",
-                  tabBox(
-                    side = "left",
-                    width = 6,
-                    tabPanel("Return on Assets", roa),
-                    tabPanel("Return on Equity*", roe,
-                             h5("*Return on equity is calculated pre-tax"))),
-                  valueBox(
-                    round(Capital_turnover,
-                          digits = 4),
-                    "Capital Turnover Rate",
-                    icon = icon("hand-holding-usd"),
-                    width = 3,
-                    color = "purple"),
-                  valueBox(
-                    round(Inventory_turnover,
-                          digits = 4),
-                    "Inventory Turnover Rate",
-                    icon = icon("warehouse"),
-                    width = 3,
-                    color = "purple")),
-          
-          tabItem(tabName = "liquidity",
+                  #I commented this out to maybe use for later
+#                  tabBox(
+#                    side = "left",
+#                    width = 6,
+#                    tabPanel("Return on Assets", roa),
+#                    tabPanel("Return on Equity*", roe,
+#                             h5("*Return on equity is calculated pre-tax"))),
+                  h1(div("Liquidity Ratios",
+                  style = "color:orange")),
                   box(
-                    title = 
-                      "Return on Equity",
-                    status =
-                      "warning",
-                    solidHeader = 
-                      TRUE,
-                    height = 
-                      275,
-                    roe),
-                  valueBox(
-                    round(
-                      Capital_turnover,
-                      digits = 3),
-                    "Capital Turnover",
-                    icon = icon("hand-holding-usd"),
-                    width = 3,
-                    color = "orange"),
-                  valueBox(
-                    round(
-                      Inventory_turnover,
-                      digits = 3),
-                    "Inventory Turnover",
-                    icon = icon("warehouse"),
-                    width = 3,
-                    color = "orange"),
+                   title = "Wages to Salary Ratio (%)",
+                   status = "warning",
+                   solidHeader = TRUE,
+                   w_to_s_chart),
+                valueBox(
+                 round(Capital_turnover,
+                       digits = 3),
+                 "Capital Turnover",
+                 icon = icon("hand-holding-usd"),
+                 width = 3,
+                 color = "orange"),
+               valueBox(
+                 round(Inventory_turnover,
+                       digits = 3),
+                 "Inventory Turnover",
+                 icon = icon("warehouse"),
+                 width = 3,
+                 color = "orange"),
                   box(
-                    title = "Wages to Salary Ratio",
+                    title = "Return on Equity",
                     status = "warning",
                     solidHeader = TRUE,
-                    renderPlot(
-                      w_to_s_chart))),
+                    height = 275,
+                    roe)),
           tabItem(tabName = "transactions",
                   box(
                     title = "Transactions",
@@ -267,3 +245,4 @@ server =
 
 # Run app
 shinyApp(ui,server)
+
