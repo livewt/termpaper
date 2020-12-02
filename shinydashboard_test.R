@@ -173,12 +173,14 @@ ui =
 #                    tabPanel("Return on Assets", roa),
 #                    tabPanel("Return on Equity*", roe,
 #                             h5("*Return on equity is calculated pre-tax"))),
-                  h1(div("Liquidity Ratios",
-                  style = "color:orange")),
+                  h1(div("Efficiency Ratios",
+                  style = "color:orange",
+                  align = "center")),
                   box(
-                   title = "Wages to Salary Ratio (%)",
+                   title = "Wages to Salary Ratio",
                    status = "warning",
                    solidHeader = TRUE,
+                   height = 413,
                    w_to_s_chart),
                 valueBox(
                  round(Capital_turnover,
@@ -195,11 +197,13 @@ ui =
                  width = 3,
                  color = "orange"),
                   box(
-                    title = "Return on Equity",
+                    title = "Return on Equity*",
                     status = "warning",
                     solidHeader = TRUE,
-                    height = 275,
-                    roe)),
+                    height = 290,
+                    roe,
+                    h6(
+                      "*Return on equity is calculated pre-tax"))),
           tabItem(tabName = "transactions",
                   box(
                     title = "Transactions",
