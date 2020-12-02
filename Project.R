@@ -312,18 +312,18 @@ roe = plot_ly(
   number = list(suffix = "%"),
   type = "indicator",
   mode = "gauge+number",
+  height = 200,
   gauge = list(
     axis = list(range = list(NULL, 100),
-                tickcolor = "darkblue",
+                tickcolor = "darkorange",
                 ticksuffix = "%"),
-    bar = list(color = "darkblue"),
+    bar = list(color = "darkorange"),
     borderwidth = 1))
 
 roe = 
   roe %>% 
   layout(margin = list(l = 20, r = 30),
-
-                  font = list(color = "darkblue"))
+                  font = list(color = "darkorange"))
   
 # Return on assets
 
@@ -344,47 +344,6 @@ roa =
   roa %>% 
   layout(margin = list(l = 20, r = 30),
          font = list(color = "darkgreen"))
-
-
-# Capital turnover rate
-
-capital_t =
-  plot_ly(
-    domain = list(x = c(0,1), y = c(0,1)),
-    value = Capital_turnover,
-    type = "indicator",
-    mode = "gauge+number",
-    gauge = list(
-      axis = list(range = list(NULL, 100),
-                  tickcolor = "darkred"),
-      bar = list(color = "darkred"),
-      borderwidth = 1))
-
-capital_t =
-  capital_t %>% 
-  layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkred"))
-
-# Inventory turnover rate
-
-inventory_t =
-  plot_ly(
-    domain = list(x = c(0,1), y = c(0,1)),
-    value = Inventory_turnover,
-    type = "indicator",
-    mode = "gauge+number",
-    gauge = list(
-      axis = list(range = list(NULL, 30),
-                  tickcolor = "purple"),
-      bar = list(color = "purple"),
-      borderwidth = 1))
-
-inventory_t =
-  inventory_t %>% 
-  layout(margin = list(l = 20, r = 30),
-         font = list(color = "purple"))
-
-
 
 # Wages to sales ratio
 
@@ -409,8 +368,6 @@ w_to_s =
   group_by(timi)
 
 
-# uuu
-
 w_to_s_chart = 
 ggplot(data = w_to_s,
            aes(x = timi,
@@ -427,81 +384,5 @@ ggplot(data = w_to_s,
     position = position_dodge(0.9),
     vjust = 0)
 
-
-w_to_s_chart =
-ggplotly(
-  p = w_to_s_chart,
-  tooltip = "all",
-  dynamicTicks = FALSE,
-  originalData = FALSE)
-
 w_to_s_chart
     
-
-
-
-# Making data frame to compare relevant financial ratios
-# from beginning of the year to the end of the year
-# (trying something)
-
-open_ratios = 
-  c(Open_Current_ratio,
-    Open_Acid_test,
-    Open_GrossProfit_percent,
-    Open_GrossProfit,
-    Open_Operating_margin,
-    Open_profit_margin1,
-    Open_profit_margin2,
-    Open_wages_sale_inc,
-    Open_interest_ratio,
-    Open_equity_ratio,
-    Open_debt_ratio)
-
-close_ratios =
-  c(Close_Current_ratio,
-    Close_Acid_test,
-    Close_GrossProfit_percent,
-    Close_GrossProfit,
-    Close_Operating_margin,
-    Close_profit_margin1,
-    Close_profit_margin2,
-    Close_wages_sale_inc,
-    Close_interest_ratio,
-    Close_equity_ratio,
-    Close_debt_ratio)
-
-alltsaman = 
-  c(open_ratios,
-    close_ratios)
-
-myrows = 
-  c("Current Ratio",
-    "Acid Test",
-    "Gross Profit (%)",
-    "Gross profit",
-    "Operating Margin (%)",
-    "Profit Margin 1?",
-    "Profit Margin 2?",
-    "Wages/Sale income",
-    "Interest Coverage Ratio",
-    "Equity Ratio",
-    "Debt Ratio")
-
-mycols = 
-  c("Beginning of year",
-    "End of year")
-
-all_ratios =
-  data.frame(
-    "Beginning of year" = round(open_ratios,
-                                digits = 4),
-    "End of year" = round(close_ratios,
-                          digits = 4),
-    row.names = myrows)
-
-roe
-
-t_all_ratios =
-  t(all_ratios)
-
-t_all_ratios

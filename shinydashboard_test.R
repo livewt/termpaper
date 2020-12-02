@@ -49,12 +49,15 @@ ui =
         menuItem("Liquidity",
                  tabName = "liquidity",
                  icon = icon("water")),
+        menuItem("Transactions",
+                 tabName = "transactions",
+                 icon = icon("people-arrows")),
         menuItem("Income Statement",
                  tabName = "incomestatement",
                  icon = icon("cash-register")),
         menuItem("Balance Statement",
                  tabName = "balancestatement",
-                 icon = icon("cash-register")),
+                 icon = icon("balance-scale")),
         menuItem("About",
                  tabName = "about",
                  icon = icon("info-circle")))),
@@ -118,10 +121,7 @@ ui =
                     solidHeader = TRUE,
                     height = 275,
                     renderPlot(
-                      w_to_s_chart,
-                      width = "auto",
-                      height = "auto",
-                      res = 72))),
+                      w_to_s_chart))),
         
           
           tabItem(tabName = "balancestatement",
