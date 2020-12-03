@@ -135,7 +135,7 @@ ui =
                    title = "Wages to Salary Ratio",
                    status = "warning",
                    solidHeader = TRUE,
-                   height = 413,
+                   height = 417,
                    w_to_s_chart),
                 valueBox(
                  round(Capital_turnover,
@@ -155,15 +155,25 @@ ui =
                     title = "Return on Equity*",
                     status = "warning",
                     solidHeader = TRUE,
-                    height = 290,
+                    height = 295,
                     roe,
                     h6(
-                      "*Return on equity is calculated pre-tax"))),
+                      "*Return on equity is calculated pre-tax")),
+               h1(div("Liquidity Ratios",
+                      style = "color:green",
+                      align = "center")),
+               box(
+                 title = "Current Ratio*",
+                 status = "success",
+                 solidHeader = TRUE,
+                 current_chart,
+                 h6(
+                   "*Generally, a good current ratio is between 1 and 2"))),
           tabItem(tabName = "transactions",
                   box(
                     title = "Transactions",
                     status = "primary",
-                    solidHeader = TRUE,
+                    solidHeader = TRUE
 #                    ,*plot name here*
                   )),
   

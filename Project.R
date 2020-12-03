@@ -351,7 +351,6 @@ roa =
          font = list(color = "darkgreen"))
 
 # Wages to sales ratio
-# First, created data frame - then, plotted the ratio
 
 wtos_when = c("Beginning of Year", "End of Year")
 wtos_value = c(Open_wages_sale_inc*100,
@@ -379,15 +378,28 @@ w_to_s_chart =
   w_to_s_chart %>% 
   add_annotations(text = mytext)
 
-# Current ratio - IN PROCESS
+# Current ratio
 
-plot_ly(
+current_chart = plot_ly(
+  value = round(Close_Current_ratio,
+                digits = 3),
   type = "indicator",
-  mode = "number+gauge+delta",
-  gauge = list(shape = "bullet"),
-  delta = list(reference = Open_Current_ratio),
-  number = list(suffix = "%"),
-  value = round(Close_Current_ratio*100,
-                digits = 2),
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  height = 150)
+  mode = "gauge+number+delta",
+  height = 200,
+  gauge = list(
+    axis = list(range = list(NULL, 2),
+                tickcolor = "black"),
+    bar = list(color = "black",
+               width = 1),
+    borderwidth = 1,
+    steps = list(
+      list(range = c(0,0.7), color = "red"),
+      list(range = c(0.7,1), color = "yellow"),
+      list(range = c(1, 2), color = "green"))),
+  delta = list(reference = round(Open_Current_ratio,
+                                 digits = 2)))
+
+current_chart = 
+  current_chart %>% 
+  layout(margin = list(l = 20, r = 30),
+         font = list(color = "black"))
