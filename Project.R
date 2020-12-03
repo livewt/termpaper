@@ -313,7 +313,8 @@ Return_equity <-
 # Return on equity
 
 roe = plot_ly(
-  value = Return_equity * 100,
+  value = round(Return_equity * 100,
+                digits = 2),
   number = list(suffix = "%"),
   type = "indicator",
   mode = "gauge+number",
@@ -362,7 +363,6 @@ w_to_s =
 w_to_s$wtos_value = round(w_to_s$wtos_value,
                           digits = 2)
 
-mytext = c("15.19%","16.26%")
 
 w_to_s_chart = 
   plot_ly(w_to_s,
@@ -372,7 +372,14 @@ w_to_s_chart =
           marker = list(color = 
                           c("yellow","orange")),
           opacity = 0.6,
-          height = 360)
+          height = 300)
+
+mytext = c(round(Open_wages_sale_inc*100,
+                 digits = 2),
+           round(Close_wages_sale_inc*100,
+                 digits = 2))
+
+mytext = paste(mytext,"%", sep = "")
 
 w_to_s_chart = 
   w_to_s_chart %>% 
@@ -380,7 +387,8 @@ w_to_s_chart =
 
 # Current ratio
 
-current_chart = plot_ly(
+current_chart = 
+  plot_ly(
   value = round(Close_Current_ratio,
                 digits = 3),
   type = "indicator",
@@ -403,3 +411,50 @@ current_chart =
   current_chart %>% 
   layout(margin = list(l = 20, r = 30),
          font = list(color = "black"))
+
+# Quick Ratio (Acid Test)
+
+quick_chart = 
+  plot_ly(
+    value = Close_Acid_test,
+    type = "indicator",
+    mode = "gauge+number+delta",
+    height = 200,
+    gauge = list(
+      axis = list(range = list(NULL,2),
+                  tickcolor = "black"),
+      bar = list(color = "black",
+                 width = 1),
+      borderwidth = 1,
+      steps = list(
+        list(range = c(0,0.7), color = "red"),
+        list(range = c(0.7,1), color = "yellow"),
+        list(range = c(1,2), color = "green"))),
+    delta = list(reference = round(Open_Acid_test,
+                                   digits = 2)))
+
+quick_chart = 
+  quick_chart %>% 
+  layout(margin = list(l = 20, r = 30),
+         font = list(color = "black"))
+
+# Higher_lower function for explaining purposes in the Shiny app:
+# Inputs are opening ratio and closing ratio.
+# Prints "higher than" if closing ratio is higher than opening ratio,
+# "lower than" if opening ratio is higher than closing ratio,
+# and "equal to" if closing ratio and opening ratio is the same.
+
+higher_lower = function(open,close){
+  for(i in 1:length(c(open,close))){
+    if(open - close > 0){
+      solution = c("lower than")
+      break}
+    if(close - open > 0){
+      solution = c("higher than")
+      break}
+    else
+      solution = ("equal to what")
+      }
+  print(solution)
+}
+

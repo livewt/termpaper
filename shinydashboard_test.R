@@ -136,6 +136,12 @@ ui =
                    status = "warning",
                    solidHeader = TRUE,
                    height = 417,
+                   h5(div(
+                     "Wages to salary ratio is",
+                     higher_lower(Open_wages_sale_inc,
+                                  Close_wages_sale_inc),
+                     "it was at the beginning of the year",
+                     align = "center")),
                    w_to_s_chart),
                 valueBox(
                  round(Capital_turnover,
@@ -152,23 +158,43 @@ ui =
                  width = 3,
                  color = "orange"),
                   box(
-                    title = "Return on Equity*",
+                    title = "Return on Equity",
                     status = "warning",
                     solidHeader = TRUE,
                     height = 295,
                     roe,
                     h6(
-                      "*Return on equity is calculated pre-tax")),
+                      "Return on equity is calculated pre-tax")),
                h1(div("Liquidity Ratios",
                       style = "color:green",
                       align = "center")),
                box(
-                 title = "Current Ratio*",
+                 title = "Current Ratio",
                  status = "success",
                  solidHeader = TRUE,
+                 h5(div(
+                   "Current ratio is",
+                   higher_lower(Open_Current_ratio,
+                                Close_Current_ratio),
+                                " it was at the beginning of the year"),
+                   align = "center"),
                  current_chart,
                  h6(
-                   "*Generally, a good current ratio is between 1 and 2"))),
+                   "A good current ratio is considered to be between 1 and 2.")),
+               box(
+                 title = "Quick Ratio",
+                 status = "success",
+                 solidHeader = TRUE,
+                 h5(
+                   div(
+                   "Quick ratio is",
+                   higher_lower(Open_Acid_test,
+                                Close_Acid_test),
+                   "it was at the beginning of the year"),
+                   align = "center"),
+                 quick_chart,
+                 h6(
+                   "A good quick ratio is considered to be above 1."))),
           tabItem(tabName = "transactions",
                   box(
                     title = "Transactions",
