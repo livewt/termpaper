@@ -8,7 +8,6 @@ library(devtools)
 library(plotly)
 library(ggplot2)
 
-
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
 main <- xmlParse(choose_file)
@@ -309,8 +308,7 @@ Return_equity <-
   (-Close_func(88) + Sum_Close_func(83,86))/
   ((-Open_func(20) - Close_func(20))/2)
 
-# Visualizations for ratios exclusive to closing blance
-
+# Visualizations!
 
 # Return on equity
 
@@ -356,43 +354,43 @@ roa =
          font = list(color = "darkorange"))
 
 # Wages to sales ratio
+# First, created data frame - then, plotted the ratio
 
-Open_wages_sale_inc
-Close_wages_sale_inc
-
-
-timi = c("Beginning of Year", "End of Year")
-
-gildi = c(Open_wages_sale_inc*100,
+wtos_when = c("Beginning of Year", "End of Year")
+wtos_value = c(Open_wages_sale_inc*100,
           Close_wages_sale_inc*100)
-
 w_to_s = 
-  data.frame(timi,
-             gildi)
+  data.frame(wtos_when,
+             wtos_value)
 
-w_to_s$gildi = round(w_to_s$gildi,
+w_to_s$wtos_value = round(w_to_s$wtos_value,
                      digits = 2)
 
-w_to_s =
-  w_to_s %>% 
-  group_by(timi)
-
+mytext = c("15.19%","16.26%")
 
 w_to_s_chart = 
-ggplot(data = w_to_s,
-           aes(x = timi,
-               y = gildi,
-               group = timi))+
-  geom_col(aes(fill = timi),
-           position = "dodge")+
-  xlab("")+
-  ylab("")+
-  theme(legend.position = "none")+
-  geom_text(
-    aes(label = gildi,
-        y = gildi + 0.5),
-    position = position_dodge(0.9),
-    vjust = 0)
+  plot_ly(w_to_s,
+          x = c("Beginning of Year","End of Year"),
+          y = wtos_value,
+          type = "bar",
+          marker = list(color = 
+                          c("yellow","orange")),
+          opacity = 0.6,
+          height = 360)
 
-w_to_s_chart
-    
+w_to_s_chart = 
+  w_to_s_chart %>% 
+  add_annotations(text = mytext)
+          
+# Current ratio
+
+plot_ly(
+  type = "indicator",
+  mode = "number+gauge+delta",
+  gauge = list(shape = "bullet"),
+  delta = list(reference = Open_Current_ratio),
+  number = list(suffix = "%"),
+  value = round(Close_Current_ratio*100,
+                digits = 2),
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  height = 150)
