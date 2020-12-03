@@ -314,7 +314,7 @@ Return_equity <-
 
 roe = plot_ly(
   value = round(Return_equity * 100,
-                digits = 2),
+                digits = 1),
   number = list(suffix = "%"),
   type = "indicator",
   mode = "gauge+number",
@@ -335,21 +335,23 @@ roe =
 
 roa = 
   plot_ly(
-    value = Return_assets * 100,
+    value = round(Return_assets * 100,
+                  digits = 1),
     number = list(suffix = "%"),
     type = "indicator",
     mode = "gauge+number",
+    height = 200,
     gauge = list(
       axis = list(range = list(NULL, 100),
-                  tickcolor = "darkgreen",
+                  tickcolor = "darkred",
                   ticksuffix = "%"),
-      bar = list(color = "darkgreen"),
+      bar = list(color = "darkred"),
       borderwidth = 1))
 
 roa =
   roa %>% 
   layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkgreen"))
+         font = list(color = "darkred"))
 
 # Wages to sales ratio
 
@@ -438,6 +440,11 @@ quick_chart =
   layout(margin = list(l = 20, r = 30),
          font = list(color = "black"))
 
+# Operating margin - IN PROGRESS
+
+
+
+
 # Higher_lower function for explaining purposes in the Shiny app:
 # Inputs are opening ratio and closing ratio.
 # Prints "higher than" if closing ratio is higher than opening ratio,
@@ -455,7 +462,7 @@ higher_lower = function(open,close){
     else
       solution = ("equal to what")
       }
-  print(solution)
+  solution
 }
 
 

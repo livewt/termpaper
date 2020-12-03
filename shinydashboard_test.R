@@ -128,6 +128,21 @@ ui =
         ),
         tabItems(
           tabItem(tabName = "dashboard",
+                  h1(div("Profitability Ratios",
+                         style = "color:darkred",
+                         align = "center")),
+                  box(
+                    title = "Return on Equity",
+                    status = "danger",
+                    solidHeader = TRUE,
+                    height = 295,
+                    roa),
+                  box(
+                    title = "Operating Margin",
+                    status = "danger",
+                    solidHeader = TRUE,
+                    height = 295,
+                    h5("I'm working on this")),
                   h1(div("Efficiency Ratios",
                   style = "color:orange",
                   align = "center")),
