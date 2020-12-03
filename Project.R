@@ -315,7 +315,6 @@ Return_equity <-
 roe = plot_ly(
   value = Return_equity * 100,
   number = list(suffix = "%"),
-  height = 200,
   type = "indicator",
   mode = "gauge+number",
   height = 200,
@@ -330,41 +329,39 @@ roe =
   roe %>% 
   layout(margin = list(l = 20, r = 30),
          font = list(color = "darkorange"))
-  
-  
+
 # Return on assets
 
 roa = 
   plot_ly(
     value = Return_assets * 100,
     number = list(suffix = "%"),
-    height = 200,
     type = "indicator",
     mode = "gauge+number",
     gauge = list(
       axis = list(range = list(NULL, 100),
-                  tickcolor = "darkorange",
+                  tickcolor = "darkgreen",
                   ticksuffix = "%"),
-      bar = list(color = "darkorange"),
+      bar = list(color = "darkgreen"),
       borderwidth = 1))
 
 roa =
   roa %>% 
   layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkorange"))
+         font = list(color = "darkgreen"))
 
 # Wages to sales ratio
 # First, created data frame - then, plotted the ratio
 
 wtos_when = c("Beginning of Year", "End of Year")
 wtos_value = c(Open_wages_sale_inc*100,
-          Close_wages_sale_inc*100)
+               Close_wages_sale_inc*100)
 w_to_s = 
   data.frame(wtos_when,
              wtos_value)
 
 w_to_s$wtos_value = round(w_to_s$wtos_value,
-                     digits = 2)
+                          digits = 2)
 
 mytext = c("15.19%","16.26%")
 
@@ -381,8 +378,8 @@ w_to_s_chart =
 w_to_s_chart = 
   w_to_s_chart %>% 
   add_annotations(text = mytext)
-          
-# Current ratio
+
+# Current ratio - IN PROCESS
 
 plot_ly(
   type = "indicator",
