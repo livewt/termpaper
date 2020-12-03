@@ -145,7 +145,7 @@ Sum_Open_func <- function(start, end){
   #' 
   x <- integer64()
   for (i in start:end){
-    x <- c(x, Open_asset_func(i)) #uses the subset function above
+    x <- c(x, Open_func(i)) #uses the subset function above
   }
   x <- sum(x)
   x
