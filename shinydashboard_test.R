@@ -49,7 +49,31 @@ SumByAID$AccountID <- as.numeric(SumByAID$AccountID)
 # --------------------
 # Resultatregnskap etter art
 # --------------------
+library(shiny)
+library(shinydashboard)
+library(plotly)
+library(data.table)
 
+#Open with encoding UTF-8 to get ÆØÅ
+
+# Here, we choose the Telenor file as we run the app
+
+source("Project.R")
+
+# Order given dataset by StandardAccountID and sum ClosingDebitBalance
+SumBySAID <- aggregate(main_df$ClosingDebitBalance,
+                       by=list(StandardAccountID=main_df$StandardAccountID),
+                       FUN=sum)
+SumBySAID$StandardAccountID <- as.numeric(SumBySAID$StandardAccountID) 
+
+
+SumByAID <- aggregate(main_df$ClosingDebitBalance,
+                      by=list(AccountID=main_df$AccountID),
+                      FUN=sum)
+SumByAID$AccountID <- as.numeric(SumByAID$AccountID)
+
+
+# create dataset
 `Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'Lønnskostnad',
                                   'Avskrivning', 'Nedskrivning',
                                   'Annen driftskostnad', 'Finansinntekt',
@@ -60,28 +84,16 @@ SumByAID$AccountID <- as.numeric(SumByAID$AccountID)
                                   'SKattekostnad på ekstraordinært resultat',
                                   'Årsresultat', 'Overføringer/disponeringer')
 
-#AccountIDRange <- c(Salgsinntekt = 3000:3970, Varekostnad = 4000:4990, Lønnskostnad = 5000:5930,
-#                    Avskrivning = 6000:6020, Nedskrivning = 6050, `Annen driftskostnad` = 6100:7910,
-#                    Finansinntekt = 8000:8080, Finanskostnad = 8100:8170, 
-#                    `Skattekostnad på ordinært resultat` = 8300:8320,
-#                    `Ekstraordinær inntekt` = 8400, `Ekstraordinær kostnad` = 8500,
-#                    `SKattekostnad på ekstraordinært resultat` = 8600:8620,
-#                    Årsresultat = 8800, `Overføringer/disponeringer` = 8900:8990)
+AccountID <- c(3000:3970, 4000:4990, 5000:5930, 6000:6020, 6050, 6100:7910,
+               8000:8080, 8100:8170, 8300:8320, 8400, 8500, 8600:8620,
+               8800, 8900:8990)
 
-#match(names(AccountIDRange), `Resultatregnskap etter art`)
+Resultatregnskap <- 0
 
-#`REA Tall` <- 0 # placeholder
+#art.data <- data.frame(`Resultatregnskap etter art`, AccountID, 
+#                       Resultatregnskap, check.names = 'false')
 
-# Get sum from SumByAID and insert into REA
-#setDT(AccountIDRange)[SumByAID, `REA Tall` := x, on = .(AccountIDRange)]
-
-#BalanseREA <- data.frame(`Resultatregnskap etter art`, AccountIDRange, 
-#                       `REA Tall`, check.names = 'false')
-
-
-# --------------------
 # EIENDELER
-# --------------------
 
 Eiendeler <- c('Immaterielle eiendeler o.l',
                'Tomter, bygninger og annen fast eiendom',
@@ -94,7 +106,7 @@ Eiendeler <- c('Immaterielle eiendeler o.l',
                'Kortsiktige finansinvesteringer', 
                'Bankinnskudd, kontanter og lignende')
 
-StandardAccountID <- c(10:19)
+StandardAccountID <- c(10,11,12,13,14,15,16,17,18,19)
 
 `Eiendeler tall` <- 0 # placeholder
 
@@ -104,13 +116,9 @@ BalanseEiendeler <- data.frame(Eiendeler, StandardAccountID,
 # Get sum from SumBySAID and insert into BalanseEiendeler
 setDT(BalanseEiendeler)[SumBySAID, `Eiendeler tall` := x, on = .(StandardAccountID)]
 
-# Remove SAID from BalanseEiendeler
 BalanseEiendeler$StandardAccountID <- NULL
 
-
-# --------------------
 # EGENKAPITAL OG GJELD
-# --------------------
 
 `Egenkapital og Gjeld` <- c('Egenkapital AS/ASA', 'Avsetning for forpliktelser',
                             'Annen langsiktig gjeld', 
@@ -120,7 +128,7 @@ BalanseEiendeler$StandardAccountID <- NULL
                             'Skyldige offentlige avgifter', 'Utbytte',
                             'Annen kortsiktig gjeld')
 
-StandardAccountID <- c(20:29)
+StandardAccountID <- c(20,21,22,23,24,25,26,27,28,29)
 
 `EKGJ tall` <- 0 # placeholder
 
@@ -130,9 +138,7 @@ BalanseEKGJ <- data.frame(`Egenkapital og Gjeld`, StandardAccountID,
 # Get sum from SumBySAID and insert into BalanseEKGJ
 setDT(BalanseEKGJ)[SumBySAID, `EKGJ tall` := x, on = .(StandardAccountID)]
 
-# Remove SAID from BalanseEKGJ
 BalanseEKGJ$StandardAccountID <- NULL
-
 
 
 # Create ui
@@ -164,15 +170,14 @@ ui =
     
     dashboardBody(
       fluidRow(
+        tags$head(
+          tags$style(HTML("hr {border-top: 1px solid #000000;}")), # make hr more visible
+          tags$style(HTML("
+            .content{
+               width: 90%;
+            }"))),
         tabItems(
           tabItem(tabName = "dashboard",
-                  #I commented this out to maybe use for later
-#                  tabBox(
-#                    side = "left",
-#                    width = 6,
-#                    tabPanel("Return on Assets", roa),
-#                    tabPanel("Return on Equity*", roe,
-#                             h5("*Return on equity is calculated pre-tax"))),
                   h1(div("Efficiency Ratios",
                   style = "color:orange",
                   align = "center")),
@@ -212,34 +217,36 @@ ui =
 #                    ,*plot name here*
                   )),
         
-          
-          tabItem(tabName = "balancestatement",
-                  h4(
-                    "Balance statement"),
-                    tabPanel("Balanse", DT::dataTableOutput("Balanse"))),
-          tabItem(tabName = "incomestatement",
-                  h4(
-                    "Income statement"),
-                  tabPanel("art.data", DT::dataTableOutput("art.data"))),
-          tabItem(tabName = "about",
-                  
-                  h4(
-                    " Here, we can write some information
+           tabItem(tabName = "balancestatement",
+              h2(
+                 "Balance statement"),
+              tabPanel("BalanseEiendeler", DT::dataTableOutput("BalanseEiendeler")),
+                hr(),
+              tabPanel("BalanseEKGJ", DT::dataTableOutput("BalanseEKGJ"))),
+           tabItem(tabName = "incomestatement",
+              h4(
+                "Income statement"),
+             tabPanel("art.data", DT::dataTableOutput("art.data"))),
+           tabItem(tabName = "about",
+              h4(
+                 " Here, we can write some information
                    about the financial ratios or about how
                    the dashboard was made."),
-                  h5(
-                    "We can also write our names.")))
-        
+              h5(
+                 "We can also write our names.")))
+
       )
+    )
   )
-)
 
 # Create server
 server = 
   function(input,output){
-    
-    output$Balanse <- DT::renderDataTable({
-      DT::datatable(Balanse)
+    output$BalanseEiendeler <- DT::renderDataTable({
+      DT::datatable(BalanseEiendeler)
+    })
+    output$BalanseEKGJ <- DT::renderDataTable({
+      DT::datatable(BalanseEKGJ)
     })
     output$art.data <- DT::renderDataTable({
       DT::datatable(art.data)
@@ -249,4 +256,3 @@ server =
 
 # Run app
 shinyApp(ui,server)
-
