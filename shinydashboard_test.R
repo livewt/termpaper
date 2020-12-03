@@ -132,7 +132,7 @@ ui =
                          style = "color:darkred",
                          align = "center")),
                   box(
-                    title = "Return on Equity",
+                    title = "Return on Assets",
                     status = "danger",
                     solidHeader = TRUE,
                     height = 295,
