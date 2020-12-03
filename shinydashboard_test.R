@@ -199,8 +199,8 @@ ui =
                   box(
                     title = "Transactions",
                     status = "primary",
-                    solidHeader = TRUE
-#                    ,*plot name here*
+                    solidHeader = TRUE,
+                    girafeOutput("trans_plot")
                   )),
   
            tabItem(tabName = "balancestatement",
@@ -236,6 +236,9 @@ server =
     })
     output$art.data <- DT::renderDataTable({
       DT::datatable(BalanseREA)
+    })
+    output$trans_plot <- renderGirafe({
+      girafe(ggobj = transaction_plot)
     })
     
   }
