@@ -197,9 +197,8 @@ ui =
                    "A good quick ratio is considered to be above 1."))),
           tabItem(tabName = "transactions",
                   box(
-                    title = "Transactions",
-                    status = "primary",
-                    solidHeader = TRUE,
+                    solidHeader = FALSE,
+                    width = 12,
                     girafeOutput("trans_plot")
                   )),
   

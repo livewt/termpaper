@@ -549,8 +549,8 @@ tooltip_ <- c(paste0("Description: ", plot_info$Description,
 transaction_plot <- ggplot(data = plot_info) +
   geom_point_interactive(aes(x = 1:53, y = `trans_sum$Amounts`,
                              tooltip = tooltip_, data_id = TransactionID))+
-  ylab("Transcation amount")+
-  xlab("Transcations")+
+  ylab("Amount")+
+  xlab("Transcation number")+
   ggtitle("Hover over points to view description of the transcation")+
   scale_x_continuous(labels = scales::comma)+
   scale_y_continuous(labels = scales::comma)
