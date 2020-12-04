@@ -549,9 +549,9 @@ library(ggiraph)
 #mva_test$Line.Amount.1 <- as.numeric(mva_test$Line.Amount.1)
 plot_info$TransactionID <- as.numeric(plot_info$TransactionID)
 
-tooltip_ <- c(paste0("Description: ", plot_info$Description,
-                     "\n Transaction ID: ", plot_info$TransactionID,
-                     "\n Amount: ", as.integer(plot_info$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
+#tooltip_ <- c(paste0("Description: ", plot_info$Description,
+#                     "\n Transaction ID: ", plot_info$TransactionID,
+#                     "\n Amount: ", as.integer(plot_info$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
 
 #transaction_plot <- ggplot(data = plot_info) +
 #  geom_point_interactive(aes(x = 1:length(`trans_sum$Amounts`), y = `trans_sum$Amounts`,
