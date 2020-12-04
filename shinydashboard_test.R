@@ -214,7 +214,14 @@ ui =
                   box(
                     solidHeader = FALSE,
                     width = 12,
-                    girafeOutput("trans_plot")
+                    #girafeOutput("trans_plot"),
+                    plotOutput("trans_plot"),
+                    dateRangeInput(inputId = "date",
+                                   label = "Select date",
+                                   start = min(plot_info$TransactionDate),
+                                   end = max(plot_info$TransactionDate),
+                                   min = min(plot_info$TransactionDate),
+                                   max = max(plot_info$TransactionDate))
                   )),
   
            tabItem(tabName = "balancestatement",
@@ -251,10 +258,37 @@ server =
     output$art.data <- DT::renderDataTable({
       DT::datatable(BalanseREA)
     })
-    output$trans_plot <- renderGirafe({
-      girafe(ggobj = transaction_plot)
+    #output$trans_plot <- renderGirafe({
+     # girafe(ggobj = transaction_plot)
+    #})
+    trans_subset <- reactive({
+      subset(plot_info, plot_info$TransactionDate>= input$date[1] & plot_info$TransactionDate <= input$date[2])
+      
     })
-    
+    #tooltip_ <- c(paste0("Description: ", trans_subset$Description,
+    #                     "\n Transaction ID: ", trans_subset$TransactionID,
+    #                     "\n Amount: ", as.integer(trans_subset$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
+    #output$datestart <- renderText({
+    #  as.character(input$date[1])
+    #})
+    #output$dateend <- renderText({
+    #  as.character(input$date[2])
+    #})
+    output$trans_plot <- renderPlot({
+      ggplot(data = trans_subset()) +
+        geom_point_interactive(aes(x = 1:length(`trans_sum$Amounts`), y = `trans_sum$Amounts`))+#,
+                                   #tooltip = tooltip_, data_id = TransactionID))+
+        ylab("Amount")+
+        xlab("Transcation number")+
+        ggtitle("Hover over points to view description of the transcation")+
+        scale_x_continuous(labels = scales::comma)+
+        scale_y_continuous(labels = scales::comma)
+        
+        #girafe(ggobj = trans_plot2)
+    })
+    #output$test <- renderTable(
+     # test2 <- subset(trans_plot, trans_plot$TransactionDate >= input$date[1] & trans_plot$TransactionDate <= input$date[2])
+    #)
   }
 
 # Run app

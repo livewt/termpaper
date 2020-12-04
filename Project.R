@@ -553,20 +553,24 @@ tooltip_ <- c(paste0("Description: ", plot_info$Description,
                      "\n Transaction ID: ", plot_info$TransactionID,
                      "\n Amount: ", as.integer(plot_info$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
 
-transaction_plot <- ggplot(data = plot_info) +
-  geom_point_interactive(aes(x = 1:53, y = `trans_sum$Amounts`,
-                             tooltip = tooltip_, data_id = TransactionID))+
-  ylab("Amount")+
-  xlab("Transcation number")+
-  ggtitle("Hover over points to view description of the transcation")+
-  scale_x_continuous(labels = scales::comma)+
-  scale_y_continuous(labels = scales::comma)
+#transaction_plot <- ggplot(data = plot_info) +
+#  geom_point_interactive(aes(x = 1:length(`trans_sum$Amounts`), y = `trans_sum$Amounts`,
+#                             tooltip = tooltip_, data_id = TransactionID))+
+#  ylab("Amount")+
+#  xlab("Transcation number")+
+#  ggtitle("Hover over points to view description of the transcation")+
+#  scale_x_continuous(labels = scales::comma)+
+#  scale_y_continuous(labels = scales::comma)
 
 
-transaction_plot
+#transaction_plot
 #girafe(code = print(testplot))
-girafe(ggobj = transaction_plot)
-
+#girafe(ggobj = transaction_plot)
+plot_info$TransactionDate <- as.Date(plot_info$TransactionDate)
+plot_info
+#plot_info %>%
+#  subset(.$TransactionDate> as.Date("2017-04-03"))
+subset(plot_info, plot_info$TransactionDate>= "2017-03-15" & plot_info$TransactionDate <= "2017-05-05")
 
 #check if all transcations are included (53 in this case)
 as.numeric(main_list[[3]][[1]]) == length(plot_info$`trans_sum$Amounts`)
@@ -574,8 +578,9 @@ as.numeric(main_list[[3]][[1]]) == length(plot_info$`trans_sum$Amounts`)
 sum(plot_info$`trans_sum$Amounts`)== as.numeric(main_list[[3]][[2]])
 as.numeric(main_list[[3]][[3]]) == as.numeric(main_list[[3]][[2]])
 
-library(anytime)
+#library(anytime)
 
-plot_info$TransactionDate <- anytime(plot_info$TransactionDate)
+#plot_info$TransactionDate <- anytime(plot_info$TransactionDate)
 
-max(plot_info$TransactionDate)
+#max(plot_info$TransactionDate)
+#length(plot_info$TransactionDate)
