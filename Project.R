@@ -625,23 +625,6 @@ SumByAIDCredit$AccountID <- as.numeric(SumByAIDCredit$AccountID)
                                   'SKattekostnad på ekstraordinært resultat',
                                    'Årsresultat', 'Overføringer/disponeringer')
 
-# `Resultatregnskap etter art` <-
-#   list(
-#   list(name = "Salgsinntekt", aid = c(3000:3970), type = "Credit"),
-#   list(name = "Varekostnad", aid = c(4000:4990), type = "Debit"),
-#   list(name = "Lønnskostnad", aid = c(5000:5930), type = "Debit"),
-#   list(name = "Avskrivning", aid = c(6000:6020), type = "Debit"),
-#   list(name = "Nedskrivning", aid = c(6050), type = "Debit"),
-#   list(name = "Annen driftskostnad", aid = c(6100:7910), type = "Debit"),
-#   list(name = "Finansinntekt", aid = c(8000:8080), type = "Credit"),
-#   list(name = "Finanskostnad", aid = c(8100:8170), type = "Debit"),
-#   list(name = "Skattekostnad på ordinært resultat", aid = c(8300:8320), type = "Debit"),
-#   list(name = "Ekstraordinær inntekt", aid = c(8400), type = "Credit"),
-#   list(name = "Ekstraordinær kostnad", aid = c(8500), type = "Debit"),
-#   list(name = "Skattekostnad på ekstraordinært resultat", aid = c(8600:8620), type = "Debit"),
-#   list(name = "Årsresultat", aid = c(8800), type = "Credit"),
-#   list(name = "Overføringer/disponeringer", aid = c(8900:8990), type = "Debit")
-#   )
 
 SI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=3000 & SumByAIDCredit[,1]<=3970),2]))
 VK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=4000 & SumByAIDDebit[,1]<=4990),2]))
@@ -661,40 +644,9 @@ Disp <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8900 & SumByAIDDeb
 Tall <- c(SI, VK, LK, Avskr, Nedskr, AnnenDK, FI, FK, SKord, EkstraI, EkstraK,
           SKekstra, Res, Disp)
 
-                                 
-# REA <- `Resultatregnskap etter art` #simplify
-
-#AccountID <- c(3000:3970, 4000:4990, 5000:5930, 6000:6020, 6050, 6100:7910,
-#                8000:8080, 8100:8170, 8300:8320, 8400, 8500, 8600:8620,
-#                8800, 8900:8990)
-
-#`REA Tall` <- 0 # Placeholder
 
 Resultatregnskap <- data.frame(`Resultatregnskap etter art`, Tall, check.names = 'false')
 
-# i <- 1
-# for (entry in `Resultatregnskap etter art`) {
-#   # Save to variables for simplicity
-#   name <- entry["name"]
-#   range <- entry["aid"]
-  
-  
-  
-  # if (entry["type"] == "Debit") {
-  #   # Entry type is Debit
-  #   # Get sum from SumByAID and insert into BalanseREA
-  #   
-  #   setDT(BalanseREA)[SumByAIDDebit, `REA Tall` := x, on = .(AccountID)]
-  # }
-  # if (entry["type"] == "Credit") {
-  #   # Entry type is Credit
-  #   # Get sum from SumByAID and insert into BalanseREA
-  #   setDT(BalanseREA)[SumByAIDCredit, `REA Tall` := x, on = .(AccountID)]
-  # }
-#   i <- i+1
-# }
-
-#BalanseREA$AccountID <- NULL
 
 # --------------------
 # EIENDELER
