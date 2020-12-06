@@ -584,3 +584,166 @@ as.numeric(main_list[[3]][[3]]) == as.numeric(main_list[[3]][[2]])
 
 #max(plot_info$TransactionDate)
 #length(plot_info$TransactionDate)
+# Order given dataset by StandardAccountID and sum depending on credit/debit
+
+# Sum by SAID - Debit
+SumBySAIDDebit <- aggregate(main_df$ClosingDebitBalance - main_df$ClosingCreditBalance,
+                             by=list(StandardAccountID=main_df$StandardAccountID),
+                             FUN=sum)
+SumBySAIDDebit$StandardAccountID <- as.numeric(SumBySAIDDebit$StandardAccountID)
+
+# Sum by SAID - Credit
+SumBySAIDCredit <- aggregate(main_df$ClosingCreditBalance - main_df$ClosingDebitBalance,
+                       by=list(StandardAccountID=main_df$StandardAccountID),
+                       FUN=sum)
+SumBySAIDCredit$StandardAccountID <- as.numeric(SumBySAIDCredit$StandardAccountID) 
+
+# Sum by Account ID - Debit
+SumByAIDDebit <- aggregate(main_df$ClosingDebitBalance - main_df$ClosingCreditBalance,
+                      by=list(AccountID=main_df$AccountID),
+                      FUN=sum)
+SumByAIDDebit$AccountID <- as.numeric(SumByAIDDebit$AccountID)
+
+# Sum by Account ID - Credit
+SumByAIDCredit <- aggregate(main_df$ClosingCreditBalance - main_df$ClosingDebitBalance,
+                           by=list(AccountID=main_df$AccountID),
+                           FUN=sum)
+SumByAIDCredit$AccountID <- as.numeric(SumByAIDCredit$AccountID)
+
+
+# --------------------
+# RESULTATREGNSKAP ETTER ART
+# --------------------
+
+`Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'Lønnskostnad',
+                                  'Avskrivning', 'Nedskrivning',
+                                  'Annen driftskostnad', 'Finansinntekt',
+                                  'Finanskostnad',
+                                  'Skattekostnad på ordinært resultat',
+                                  'Ekstraordinær inntekt',
+                                  'Ekstraordinær kostnad',
+                                  'SKattekostnad på ekstraordinært resultat',
+                                   'Årsresultat', 'Overføringer/disponeringer')
+
+# `Resultatregnskap etter art` <-
+#   list(
+#   list(name = "Salgsinntekt", aid = c(3000:3970), type = "Credit"),
+#   list(name = "Varekostnad", aid = c(4000:4990), type = "Debit"),
+#   list(name = "Lønnskostnad", aid = c(5000:5930), type = "Debit"),
+#   list(name = "Avskrivning", aid = c(6000:6020), type = "Debit"),
+#   list(name = "Nedskrivning", aid = c(6050), type = "Debit"),
+#   list(name = "Annen driftskostnad", aid = c(6100:7910), type = "Debit"),
+#   list(name = "Finansinntekt", aid = c(8000:8080), type = "Credit"),
+#   list(name = "Finanskostnad", aid = c(8100:8170), type = "Debit"),
+#   list(name = "Skattekostnad på ordinært resultat", aid = c(8300:8320), type = "Debit"),
+#   list(name = "Ekstraordinær inntekt", aid = c(8400), type = "Credit"),
+#   list(name = "Ekstraordinær kostnad", aid = c(8500), type = "Debit"),
+#   list(name = "Skattekostnad på ekstraordinært resultat", aid = c(8600:8620), type = "Debit"),
+#   list(name = "Årsresultat", aid = c(8800), type = "Credit"),
+#   list(name = "Overføringer/disponeringer", aid = c(8900:8990), type = "Debit")
+#   )
+
+SI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=3000 & SumByAIDCredit[,1]<=3970),2]))
+VK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=4000 & SumByAIDDebit[,1]<=4990),2]))
+LK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=5000 & SumByAIDDebit[,1]<=5930),2]))
+Avskr <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=6000 & SumByAIDDebit[,1]<=6020),2]))
+Nedskr <- as.numeric(SumByAIDDebit[,2][SumByAIDDebit["AccountID"]==6050])
+AnnenDK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=6100 & SumByAIDDebit[,1]<=7910),2]))
+FI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=8000 & SumByAIDCredit[,1]<=8080),2]))
+FK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8100 & SumByAIDDebit[,1]<=8170),2]))
+SKord <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8300 & SumByAIDDebit[,1]<=8320),2]))
+EkstraI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=8400 & SumByAIDCredit[,1]<=8499),2]))
+EkstraK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8500 & SumByAIDDebit[,1]<=8599),2]))
+SKekstra <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8600 & SumByAIDDebit[,1]<=8620),2]))
+Res <- as.numeric(SumByAIDCredit[,2][SumByAIDCredit["AccountID"]==8800])
+Disp <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8900 & SumByAIDDebit[,1]<=8990),2]))
+
+Tall <- c(SI, VK, LK, Avskr, Nedskr, AnnenDK, FI, FK, SKord, EkstraI, EkstraK,
+          SKekstra, Res, Disp)
+
+                                 
+# REA <- `Resultatregnskap etter art` #simplify
+
+#AccountID <- c(3000:3970, 4000:4990, 5000:5930, 6000:6020, 6050, 6100:7910,
+#                8000:8080, 8100:8170, 8300:8320, 8400, 8500, 8600:8620,
+#                8800, 8900:8990)
+
+#`REA Tall` <- 0 # Placeholder
+
+Resultatregnskap <- data.frame(`Resultatregnskap etter art`, Tall, check.names = 'false')
+
+# i <- 1
+# for (entry in `Resultatregnskap etter art`) {
+#   # Save to variables for simplicity
+#   name <- entry["name"]
+#   range <- entry["aid"]
+  
+  
+  
+  # if (entry["type"] == "Debit") {
+  #   # Entry type is Debit
+  #   # Get sum from SumByAID and insert into BalanseREA
+  #   
+  #   setDT(BalanseREA)[SumByAIDDebit, `REA Tall` := x, on = .(AccountID)]
+  # }
+  # if (entry["type"] == "Credit") {
+  #   # Entry type is Credit
+  #   # Get sum from SumByAID and insert into BalanseREA
+  #   setDT(BalanseREA)[SumByAIDCredit, `REA Tall` := x, on = .(AccountID)]
+  # }
+#   i <- i+1
+# }
+
+#BalanseREA$AccountID <- NULL
+
+# --------------------
+# EIENDELER
+# --------------------
+
+Eiendeler <- c('Immaterielle eiendeler o.l',
+               'Tomter, bygninger og annen fast eiendom',
+               'Transportmidler, inventar og maskiner o.l.', 
+               'Finansielle anleggsmidler',
+               'Varelager og forskudd til leverandører', 
+               'Kortsiktige fordringer',
+               'Merverdiavgift, opptjente offentlige tilskudd o.l.', 
+               'Forskuddsbetalt kostnad, påløpt inntekt o.l.',
+               'Kortsiktige finansinvesteringer', 
+               'Bankinnskudd, kontanter og lignende')
+
+StandardAccountID <- c(10:19)
+
+`Eiendeler tall` <- 0 # placeholder
+
+BalanseEiendeler <- data.frame(Eiendeler, StandardAccountID, 
+                               `Eiendeler tall`, check.names = 'false')
+
+# Get sum from SumBySAID and insert into BalanseEiendeler
+setDT(BalanseEiendeler)[SumBySAIDDebit, `Eiendeler tall` := x, on = .(StandardAccountID)]
+
+BalanseEiendeler$StandardAccountID <- NULL
+
+# --------------------
+# EGENKAPITAL OG GJELD
+# --------------------
+
+`Egenkapital og Gjeld` <- c('Egenkapital AS/ASA', 'Avsetning for forpliktelser',
+                            'Annen langsiktig gjeld', 
+                            'Kortsiktige konvertible lån, obligasjonslån og gjeld til kredittinstitusjoner',
+                            'Leverandørgjeld', 'Betalbar skatt', 
+                            'Skattetrekk og andre trekk',
+                            'Skyldige offentlige avgifter', 'Utbytte',
+                            'Annen kortsiktig gjeld')
+
+StandardAccountID <- c(20:29)
+
+`EKGJ tall` <- 0 # placeholder
+
+BalanseEKGJ <- data.frame(`Egenkapital og Gjeld`, StandardAccountID, 
+                          `EKGJ tall`, check.names = 'false')
+
+# Get sum from SumBySAID and insert into BalanseEKGJ
+setDT(BalanseEKGJ)[SumBySAIDCredit, `EKGJ tall` := x, on = .(StandardAccountID)]
+
+BalanseEKGJ$StandardAccountID <- NULL
+
