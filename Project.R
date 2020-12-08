@@ -343,15 +343,19 @@ roa =
     height = 200,
     gauge = list(
       axis = list(range = list(NULL, 100),
-                  tickcolor = "darkred",
+                  tickcolor = "dodgerblue",
                   ticksuffix = "%"),
-      bar = list(color = "darkred"),
-      borderwidth = 1))
+      bar = list(color = "dodgerblue"),
+      borderwidth = 1,
+      threshold = list(
+        line = list(color = "red", width = 2),
+        thickness = 1,
+        value = 5)))
 
 roa =
   roa %>% 
   layout(margin = list(l = 20, r = 30),
-         font = list(color = "darkred"))
+         font = list(color = "dodgerblue"))
 
 # Wages to sales ratio
 
@@ -442,7 +446,8 @@ quick_chart =
 
 # Operating margin - IN PROGRESS
 
-
+#Open_Operating_margin
+#Close_Operating_margin
 
 
 # Higher_lower function for explaining purposes in the Shiny app:
@@ -615,15 +620,15 @@ SumByAIDCredit$AccountID <- as.numeric(SumByAIDCredit$AccountID)
 # RESULTATREGNSKAP ETTER ART
 # --------------------
 
-`Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'Lønnskostnad',
+`Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'LÃ¸nnskostnad',
                                   'Avskrivning', 'Nedskrivning',
                                   'Annen driftskostnad', 'Finansinntekt',
                                   'Finanskostnad',
-                                  'Skattekostnad på ordinært resultat',
-                                  'Ekstraordinær inntekt',
-                                  'Ekstraordinær kostnad',
-                                  'SKattekostnad på ekstraordinært resultat',
-                                   'Årsresultat', 'Overføringer/disponeringer')
+                                  'Skattekostnad pÃ¥ ordinÃ¦rt resultat',
+                                  'EkstraordinÃ¦r inntekt',
+                                  'EkstraordinÃ¦r kostnad',
+                                  'SKattekostnad pÃ¥ ekstraordinÃ¦rt resultat',
+                                   'Ãrsresultat', 'OverfÃ¸ringer/disponeringer')
 
 
 SI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=3000 & SumByAIDCredit[,1]<=3970),2]))
@@ -656,10 +661,10 @@ Eiendeler <- c('Immaterielle eiendeler o.l',
                'Tomter, bygninger og annen fast eiendom',
                'Transportmidler, inventar og maskiner o.l.', 
                'Finansielle anleggsmidler',
-               'Varelager og forskudd til leverandører', 
+               'Varelager og forskudd til leverandÃ¸rer', 
                'Kortsiktige fordringer',
                'Merverdiavgift, opptjente offentlige tilskudd o.l.', 
-               'Forskuddsbetalt kostnad, påløpt inntekt o.l.',
+               'Forskuddsbetalt kostnad, pÃ¥lÃ¸pt inntekt o.l.',
                'Kortsiktige finansinvesteringer', 
                'Bankinnskudd, kontanter og lignende')
 
@@ -681,8 +686,8 @@ BalanseEiendeler$StandardAccountID <- NULL
 
 `Egenkapital og Gjeld` <- c('Egenkapital AS/ASA', 'Avsetning for forpliktelser',
                             'Annen langsiktig gjeld', 
-                            'Kortsiktige konvertible lån, obligasjonslån og gjeld til kredittinstitusjoner',
-                            'Leverandørgjeld', 'Betalbar skatt', 
+                            'Kortsiktige konvertible lÃ¥n, obligasjonslÃ¥n og gjeld til kredittinstitusjoner',
+                            'LeverandÃ¸rgjeld', 'Betalbar skatt', 
                             'Skattetrekk og andre trekk',
                             'Skyldige offentlige avgifter', 'Utbytte',
                             'Annen kortsiktig gjeld')

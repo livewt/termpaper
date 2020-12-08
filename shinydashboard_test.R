@@ -7,6 +7,7 @@ library(data.table)
 
 # Here, we choose the Telenor file as we run the app
 
+
 source("Project.R")
 
 
@@ -49,23 +50,54 @@ ui =
         tabItems(
           tabItem(tabName = "dashboard",
                   h1(div("Profitability Ratios",
-                         style = "color:darkred",
+                         style = "color:dodgerblue",
                          align = "center")),
                   box(
                     title = "Return on Assets",
-                    status = "danger",
+                    status = "info",
                     solidHeader = TRUE,
                     height = 295,
-                    roa),
+                    roa,
+                    h5(div(
+                      "A good return on assets ratio is considered to be above 5%"),
+                      align = "center")),
                   box(
                     title = "Operating Margin",
-                    status = "danger",
+                    status = "info",
                     solidHeader = TRUE,
                     height = 295,
-                    h5("I'm working on this")),
+                    h5("I'm working on this, just really tired of it")),
+                  h1(div("Leverage Ratios",
+                         style = "color:darkred",
+                         align = "center")),
+                  valueBox(
+                    round(Close_debt_ratio,
+                          digits = 3),
+                    "Debt Ratio",
+                    icon = icon("credit-card"),
+                    width = 4,
+                    color = "red"),
+                  valueBox(
+                    round(Close_equity_ratio,
+                          digits = 3),
+                    "Equity Ratio",
+                    icon = icon("coins"),
+                    width = 4,
+                    color = "red"),
+                  valueBox(
+                    round(Close_interest_ratio,
+                          digits = 3),
+                    "Interest Coverage Ratio",
+                    icon = icon("chart-line"),
+                    width = 4,
+                    color = "red"),
+
+                  
+                  
+                  
                   h1(div("Efficiency Ratios",
-                  style = "color:orange",
-                  align = "center")),
+                         style = "color:darkorange",
+                         align = "center")),
                   box(
                    title = "Wages to Salary Ratio",
                    status = "warning",
@@ -78,6 +110,14 @@ ui =
                      "it was at the beginning of the year",
                      align = "center")),
                    w_to_s_chart),
+                  box(
+                    title = "Return on Equity",
+                    status = "warning",
+                    solidHeader = TRUE,
+                    height = 295,
+                    roe,
+                    h6(
+                      "Return on equity is calculated pre-tax")),
                 valueBox(
                  round(Capital_turnover,
                        digits = 3),
@@ -92,14 +132,7 @@ ui =
                  icon = icon("warehouse"),
                  width = 3,
                  color = "orange"),
-                  box(
-                    title = "Return on Equity",
-                    status = "warning",
-                    solidHeader = TRUE,
-                    height = 295,
-                    roe,
-                    h6(
-                      "Return on equity is calculated pre-tax")),
+               
                h1(div("Liquidity Ratios",
                       style = "color:green",
                       align = "center")),
@@ -135,7 +168,6 @@ ui =
                     solidHeader = FALSE,
                     width = 12,
                     girafeOutput("trans_plot"),
-                    #plotOutput("trans_plot"),
                     dateRangeInput(inputId = "date",
                                    label = "Select date",
                                    start = min(plot_info$TransactionDate),
