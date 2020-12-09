@@ -446,8 +446,7 @@ quick_chart =
 
 # Operating margin - IN PROGRESS
 
-#Open_Operating_margin
-#Close_Operating_margin
+Close_Operating_margin
 
 
 # Higher_lower function for explaining purposes in the Shiny app:
