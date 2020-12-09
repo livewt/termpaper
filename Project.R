@@ -12,7 +12,7 @@ choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
 main <- xmlParse(choose_file)
 #or choose automatic (for testing purposes)
-main <- xmlParse("SAF-T Telenor 2019 (fictious).xml")
+#main <- xmlParse("SAF-T Telenor 2019 (fictious).xml")
 
 namespace <- xmlNamespaceDefinitions(main)[1]
 namespace[[1]][1] == "nl"
