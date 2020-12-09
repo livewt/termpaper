@@ -8,7 +8,7 @@ library(data.table)
 # Here, we choose the Telenor file as we run the app
 
 
-source("Project.R")
+source("Project.R", encoding = "UTF-8")
 
 
 # Create ui
@@ -58,8 +58,8 @@ ui =
                     solidHeader = TRUE,
                     height = 295,
                     roa,
-                    h5(div(
-                      "A good return on assets ratio is considered to be above 5%"),
+                    h6(div(
+                      "A good return on assets is considered to be above 5%"),
                       align = "center")),
                   box(
                     title = "Operating Margin",
@@ -67,6 +67,7 @@ ui =
                     solidHeader = TRUE,
                     height = 295,
                     h5("I'm working on this, just really tired of it")),
+
                   h1(div("Leverage Ratios",
                          style = "color:darkred",
                          align = "center")),
@@ -116,8 +117,9 @@ ui =
                     solidHeader = TRUE,
                     height = 295,
                     roe,
-                    h6(
-                      "Return on equity is calculated pre-tax")),
+                    h6(div(
+                      "Return on equity is calculated pre-tax"),
+                      align = "center")),
                 valueBox(
                  round(Capital_turnover,
                        digits = 3),
@@ -147,8 +149,9 @@ ui =
                                 " it was at the beginning of the year"),
                    align = "center"),
                  current_chart,
-                 h6(
-                   "A good current ratio is considered to be between 1 and 2.")),
+                 h6(div(
+                   "A good current ratio is considered to be between 1 and 2."),
+                   align = "center")),
                box(
                  title = "Quick Ratio",
                  status = "success",
@@ -161,8 +164,9 @@ ui =
                    "it was at the beginning of the year"),
                    align = "center"),
                  quick_chart,
-                 h6(
-                   "A good quick ratio is considered to be above 1."))),
+                 h6(div(
+                   "A good quick ratio is considered to be above 1."),
+                   align = "center"))),
           tabItem(tabName = "transactions",
                   box(
                     solidHeader = FALSE,

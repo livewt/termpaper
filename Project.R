@@ -446,8 +446,7 @@ quick_chart =
 
 # Operating margin - IN PROGRESS
 
-#Open_Operating_margin
-#Close_Operating_margin
+Close_Operating_margin
 
 
 # Higher_lower function for explaining purposes in the Shiny app:
@@ -630,22 +629,22 @@ SumByAIDCredit$AccountID <- as.numeric(SumByAIDCredit$AccountID)
 # RESULTATREGNSKAP ETTER ART
 # --------------------
 
-`Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'LÃ¸nnskostnad',
+`Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'Lønnskostnad',
                                   'Avskrivning', 'Nedskrivning',
                                   'Annen driftskostnad', 'Finansinntekt',
                                   'Finanskostnad',
-                                  'Skattekostnad pÃ¥ ordinÃ¦rt resultat',
-                                  'EkstraordinÃ¦r inntekt',
-                                  'EkstraordinÃ¦r kostnad',
-                                  'SKattekostnad pÃ¥ ekstraordinÃ¦rt resultat',
-                                   'Ãrsresultat', 'OverfÃ¸ringer/disponeringer')
+                                  'Skattekostnad på ordinært resultat',
+                                  'Ekstraordinær inntekt',
+                                  'Ekstraordinær kostnad',
+                                  'SKattekostnad på ekstraordinært resultat',
+                                   'Ãrsresultat', 'Overføringer/disponeringer')
 
 
 SI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=3000 & SumByAIDCredit[,1]<=3970),2]))
 VK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=4000 & SumByAIDDebit[,1]<=4990),2]))
 LK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=5000 & SumByAIDDebit[,1]<=5930),2]))
 Avskr <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=6000 & SumByAIDDebit[,1]<=6020),2]))
-Nedskr <- as.numeric(SumByAIDDebit[,2][SumByAIDDebit["AccountID"]==6050])
+Nedskr <- as.numeric(subset(`SumByAIDCredit`, AccountID == 6050)[,2])
 AnnenDK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=6100 & SumByAIDDebit[,1]<=7910),2]))
 FI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=8000 & SumByAIDCredit[,1]<=8080),2]))
 FK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8100 & SumByAIDDebit[,1]<=8170),2]))
@@ -653,8 +652,9 @@ SKord <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8300 & SumByAIDDe
 EkstraI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=8400 & SumByAIDCredit[,1]<=8499),2]))
 EkstraK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8500 & SumByAIDDebit[,1]<=8599),2]))
 SKekstra <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8600 & SumByAIDDebit[,1]<=8620),2]))
-Res <- as.numeric(SumByAIDCredit[,2][SumByAIDCredit["AccountID"]==8800])
+Res <- as.numeric(subset(`SumByAIDCredit`, AccountID == 8800)[,2])
 Disp <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8900 & SumByAIDDebit[,1]<=8990),2]))
+
 
 Tall <- c(SI, VK, LK, Avskr, Nedskr, AnnenDK, FI, FK, SKord, EkstraI, EkstraK,
           SKekstra, Res, Disp)
@@ -671,10 +671,10 @@ Eiendeler <- c('Immaterielle eiendeler o.l',
                'Tomter, bygninger og annen fast eiendom',
                'Transportmidler, inventar og maskiner o.l.', 
                'Finansielle anleggsmidler',
-               'Varelager og forskudd til leverandÃ¸rer', 
+               'Varelager og forskudd til leverandører', 
                'Kortsiktige fordringer',
                'Merverdiavgift, opptjente offentlige tilskudd o.l.', 
-               'Forskuddsbetalt kostnad, pÃ¥lÃ¸pt inntekt o.l.',
+               'Forskuddsbetalt kostnad, påløpt inntekt o.l.',
                'Kortsiktige finansinvesteringer', 
                'Bankinnskudd, kontanter og lignende')
 
@@ -696,8 +696,8 @@ BalanseEiendeler$StandardAccountID <- NULL
 
 `Egenkapital og Gjeld` <- c('Egenkapital AS/ASA', 'Avsetning for forpliktelser',
                             'Annen langsiktig gjeld', 
-                            'Kortsiktige konvertible lÃ¥n, obligasjonslÃ¥n og gjeld til kredittinstitusjoner',
-                            'LeverandÃ¸rgjeld', 'Betalbar skatt', 
+                            'Kortsiktige konvertible lån, obligasjonslån og gjeld til kredittinstitusjoner',
+                            'Leverandørgjeld', 'Betalbar skatt', 
                             'Skattetrekk og andre trekk',
                             'Skyldige offentlige avgifter', 'Utbytte',
                             'Annen kortsiktig gjeld')
