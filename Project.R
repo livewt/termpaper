@@ -635,7 +635,7 @@ SI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=3000 & SumByAIDCre
 VK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=4000 & SumByAIDDebit[,1]<=4990),2]))
 LK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=5000 & SumByAIDDebit[,1]<=5930),2]))
 Avskr <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=6000 & SumByAIDDebit[,1]<=6020),2]))
-Nedskr <- as.numeric(SumByAIDDebit[,2][SumByAIDDebit["AccountID"]==6050])
+Nedskr <- as.numeric(subset(`SumByAIDCredit`, AccountID == 6050)[,2])
 AnnenDK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=6100 & SumByAIDDebit[,1]<=7910),2]))
 FI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=8000 & SumByAIDCredit[,1]<=8080),2]))
 FK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8100 & SumByAIDDebit[,1]<=8170),2]))
@@ -643,8 +643,9 @@ SKord <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8300 & SumByAIDDe
 EkstraI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=8400 & SumByAIDCredit[,1]<=8499),2]))
 EkstraK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8500 & SumByAIDDebit[,1]<=8599),2]))
 SKekstra <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8600 & SumByAIDDebit[,1]<=8620),2]))
-Res <- as.numeric(SumByAIDCredit[,2][SumByAIDCredit["AccountID"]==8800])
+Res <- as.numeric(subset(`SumByAIDCredit`, AccountID == 8800)[,2])
 Disp <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8900 & SumByAIDDebit[,1]<=8990),2]))
+
 
 Tall <- c(SI, VK, LK, Avskr, Nedskr, AnnenDK, FI, FK, SKord, EkstraI, EkstraK,
           SKekstra, Res, Disp)
@@ -687,7 +688,7 @@ BalanseEiendeler$StandardAccountID <- NULL
 `Egenkapital og Gjeld` <- c('Egenkapital AS/ASA', 'Avsetning for forpliktelser',
                             'Annen langsiktig gjeld', 
                             'Kortsiktige konvertible lån, obligasjonslån og gjeld til kredittinstitusjoner',
-                            'LeverandÃ¸rgjeld', 'Betalbar skatt', 
+                            'Leverandørgjeld', 'Betalbar skatt', 
                             'Skattetrekk og andre trekk',
                             'Skyldige offentlige avgifter', 'Utbytte',
                             'Annen kortsiktig gjeld')
