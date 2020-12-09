@@ -8,7 +8,7 @@ library(data.table)
 # Here, we choose the Telenor file as we run the app
 
 
-source("Project.R")
+source("Project.R", encoding = "UTF-8")
 
 
 # Create ui

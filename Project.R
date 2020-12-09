@@ -620,15 +620,15 @@ SumByAIDCredit$AccountID <- as.numeric(SumByAIDCredit$AccountID)
 # RESULTATREGNSKAP ETTER ART
 # --------------------
 
-`Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'LÃ¸nnskostnad',
+`Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'Lønnskostnad',
                                   'Avskrivning', 'Nedskrivning',
                                   'Annen driftskostnad', 'Finansinntekt',
                                   'Finanskostnad',
-                                  'Skattekostnad pÃ¥ ordinÃ¦rt resultat',
-                                  'EkstraordinÃ¦r inntekt',
-                                  'EkstraordinÃ¦r kostnad',
-                                  'SKattekostnad pÃ¥ ekstraordinÃ¦rt resultat',
-                                   'Ãrsresultat', 'OverfÃ¸ringer/disponeringer')
+                                  'Skattekostnad på ordinært resultat',
+                                  'Ekstraordinær inntekt',
+                                  'Ekstraordinær kostnad',
+                                  'SKattekostnad på ekstraordinært resultat',
+                                   'Ãrsresultat', 'Overføringer/disponeringer')
 
 
 SI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=3000 & SumByAIDCredit[,1]<=3970),2]))
@@ -661,10 +661,10 @@ Eiendeler <- c('Immaterielle eiendeler o.l',
                'Tomter, bygninger og annen fast eiendom',
                'Transportmidler, inventar og maskiner o.l.', 
                'Finansielle anleggsmidler',
-               'Varelager og forskudd til leverandÃ¸rer', 
+               'Varelager og forskudd til leverandører', 
                'Kortsiktige fordringer',
                'Merverdiavgift, opptjente offentlige tilskudd o.l.', 
-               'Forskuddsbetalt kostnad, pÃ¥lÃ¸pt inntekt o.l.',
+               'Forskuddsbetalt kostnad, påløpt inntekt o.l.',
                'Kortsiktige finansinvesteringer', 
                'Bankinnskudd, kontanter og lignende')
 
@@ -686,7 +686,7 @@ BalanseEiendeler$StandardAccountID <- NULL
 
 `Egenkapital og Gjeld` <- c('Egenkapital AS/ASA', 'Avsetning for forpliktelser',
                             'Annen langsiktig gjeld', 
-                            'Kortsiktige konvertible lÃ¥n, obligasjonslÃ¥n og gjeld til kredittinstitusjoner',
+                            'Kortsiktige konvertible lån, obligasjonslån og gjeld til kredittinstitusjoner',
                             'LeverandÃ¸rgjeld', 'Betalbar skatt', 
                             'Skattetrekk og andre trekk',
                             'Skyldige offentlige avgifter', 'Utbytte',
