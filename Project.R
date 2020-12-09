@@ -575,7 +575,17 @@ plot_info$TransactionDate <- as.Date(plot_info$TransactionDate)
 plot_info
 #plot_info %>%
 #  subset(.$TransactionDate> as.Date("2017-04-03"))
-subset(plot_info, plot_info$TransactionDate>= "2017-03-15" & plot_info$TransactionDate <= "2017-05-05")
+nrow(subset(plot_info, plot_info$TransactionDate>= "2017-03-15" & plot_info$TransactionDate <= "2017-03-15"))
+
+#error plot
+error_plot_df <- data.frame(matrix(nrow=1,ncol=1))
+
+error_plot <- ggplot (data = error_plot_df)+
+  geom_text(aes(1,1),label="No transactions in given date range", size=7)+
+  theme(text=element_text(size=200),
+        axis.title = element_blank(),
+        axis.text=element_blank())
+
 
 #check if all transcations are included (53 in this case)
 as.numeric(main_list[[3]][[1]]) == length(plot_info$`trans_sum$Amounts`)

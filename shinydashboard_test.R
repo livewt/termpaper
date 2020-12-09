@@ -234,8 +234,9 @@ server =
    # tooltip_ <- c(paste0("Description: ", a$Description,
   #                                         "\n Transaction ID: ", a$TransactionID,
   #                                         "\n Amount: ", as.integer(a$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
-                         
+                       
     output$trans_plot <- renderGirafe({
+      if (nrow(trans_subset()) >0){
       plottt <- ggplot(data = trans_subset()) +
         geom_point_interactive(aes(x = 1:length(`trans_sum$Amounts`), y = `trans_sum$Amounts`,
                                    tooltip = c(paste0("Description: ", Description,
@@ -249,7 +250,13 @@ server =
         scale_y_continuous(labels = scales::comma)
         
         girafe(ggobj = plottt)
+      }else{
+        girafe(ggobj = error_plot)
+    }
     })
+    
+     
+    
     #output$test <- renderTable(
      # test2 <- subset(trans_plot, trans_plot$TransactionDate >= input$date[1] & trans_plot$TransactionDate <= input$date[2])
     #)
