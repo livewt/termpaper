@@ -3,6 +3,7 @@ library(shinydashboard)
 library(plotly)
 library(data.table)
 library(DT)
+library(shinyWidgets)
 #Open with encoding UTF-8 to get norwegian letters
 
 # Here, we choose the Telenor file as we run the app
@@ -177,7 +178,11 @@ ui =
                                    start = min(plot_info$TransactionDate),
                                    end = max(plot_info$TransactionDate),
                                    min = min(plot_info$TransactionDate),
-                                   max = max(plot_info$TransactionDate))
+                                   max = max(plot_info$TransactionDate)),
+                    numericRangeInput(inputId = "monetary",
+                                      label ="Choose transcation amount range",
+                                      value = c(min(plot_info$`trans_sum$Amounts`),
+                                      max(plot_info$`trans_sum$Amounts`)))
                   )),
   
            tabItem(tabName = "balancestatement",
@@ -233,7 +238,8 @@ server =
      # girafe(ggobj = transaction_plot)
     #})
     trans_subset <- reactive({
-      a <- subset(plot_info, plot_info$TransactionDate>= input$date[1] & plot_info$TransactionDate <= input$date[2])
+      a <- subset(plot_info, plot_info$TransactionDate>= input$date[1] & plot_info$TransactionDate <= input$date[2]
+                  & plot_info$`trans_sum$Amounts` >= input$monetary[1] & plot_info$`trans_sum$Amounts` <= input$monetary[2])
       a
     })
     #tooltip_ <- c(paste0("Description: ", trans_subset$Description,
@@ -263,10 +269,17 @@ server =
                                    "\n Amount: ", as.integer(`trans_sum$Amounts`), " NOK")),
                                    data_id = TransactionID))+
         ylab("Amount")+
-        xlab("Transcation number")+
-        ggtitle("Hover over points to view description of the transcation")+
-        scale_x_continuous(labels = scales::comma)+
-        scale_y_continuous(labels = scales::comma)
+        xlab(" ")+
+        ggtitle("Hover over observations to view description of the transaction")+
+        (if (nrow(trans_subset())==1){
+          labs(subtitle = paste0("Currently viewing ",nrow(trans_subset())," transaction"))
+        }
+        else {
+            labs(subtitle = paste0("Currently viewing ",nrow(trans_subset())," transactions"))
+          })+
+       # scale_x_continuous(labels = scales::comma)+
+        scale_y_continuous(labels = scales::comma)+
+        theme(axis.text.x=element_blank())
         
         girafe(ggobj = plottt)
       }else{
