@@ -2,7 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(plotly)
 library(data.table)
-
+library(DT)
 #Open with encoding UTF-8 to get norwegian letters
 
 # Here, we choose the Telenor file as we run the app
@@ -206,13 +206,28 @@ ui =
 server = 
   function(input,output){
     output$BalanseEiendeler <- DT::renderDataTable({
-      DT::datatable(BalanseEiendeler)
+      DT::datatable(BalanseEiendeler) %>%
+                      formatRound(columns = "Eiendeler tall",
+                                  interval = 3,
+                                  mark = ",",
+                                  digits = 0)
+      
     })
     output$BalanseEKGJ <- DT::renderDataTable({
-      DT::datatable(BalanseEKGJ)
+      DT::datatable(BalanseEKGJ) %>%
+        formatRound(columns = "EKGJ tall",
+          interval = 3,
+          mark = ",",
+          digits = 0
+        )
     })
     output$art.data <- DT::renderDataTable({
-      DT::datatable(Resultatregnskap)
+      DT::datatable(Resultatregnskap)%>%
+        formatRound(columns = "Tall",
+                    interval = 3,
+                    mark = ",",
+                    digits = 0
+        )
     })
     #output$trans_plot <- renderGirafe({
      # girafe(ggobj = transaction_plot)
