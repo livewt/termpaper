@@ -62,11 +62,16 @@ ui =
                       "A good return on assets is considered to be above 5%"),
                       align = "center")),
                   box(
-                    title = "Operating Margin",
+                    title = "Gross Profit",
                     status = "info",
                     solidHeader = TRUE,
-                    height = 295,
-                    h5("I'm working on this, just really tired of it")),
+                    height = 417,
+                    h5(div(
+                      "Gross profit is", higher_lower(Open_GrossProfit,
+                                                      Close_GrossProfit),
+                      "it was at the beginning of the year"),
+                      align = "center"),
+                    profit_chart),
 
                   h1(div("Leverage Ratios",
                          style = "color:darkred",
@@ -105,7 +110,7 @@ ui =
                    solidHeader = TRUE,
                    height = 417,
                    h5(div(
-                     "Wages to salary ratio is",
+                     "Wages to Salary ratio is",
                      higher_lower(Open_wages_sale_inc,
                                   Close_wages_sale_inc),
                      "it was at the beginning of the year",
@@ -150,7 +155,7 @@ ui =
                    align = "center"),
                  current_chart,
                  h6(div(
-                   "A good current ratio is considered to be between 1 and 2."),
+                   "A good current ratio is considered to be between 1 and 2"),
                    align = "center")),
                box(
                  title = "Quick Ratio",
@@ -165,7 +170,7 @@ ui =
                    align = "center"),
                  quick_chart,
                  h6(div(
-                   "A good quick ratio is considered to be above 1."),
+                   "A good quick ratio is considered to be above 1"),
                    align = "center"))),
           tabItem(tabName = "transactions",
                   box(

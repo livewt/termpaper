@@ -444,10 +444,63 @@ quick_chart =
   layout(margin = list(l = 20, r = 30),
          font = list(color = "black"))
 
+# Gross profit
+
+profit_when = c("Last Year", "This Year")
+profit_value = c(as.numeric(Open_GrossProfit,
+                            Close_GrossProfit))
+profit = 
+  data.frame(profit_when,
+             profit_value)
+
+profit_chart = 
+  plot_ly(profit,
+          x = c("Last Year", "This Year"),
+          y = profit_value,
+          type = "bar",
+          marker = list(color = 
+                          c("darkblue","dodgerblue")),
+          opacity = 0.6,
+          height = 300)
+
+profit_text = as.character(format(profit$profit_value,
+                                  big.mark = ","))
+
+profit_chart = 
+  profit_chart %>% 
+  add_annotations(text = profit_text)
+
 # Operating margin - IN PROGRESS
 
-Close_Operating_margin
+operating_chart =
+  plot_ly(
+    type = "indicator",
+    mode = "number+gauge+delta",
+    value = round(Close_Operating_margin*100,
+                  digits = 2),
+    domain = list(x = c(0,1),
+                  y = c(0,1)),
+    title = list(text = ""),
+    delta = list(reference = round(Open_Operating_margin*100,
+                                   digits = 2),
+                 ticksuffix = "%"),
+    gauge = list(
+      shape = "bullet",
+      axis = list(range = list(NULL,60),
+                  tickcolor = "black"),
+      bar = list(color = "black",
+                 width = 1),
+      steps = list(
+        list(range = c(4.75,5.25), color = "red"),
+        list(range = c(9.75,10.25), color = "yellow"),
+        list(range = c(19.75,20.25), color = "green"))),
+      height = 150,
+      width = 200,
+    number = list(suffix = "%"))
 
+operating_chart = 
+  operating_chart %>% 
+  layout(margin = list(l = 100, r = 10))
 
 # Higher_lower function for explaining purposes in the Shiny app:
 # Inputs are opening ratio and closing ratio.
