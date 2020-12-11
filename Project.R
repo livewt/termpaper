@@ -633,7 +633,7 @@ nrow(subset(plot_info, plot_info$TransactionDate>= "2017-03-15" & plot_info$Tran
 error_plot_df <- data.frame(matrix(nrow=1,ncol=1))
 
 error_plot <- ggplot (data = error_plot_df)+
-  geom_text(aes(1,1),label="No transactions in given date range", size=7)+
+  geom_text(aes(1,1),label="No transactions in given date- or monetary amount range", size=5)+
   theme(text=element_text(size=200),
         axis.title = element_blank(),
         axis.text=element_blank())
