@@ -54,7 +54,32 @@ ui =
                          style = "color:dodgerblue",
                          align = "center")),
                   box(
-                    title = "Return on Assets",
+                    title = "Bruttofortjeneste",
+                    status = "info",
+                    solidHeader = TRUE,
+                    height = 417,
+                    h5(div(
+                      "Gross profit is", higher_lower(Open_GrossProfit,
+                                                      Close_GrossProfit),
+                      "it was last year"),
+                      align = "center"),
+                    profit_chart),
+                  valueBox(
+                    round(Close_profit_margin1*100,
+                          digits = 2),
+                    "Resultatsgrad i %",
+                    icon = icon("piggy-bank"),
+                    width = 3,
+                    color = "aqua"),
+                  valueBox(
+                    round(Close_profit_margin2*100,
+                          digits = 2),
+                    "Resultatsmargin i %",
+                    icon = icon("money-check-alt"),
+                    width = 3,
+                    color = "aqua"),
+                  box(
+                    title = "Totalkapitalens rentabilitet",
                     status = "info",
                     solidHeader = TRUE,
                     height = 295,
@@ -63,62 +88,87 @@ ui =
                       "A good return on assets is considered to be above 5%"),
                       align = "center")),
                   box(
-                    title = "Gross Profit",
+                    title = "Bruttofortjeneste i %",
                     status = "info",
                     solidHeader = TRUE,
-                    height = 417,
-                    h5(div(
-                      "Gross profit is", higher_lower(Open_GrossProfit,
-                                                      Close_GrossProfit),
-                      "it was at the beginning of the year"),
+                    height = 380,
+                    h5(div("Gross profit margin is",
+                       higher_lower(Open_GrossProfit_percent,
+                                    Close_GrossProfit_percent),
+                       "it was last year"),
+                       align = "center"),
+                    gross_percent_chart,
+                    h6(div(
+                      "High: 20%,"),
                       align = "center"),
-                    profit_chart),
-
+                    h6(div(
+                      "Average: 10%"),
+                      align = "center"),
+                    h6(div(
+                      "Low: 5%"),
+                      align = "center")),
+                  box(
+                    title = "Driftsmargin",
+                    status = "info",
+                    solidHeader = TRUE,
+                    height = 380,
+                    h5(div("Operating margin is",
+                           higher_lower(Open_Operating_margin,
+                                        Close_Operating_margin),
+                           "it was last year"),
+                       align = "center"),
+                    operating_chart,
+                    h6(div(
+                      "High: 20%,"),
+                      align = "center"),
+                    h6(div(
+                      "Average: 10%"),
+                      align = "center"),
+                    h6(div(
+                      "Low: 5%"),
+                      align = "center")),
+                  
                   h1(div("Leverage Ratios",
                          style = "color:darkred",
                          align = "center")),
                   valueBox(
                     round(Close_debt_ratio,
                           digits = 3),
-                    "Debt Ratio",
+                    "Gjeldsgrad",
                     icon = icon("credit-card"),
                     width = 4,
                     color = "red"),
                   valueBox(
                     round(Close_equity_ratio,
                           digits = 3),
-                    "Equity Ratio",
+                    "Egenkapitalandel",
                     icon = icon("coins"),
                     width = 4,
                     color = "red"),
                   valueBox(
                     round(Close_interest_ratio,
                           digits = 3),
-                    "Interest Coverage Ratio",
+                    "Rentedekningsgrad",
                     icon = icon("chart-line"),
                     width = 4,
                     color = "red"),
-
-                  
-                  
-                  
                   h1(div("Efficiency Ratios",
                          style = "color:darkorange",
                          align = "center")),
                   box(
-                   title = "Wages to Salary Ratio",
+                   title = "Lønnskostnader i % af salgsinntekt",
                    status = "warning",
                    solidHeader = TRUE,
                    height = 417,
                    h5(div(
-                     "Wages to Salary ratio is",
+                     "Wages to salary ratio is",
                      higher_lower(Open_wages_sale_inc,
                                   Close_wages_sale_inc),
                      "it was at the beginning of the year",
                      align = "center")),
                    w_to_s_chart),
                   box(
-                    title = "Return on Equity",
+                    title = "Egenkapitalens rentabilitet",
                     status = "warning",
                     solidHeader = TRUE,
                     height = 295,

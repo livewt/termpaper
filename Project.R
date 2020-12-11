@@ -447,7 +447,7 @@ quick_chart =
 # Gross profit
 
 profit_when = c("Last Year", "This Year")
-profit_value = c(as.numeric(Open_GrossProfit,
+profit_value = as.numeric(c(Open_GrossProfit,
                             Close_GrossProfit))
 profit = 
   data.frame(profit_when,
@@ -470,37 +470,66 @@ profit_chart =
   profit_chart %>% 
   add_annotations(text = profit_text)
 
-# Operating margin - IN PROGRESS
+# Operating Margin
 
 operating_chart =
   plot_ly(
     type = "indicator",
     mode = "number+gauge+delta",
     value = round(Close_Operating_margin*100,
-                  digits = 2),
-    domain = list(x = c(0,1),
-                  y = c(0,1)),
-    title = list(text = ""),
+                  digits = 1),
     delta = list(reference = round(Open_Operating_margin*100,
-                                   digits = 2),
+                                   digits = 1),
                  ticksuffix = "%"),
     gauge = list(
-      shape = "bullet",
-      axis = list(range = list(NULL,60),
-                  tickcolor = "black"),
-      bar = list(color = "black",
+      axis = list(range = list(NULL,100),
+                  tickcolor = "purple",
+                  ticksuffix = "%"),
+      bar = list(color = "purple",
                  width = 1),
+      borderwidth = 1,
       steps = list(
-        list(range = c(4.75,5.25), color = "red"),
-        list(range = c(9.75,10.25), color = "yellow"),
-        list(range = c(19.75,20.25), color = "green"))),
-      height = 150,
-      width = 200,
+        list(range = c(4.7,5.3), color = "red"),
+        list(range = c(9.7,10.3), color = "yellow"),
+        list(range = c(19.7,20.3), color = "green"))),
+    height = 210,
     number = list(suffix = "%"))
 
 operating_chart = 
   operating_chart %>% 
-  layout(margin = list(l = 100, r = 10))
+  layout(margin = list(l = 20, r = 30),
+         font = list(color = "purple"))
+
+
+# Gross Profit Margin
+
+gross_percent_chart =
+  plot_ly(
+    type = "indicator",
+    mode = "number+gauge+delta",
+    value = round(Close_GrossProfit_percent*100,
+                  digits = 3),
+    delta = list(reference = round(Open_GrossProfit_percent*100,
+                                   digits = 1),
+                 ticksuffix = "%"),
+    gauge = list(
+      axis = list(range = list(NULL,100),
+                  tickcolor = "navy",
+                  ticksuffix = "%"),
+      bar = list(color = "navy",
+                 width = 1),
+      borderwidth = 1,
+      steps = list(
+        list(range = c(4.7,5.3), color = "red"),
+        list(range = c(9.7,10.3), color = "yellow"),
+        list(range = c(19.7,20.3), color = "green"))),
+      height = 210,
+    number = list(suffix = "%"))
+
+gross_percent_chart = 
+  gross_percent_chart %>% 
+  layout(margin = list(l = 20, r = 30),
+         font = list(color = "navy"))
 
 # Higher_lower function for explaining purposes in the Shiny app:
 # Inputs are opening ratio and closing ratio.
