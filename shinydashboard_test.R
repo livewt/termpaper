@@ -15,7 +15,7 @@ source("Project.R", encoding = "UTF-8")
 
 # Create ui
 ui =
-  if (the_true_test == TRUE){
+  if (the_true_test == TRUE & class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
   dashboardPage(
     skin = "black",
     dashboardHeader(
@@ -262,7 +262,7 @@ ui =
 # Create server
 server = 
   function(input,output){
-    if (the_true_test == TRUE){
+    if (the_true_test == TRUE & class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
     output$BalanseEiendeler <- DT::renderDataTable({
       DT::datatable(BalanseEiendeler) %>%
                       formatRound(columns = "Eiendeler tall",

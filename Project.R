@@ -10,7 +10,10 @@ library(ggplot2)
 
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
-main <- xmlParse(choose_file)
+the_true_test <- FALSE
+try(
+main <- xmlParse(choose_file), silent = T)
+if (class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
 #or choose automatic (for testing purposes)
 #main <- xmlParse("SAF-T Telenor 2019 (fictious).xml")
 
@@ -25,25 +28,31 @@ main_df <- xmlToDataFrame(nodes = getNodeSet(main, namespace))
 main_df <- main_df %>%
   replace(is.na(.), 0) #theres not always registered numbers on the nodes.
 #removing "helping account"
+try(
 main_df <- main_df %>%
   filter(AccountDescription!="Hjelpekonto")
-
+, silent=T)
 
 #Making sure all account IDS from specification by skatteetaten is in our data
 
 #vektor1 contais account IDS from SAF-T file
+try(
 dataframe_check_STD <- data.frame(main_df$StandardAccountID) %>%
   remove.factors(.)
+, silent = T)
 vektor1 <- character()
+try(
 for (chr in dataframe_check_STD){
   vektor1 <- c(vektor1, chr)
 }
+, silent =T)
 vektor1 <- vektor1 %>% unique()
 
 
 coltest <- c("AccountID", "AccountDescription", "StandardAccountID", "AccountType", "OpeningDebitBalance",
              "ClosingDebitBalance", "OpeningCreditBalance", "ClosingCreditBalance")
 truecols <- vector()
+try(
 for (i in 1:length(coltest)){
   if (colnames(main_df)[i] == coltest[i]){
     truecols <- c(truecols, TRUE)
@@ -51,12 +60,13 @@ for (i in 1:length(coltest)){
     truecols <- c(truecols, FALSE)
   }
 }
+, silent = T)
 std.acc.vector <- c("10", "11","12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "36", "37",
                   "38", "39", "40", "41", "42", "43", "45", "49", "50", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69",
                   "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "83", "84", "85", "86", "88", "89")
 std.acc.test <- std.acc.vector == vektor1
 
-the_true_test <- vector()
+
 if (!FALSE %in% truecols & !FALSE %in% std.acc.test){
   the_true_test <- TRUE
 } else {
@@ -821,4 +831,5 @@ setDT(BalanseEKGJ)[SumBySAIDCredit, `EKGJ tall` := x, on = .(StandardAccountID)]
 
 BalanseEKGJ$StandardAccountID <- NULL
 
+}
 }
