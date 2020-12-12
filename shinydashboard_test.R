@@ -11,9 +11,11 @@ library(shinyWidgets)
 
 source("Project.R", encoding = "UTF-8")
 
+  
 
 # Create ui
 ui =
+  if (the_true_test == TRUE){
   dashboardPage(
     skin = "black",
     dashboardHeader(
@@ -250,10 +252,17 @@ ui =
       )
     )
   )
+  } else {
+    
+      fluidPage(
+        titlePanel("Error! Incompatible file"))
+    
+  }
 
 # Create server
 server = 
   function(input,output){
+    if (the_true_test == TRUE){
     output$BalanseEiendeler <- DT::renderDataTable({
       DT::datatable(BalanseEiendeler) %>%
                       formatRound(columns = "Eiendeler tall",
@@ -336,7 +345,11 @@ server =
     #output$test <- renderTable(
      # test2 <- subset(trans_plot, trans_plot$TransactionDate >= input$date[1] & trans_plot$TransactionDate <= input$date[2])
     #)
-  }
+    }} #else {
+    
+#  }
 
 # Run app
 shinyApp(ui,server)
+
+

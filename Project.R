@@ -40,26 +40,51 @@ for (chr in dataframe_check_STD){
 }
 vektor1 <- vektor1 %>% unique()
 
-#importing specification from skatteetaten
-STD_accounts_check <- xmlParse("General_Ledger_Standard_Accounts_2_character.xml")
-STD_accounts_check_df <- xmlToDataFrame(nodes = getNodeSet(STD_accounts_check, "//AccountID")) %>%
-  remove.factors(.)
 
-skatteetaten_unique <- unique(STD_accounts_check_df$text)
-vektor2 <- character()
-#adding IDs to vektor 2 if IDs from our data is in the specification by skatteetaten
-for (i in 1:length(skatteetaten_unique)){
-  if (vektor1[i] %in% skatteetaten_unique){
-    vektor2 <- c(vektor2, vektor1[i])
+coltest <- c("AccountID", "AccountDescription", "StandardAccountID", "AccountType", "OpeningDebitBalance",
+             "ClosingDebitBalance", "OpeningCreditBalance", "ClosingCreditBalance")
+truecols <- vector()
+for (i in 1:length(coltest)){
+  if (colnames(main_df)[i] == coltest[i]){
+    truecols <- c(truecols, TRUE)
+  } else {
+    truecols <- c(truecols, FALSE)
   }
 }
+std.acc.vector <- c("10", "11","12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "36", "37",
+                  "38", "39", "40", "41", "42", "43", "45", "49", "50", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69",
+                  "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "83", "84", "85", "86", "88", "89")
+std.acc.test <- std.acc.vector == vektor1
+
+the_true_test <- vector()
+if (!FALSE %in% truecols & !FALSE %in% std.acc.test){
+  the_true_test <- TRUE
+} else {
+  the_true_test <- FALSE
+}
+
+if (the_true_test ==TRUE){
+
+#importing specification from skatteetaten
+#STD_accounts_check <- xmlParse("General_Ledger_Standard_Accounts_2_character.xml")
+#STD_accounts_check_df <- xmlToDataFrame(nodes = getNodeSet(STD_accounts_check, "//AccountID")) %>%
+#  remove.factors(.)
+
+#skatteetaten_unique <- unique(STD_accounts_check_df$text)
+#vektor2 <- character()
+#adding IDs to vektor 2 if IDs from our data is in the specification by skatteetaten
+#for (i in 1:length(skatteetaten_unique)){
+#  if (vektor1[i] %in% skatteetaten_unique){
+#    vektor2 <- c(vektor2, vektor1[i])
+#  }
+#}
 #making sure IDs from our data is equal to the IDS by skatteetaten
 #Giving error message if its not true
-for (i in 1:length(vektor1)){
-  if (vektor2[i] != vektor1[i]){
-    print("Your SAF-T file is not compatible with this program")
-  }
-}
+#for (i in 1:length(vektor1)){
+#  if (vektor2[i] != vektor1[i]){
+#    print("Your SAF-T file is not compatible with this program")
+#  }
+#}
 #IDEA: making sure data is correct by asking user to verify accounts
 
 ######## Financial ratios #################
@@ -796,3 +821,4 @@ setDT(BalanseEKGJ)[SumBySAIDCredit, `EKGJ tall` := x, on = .(StandardAccountID)]
 
 BalanseEKGJ$StandardAccountID <- NULL
 
+}
