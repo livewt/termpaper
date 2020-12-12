@@ -11,6 +11,7 @@ library(ggplot2)
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 #making DF from saf-t xml file
 the_true_test <- FALSE
+main <- FALSE
 try(
 main <- xmlParse(choose_file), silent = T)
 if (class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
@@ -67,7 +68,7 @@ std.acc.vector <- c("10", "11","12", "13", "14", "15", "16", "17", "18", "19", "
 std.acc.test <- std.acc.vector == vektor1
 
 
-if (!FALSE %in% truecols & !FALSE %in% std.acc.test){
+if (!FALSE %in% truecols & !FALSE %in% std.acc.test & length(truecols) == 8 & length(std.acc.test)==72){
   the_true_test <- TRUE
 } else {
   the_true_test <- FALSE
