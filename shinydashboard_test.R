@@ -64,20 +64,6 @@ ui =
                       "it was last year"),
                       align = "center"),
                     profit_chart),
-                  valueBox(
-                    round(Close_profit_margin1*100,
-                          digits = 2),
-                    "Resultatsgrad i %",
-                    icon = icon("piggy-bank"),
-                    width = 3,
-                    color = "aqua"),
-                  valueBox(
-                    round(Close_profit_margin2*100,
-                          digits = 2),
-                    "Resultatsmargin i %",
-                    icon = icon("money-check-alt"),
-                    width = 3,
-                    color = "aqua"),
                   box(
                     title = "Totalkapitalens rentabilitet",
                     status = "info",
@@ -87,11 +73,25 @@ ui =
                     h6(div(
                       "A good return on assets is considered to be above 5%"),
                       align = "center")),
+                  valueBox(
+                    paste(round(Close_profit_margin1*100,
+                          digits = 1), "%", sep = ""),
+                    "Resultatsgrad",
+                    icon = icon("piggy-bank"),
+                    width = 3,
+                    color = "aqua"),
+                  valueBox(
+                    paste(round(Close_profit_margin2*100,
+                          digits = 1),"%", sep = ""),
+                    "Resultatsmargin",
+                    icon = icon("money-check-alt"),
+                    width = 3,
+                    color = "aqua"),
                   box(
-                    title = "Bruttofortjeneste i %",
+                    title = "Gross Profit Margin",
                     status = "info",
                     solidHeader = TRUE,
-                    height = 380,
+                    height = 350,
                     h5(div("Gross profit margin is",
                        higher_lower(Open_GrossProfit_percent,
                                     Close_GrossProfit_percent),
@@ -99,19 +99,13 @@ ui =
                        align = "center"),
                     gross_percent_chart,
                     h6(div(
-                      "High: 20%,"),
-                      align = "center"),
-                    h6(div(
-                      "Average: 10%"),
-                      align = "center"),
-                    h6(div(
-                      "Low: 5%"),
+                      "High: 20%, average: 10%, low: 5%"),
                       align = "center")),
                   box(
                     title = "Driftsmargin",
                     status = "info",
                     solidHeader = TRUE,
-                    height = 380,
+                    height = 350,
                     h5(div("Operating margin is",
                            higher_lower(Open_Operating_margin,
                                         Close_Operating_margin),
@@ -119,15 +113,8 @@ ui =
                        align = "center"),
                     operating_chart,
                     h6(div(
-                      "High: 20%,"),
-                      align = "center"),
-                    h6(div(
-                      "Average: 10%"),
-                      align = "center"),
-                    h6(div(
-                      "Low: 5%"),
+                      "High: 20%, average: 10%, low: 5%"),
                       align = "center")),
-                  
                   h1(div("Leverage Ratios",
                          style = "color:darkred",
                          align = "center")),
@@ -252,11 +239,13 @@ ui =
              tabPanel("art.data", DT::dataTableOutput("art.data"))),
            tabItem(tabName = "about",
               h4(
-                 " Here, we can write some information
-                   about the financial ratios or about how
-                   the dashboard was made."),
+                 "The SAF-Tfile used in this assignment is filled with fictional numbers
+                 for illustration purposes."),
               h5(
-                 "We can also write our names.")))
+                 "Authors: Herdís Birta Jónsdóttir,
+                           Live Wold Thorsø,
+                           Morten Hønsi Følling and
+                           Sindre Lunner Nyberg.")))
 
       )
     )
