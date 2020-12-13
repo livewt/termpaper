@@ -14,7 +14,7 @@ source("Project.R", encoding = "UTF-8")
   
 
 # Create ui
-ui =
+ui =#Checks if all the error handling measures in project.R is passed
   if (the_true_test == TRUE & class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
   dashboardPage(
     skin = "black",
@@ -253,7 +253,7 @@ ui =
     )
   )
   } else {
-    
+    #If not, then output simple error window
       fluidPage(
         titlePanel("Error! Incompatible file"))
     
@@ -261,7 +261,7 @@ ui =
 
 # Create server
 server = 
-  function(input,output){
+  function(input,output){#Checks if all the error handling measures in project.R is passed
     if (the_true_test == TRUE & class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
     output$BalanseEiendeler <- DT::renderDataTable({
       DT::datatable(BalanseEiendeler) %>%
@@ -287,34 +287,16 @@ server =
                     digits = 0
         )
     })
-    #output$trans_plot <- renderGirafe({
-     # girafe(ggobj = transaction_plot)
-    #})
+# Reactive function which subsets the trans_info. Used for transaction plot. Subsets on date range and monetary range
     trans_subset <- reactive({
       a <- subset(plot_info, plot_info$TransactionDate>= input$date[1] & plot_info$TransactionDate <= input$date[2]
                   & plot_info$`trans_sum$Amounts` >= input$monetary[1] & plot_info$`trans_sum$Amounts` <= input$monetary[2])
       a
     })
-    #tooltip_ <- c(paste0("Description: ", trans_subset$Description,
-    #                     "\n Transaction ID: ", trans_subset$TransactionID,
-    #                     "\n Amount: ", as.integer(trans_subset$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
-    #output$datestart <- renderText({
-    #  as.character(input$date[1])
-    #})
-    #output$dateend <- renderText({
-    #  as.character(input$date[2])
-    #})
-    #tooltip_ <- observe({
-     # c(paste0("Description: ", trans_subset$Description,
-      #                   "\n Transaction ID: ", trans_subset$TransactionID,
-      #                   "\n Amount: ", as.integer(trans_subset$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
-#})
-   # tooltip_ <- c(paste0("Description: ", a$Description,
-  #                                         "\n Transaction ID: ", a$TransactionID,
-  #                                         "\n Amount: ", as.integer(a$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
-                       
+
+    #girafeplot which makes it possible to hover over observations in transaction plot                   
     output$trans_plot <- renderGirafe({
-      if (nrow(trans_subset()) >0){
+      if (nrow(trans_subset()) >0){#check if the subsetting doesnt remove all rows
       plottt <- ggplot(data = trans_subset()) +
         geom_point_interactive(aes(x = 1:length(`trans_sum$Amounts`), y = `trans_sum$Amounts`,
                                    tooltip = c(paste0("Description: ", Description,
@@ -330,24 +312,17 @@ server =
         else {
             labs(subtitle = paste0("Currently viewing ",nrow(trans_subset())," transactions"))
           })+
-       # scale_x_continuous(labels = scales::comma)+
         scale_y_continuous(labels = scales::comma)+
         theme(axis.text.x=element_blank())
         
         girafe(ggobj = plottt)
-      }else{
+      }else{ #if all rows removed, output error plot
         girafe(ggobj = error_plot)
     }
     })
+    }}
     
-     
-    
-    #output$test <- renderTable(
-     # test2 <- subset(trans_plot, trans_plot$TransactionDate >= input$date[1] & trans_plot$TransactionDate <= input$date[2])
-    #)
-    }} #else {
-    
-#  }
+
 
 # Run app
 shinyApp(ui,server)

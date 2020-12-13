@@ -7,36 +7,34 @@ library(docstring)
 library(devtools)
 library(plotly)
 library(ggplot2)
-
-choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
+library(ggiraph)
 #making DF from saf-t xml file
-the_true_test <- FALSE
-main <- FALSE
+choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
+
+the_true_test <- FALSE #placeholder used to error handling
+main <- FALSE # placeholder used for eurror handling
 try(
 main <- xmlParse(choose_file), silent = T)
-if (class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
-#or choose automatic (for testing purposes)
-#main <- xmlParse("SAF-T Telenor 2019 (fictious).xml")
+if (class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){ #this throws out anything not XML
 
+#extracting namespace from xml file
 namespace <- xmlNamespaceDefinitions(main)[1]
-namespace[[1]][1] == "nl"
 namespace <- as.character(namespace[[1]][1])
-
 namespace <- paste("//", namespace, sep = "", ":Account")
 
 
-main_df <- xmlToDataFrame(nodes = getNodeSet(main, namespace))
+main_df <- xmlToDataFrame(nodes = getNodeSet(main, namespace)) #extracting all the "Account" nodes
 main_df <- main_df %>%
-  replace(is.na(.), 0) #theres not always registered numbers on the nodes.
-#removing "helping account"
+  replace(is.na(.), 0) #theres not always registered nodes for opening/closing, debit/credit on all account nodes!. Thats also the reason for "warnings" when making DF.
+
+#removing "helping account" if any
 try(
 main_df <- main_df %>%
   filter(AccountDescription!="Hjelpekonto")
 , silent=T)
 
-#Making sure all account IDS from specification by skatteetaten is in our data
 
-#vektor1 contais account IDS from SAF-T file
+#vektor1 contains account IDS from SAF-T file
 try(
 dataframe_check_STD <- data.frame(main_df$StandardAccountID) %>%
   remove.factors(.)
@@ -47,27 +45,31 @@ for (chr in dataframe_check_STD){
   vektor1 <- c(vektor1, chr)
 }
 , silent =T)
-vektor1 <- vektor1 %>% unique()
+vektor1 <- vektor1 %>% unique() #we want the unique standard account IDs
 
-
+#We also want the expected coloumn names which our program will produce from saf-t file (standardized text in saf-t)
 coltest <- c("AccountID", "AccountDescription", "StandardAccountID", "AccountType", "OpeningDebitBalance",
              "ClosingDebitBalance", "OpeningCreditBalance", "ClosingCreditBalance")
+
 truecols <- vector()
 try(
-for (i in 1:length(coltest)){
+for (i in 1:length(coltest)){ #checking column names from the saf-t file and the expected outcome.
   if (colnames(main_df)[i] == coltest[i]){
-    truecols <- c(truecols, TRUE)
+    truecols <- c(truecols, TRUE) #returns true values if theres a match
   } else {
     truecols <- c(truecols, FALSE)
   }
 }
 , silent = T)
+
+#this vector is all the expected unique standard acccount IDs.
+#saf-t file should be mapped to include them all. And we only accept saf-t files that fullfill this requirement
 std.acc.vector <- c("10", "11","12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "36", "37",
                   "38", "39", "40", "41", "42", "43", "45", "49", "50", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69",
                   "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "83", "84", "85", "86", "88", "89")
-std.acc.test <- std.acc.vector == vektor1
+std.acc.test <- std.acc.vector == vektor1 #for testing purposes below
 
-
+#only if the xml file fullfills this set of requirements, the rest of the code will run. Otherwise "the_true_test" is false and shiny will show custom error output
 if (!FALSE %in% truecols & !FALSE %in% std.acc.test & length(truecols) == 8 & length(std.acc.test)==72){
   the_true_test <- TRUE
 } else {
@@ -76,37 +78,6 @@ if (!FALSE %in% truecols & !FALSE %in% std.acc.test & length(truecols) == 8 & le
 
 if (the_true_test ==TRUE){
 
-#importing specification from skatteetaten
-#STD_accounts_check <- xmlParse("General_Ledger_Standard_Accounts_2_character.xml")
-#STD_accounts_check_df <- xmlToDataFrame(nodes = getNodeSet(STD_accounts_check, "//AccountID")) %>%
-#  remove.factors(.)
-
-#skatteetaten_unique <- unique(STD_accounts_check_df$text)
-#vektor2 <- character()
-#adding IDs to vektor 2 if IDs from our data is in the specification by skatteetaten
-#for (i in 1:length(skatteetaten_unique)){
-#  if (vektor1[i] %in% skatteetaten_unique){
-#    vektor2 <- c(vektor2, vektor1[i])
-#  }
-#}
-#making sure IDs from our data is equal to the IDS by skatteetaten
-#Giving error message if its not true
-#for (i in 1:length(vektor1)){
-#  if (vektor2[i] != vektor1[i]){
-#    print("Your SAF-T file is not compatible with this program")
-#  }
-#}
-#IDEA: making sure data is correct by asking user to verify accounts
-
-######## Financial ratios #################
-
-##current ratio
-
-#base "as.integer()" has max value of +/-2*10^9. Base integer convert decimal right e.g "0.0" to 0
-#"as.integer64()" has higher max value, but converts decimal chr to NA's. E.G "0.0" to NA
-#Function to remove decimal from chr and return the "as.integer64" of it to do calcs later on
-#Even on numbers exeeding 2*10^9
-#Fixed problem with rounding!
 charToInt64 <- function(s){
   #' Convert char elements in vector into int64
   #' 
@@ -141,14 +112,10 @@ charToInt64 <- function(s){
   x #return the number
 }
 
-#test
-testvektor <- c("0.0", "0", "10", "20000000000", "0.011", "1.1", "4,5") #last one should be rounded
-charToInt64(testvektor)
+
 docstring(charToInt64)
 ?charToInt64
 
-#finally no bugs with numbers
-#unfinshed code to start working on calculating fincancial numbers
 #Converting chr to integer64 for all balances
 main_df$OpeningDebitBalance <- charToInt64(main_df$OpeningDebitBalance)
 main_df$OpeningCreditBalance <- charToInt64(main_df$OpeningCreditBalance)
@@ -160,19 +127,18 @@ main_df$ClosingCreditBalance <- charToInt64(main_df$ClosingCreditBalance)
 Open_func <- function (std_id){
   #' Output opening balance.
   #' 
-  #' Subsets main_df based on standard account ID for Opening balance for assets. Returns the sum of subset$OpeningDebitBalance minus the sum of subset$OpeningCreditBalance
+  #' Subsets main_df based on standard account ID for Opening balance. Returns the sum of subset$OpeningDebitBalance minus the sum of subset$OpeningCreditBalance
   #'
   #' @param std_id the standard account ID(s) for opening balance for assets
   #' 
   a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
-  #rownames(a) <- NULL #resetting rows
   b <- sum(a$OpeningDebitBalance) - sum(a$OpeningCreditBalance)
   b
 }
 docstring(Open_func)
 
 Sum_Open_func <- function(start, end){
-  #' Sums accounts with account IDs for Opening balance assets.
+  #' Sums accounts with account IDs for Opening balance.
   #' 
   #' A for loop that iterates through accounts from based on ID, from start to end. Adds balance to vector for each iteration. Returns the sum of accounts between from start ID until end ID. 
   #'
@@ -192,12 +158,11 @@ docstring(Sum_Open_func)
 Close_func <- function (std_id){
   #' Output closing balance.
   #' 
-  #' Subsets main_df based on standard account IDs for closing balance for assets. Returns the sum of subset$ClosingDebitBalance minus the sum of subset$ClosingCreditBalance
+  #' Subsets main_df based on standard account IDs for closing balance. Returns the sum of subset$ClosingDebitBalance minus the sum of subset$ClosingCreditBalance
   #'
   #' @param std_id the standard account IDs for closing balance for assets
   #' 
   a <- subset(main_df, main_df$StandardAccountID==std_id) #subsetting standard acc ID
-  #rownames(a) <- NULL #resetting rows
   b <- sum(a$ClosingDebitBalance) - sum(a$ClosingCreditBalance)
   b
 }
@@ -220,7 +185,6 @@ Sum_Close_func <- function(start, end){
 }
 docstring(Sum_Close_func)
 ### FINANCIAL RATIOS ###
-#Remember to always switch - to + in equation since our functions already treats costs(debit) as -
 
 ##Opening balances###
 
@@ -235,11 +199,11 @@ Open_Acid_test <-
   -Sum_Open_func(23,29)
 
 #Gross profit % (Bruttofortjeneste i %)
-Open_GrossProfit_percent <- # + since our function already treats costs as -
+Open_GrossProfit_percent <-
   (-Sum_Open_func(30,37) -Sum_Open_func(40,49))/
   -Sum_Open_func(30,37)
 #Gross profit (Bruttofortjeneste)
-Open_GrossProfit <- # + since our function already treats costs as -
+Open_GrossProfit <- 
   (-Sum_Open_func(30,37) - Sum_Open_func(40,49))
 #Operating margin (Driftsmargin i %)
 Open_Operating_margin <-
@@ -250,16 +214,16 @@ Open_profit_margin1 <-
   (-Sum_Open_func(30,39) - Sum_Open_func(40,79)-Open_func(80))/
   -Sum_Open_func(30,39)
 #Profit margin 2? (Resultatmargin i %)
-Open_profit_margin2 <- #- since here we add tax and special costs to acc 88 to get pretax result
+Open_profit_margin2 <- 
   (-Open_func(88) + Sum_Open_func(83,85))/
   -Sum_Open_func(30,39)
 #Wages / sale income (L?nnskostnader i % av salgsinntekt)
 Open_wages_sale_inc <-
-  Sum_Open_func(50,59)/ # * -1 since costs is negative..
+  Sum_Open_func(50,59)/ 
   -Sum_Open_func(30,37)
 
 #Interest coverage ratio (Rentedekningsgrad)
-Open_interest_ratio <- #- since add costs back to get ordinary profit pretax
+Open_interest_ratio <- 
   (-Open_func(88) + Sum_Open_func(83,86) + Open_func(81))/
   Open_func(81)
 
@@ -303,7 +267,7 @@ Close_profit_margin1 <-
 Close_profit_margin2 <-
   (-Close_func(88) + Sum_Close_func(83,85))/
   -Sum_Close_func(30,39)
-#Wages/sale income (L?nnskostnader i % av salgsinntekt)
+#Wages/sale income (Lnnskostnader i % av salgsinntekt)
 Close_wages_sale_inc <- 
   Sum_Close_func(50,59)/
   -Sum_Close_func(30,37)
@@ -589,41 +553,31 @@ higher_lower = function(open,close){
 
 
 
-#######################trans plot####
+#######################transaction plot##############################
 library(XML)
 library(tidyverse)
 library(taRifx)
 library(bit64)
-#for example 3yrs old
-#choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 
-
-
-#main <- xmlParse(choose_file)
-#main <- xmlParse("saf-t example (3yrs old).xml") #placeholder to skip choosing manually
-#main <- (choose_file)
-
+#making list of the same xml file as in the very start of this code.
 main_list <- 
-  xmlToList(main) #making a list of the xml file
+  xmlToList(main) 
 
-
+#The main purpose for this different extracting of numbers is that in the journal section of the saf-t files
+# there will be duplicate coulmns if doing the xmlToDataframe approach.
+# all transactions is registered doubble (credit and debit), but there might be different records for each transaction.
+# example: one transaction can be registered to as debit to 1 account and credited on 1, 2, 3, 4 etc different accounts
 main_list <- xmlToList(main)
 
-
-#as.data.frame(list[[3]][[4]][[4]])
-
-
-journal <- main_list[[3]][[4]] %>% #extracting the journal information from the list
+journal <- main_list[[3]][[4]] %>% #extracting the journal information from the list (standarized saf-t format and should work across all saf-t files)
   map_df(~as.data.frame(.)) #and making a df with map function
-#test %>%
-# select(Period, test[ ,grepl("Line.Amount", names(test))])
 
 trans_sum <- journal[ ,grepl("Line.Amount", names(journal))] #making new df with all the different records (lines). This is dynamic so doesnt matter if max 7 or 4 records in the journal
 trans_sum <- trans_sum %>%
   map_df(as.numeric) #mapping the columns to numeric instead of chr
 trans_sum[is.na(trans_sum)] <- 0 #and making NAs to 0s
 
-#Now we have all transactions in trans_sum. Here they are recorded 2 times (credit and debit to different account).
+#Now we have all transactions in trans_sum. Here they are recorded 2 times (credit and debit to different accounts).
 #we want only the transcation counted 1 time, so to do this we simply sum the rows and divide by 2.
 trans_sum <- trans_sum %>%
   mutate(Sum = rowSums(.)) %>%
@@ -635,66 +589,17 @@ journal <- cbind(journal, trans_sum$Amounts)
 plot_info <- journal%>%
   select(Description, TransactionID,`trans_sum$Amounts`, TransactionDate)
 
-#mva_test <- mva_test %>%
-# drop_na(Line.TaxInformation.TaxType)
+
 plot_info <- plot_info %>%
   drop_na(TransactionID) #removes first 3 rows of journal, which always will be there(standarized xml structure)
-#mva_test2 <- mva_test$`sum$Amounts` %>%
-#  as.numeric()
-#mva_test2 <- as.data.frame(mva_test2)
-#mva_test2$mva_test22 <- mva_test2$mva_test2
 
-#mva_test %>%
-#  head
-#For colouring purposes?
-#wssplot <- function(data, nc=15, seed=1234){ #function found online!!!
-#  wss <- (nrow(data)-1)*sum(apply(data,2,var))
-#  for (i in 2:nc){
-#    set.seed(seed)
-#    wss[i] <- sum(kmeans(data, centers=i)$withinss)}
-#  plot(1:nc, wss, type="b", xlab="Number of Clusters",
-#       ylab="Within groups sum of squares")
-#  wss
-#}
-
-#wssplot(mva_test2)
-#cluster_amount <- as.numeric(readline(prompt = "How many clusters do you want? "))
-#KM = kmeans(mva_test2, cluster_amount)
-#KM$betweenss
-#KM$centers
-#cluster <- KM$cluster
-#autoplot(KM,mva_test2, frame=TRUE)
-
-#install.packages("ggiraph")
-library(ggiraph)
-#mva_test$cluster <- as.character(KM$cluster)
-#mva_test$Line.Amount.1 <- as.numeric(mva_test$Line.Amount.1)
+#converting coloumns
 plot_info$TransactionID <- as.numeric(plot_info$TransactionID)
-
-#tooltip_ <- c(paste0("Description: ", plot_info$Description,
-#                     "\n Transaction ID: ", plot_info$TransactionID,
-#                     "\n Amount: ", as.integer(plot_info$`trans_sum$Amounts`), " NOK")) #int to remove uneccesary deciamls in plot
-
-#transaction_plot <- ggplot(data = plot_info) +
-#  geom_point_interactive(aes(x = 1:length(`trans_sum$Amounts`), y = `trans_sum$Amounts`,
-#                             tooltip = tooltip_, data_id = TransactionID))+
-#  ylab("Amount")+
-#  xlab("Transcation number")+
-#  ggtitle("Hover over points to view description of the transcation")+
-#  scale_x_continuous(labels = scales::comma)+
-#  scale_y_continuous(labels = scales::comma)
-
-
-#transaction_plot
-#girafe(code = print(testplot))
-#girafe(ggobj = transaction_plot)
 plot_info$TransactionDate <- as.Date(plot_info$TransactionDate)
-plot_info
-#plot_info %>%
-#  subset(.$TransactionDate> as.Date("2017-04-03"))
-nrow(subset(plot_info, plot_info$TransactionDate>= "2017-03-15" & plot_info$TransactionDate <= "2017-03-15"))
+
 
 #error plot
+#An alternative plot which will be outputted when reactive function in shiny subsets the plot_info so its empty
 error_plot_df <- data.frame(matrix(nrow=1,ncol=1))
 
 error_plot <- ggplot (data = error_plot_df)+
@@ -703,20 +608,7 @@ error_plot <- ggplot (data = error_plot_df)+
         axis.title = element_blank(),
         axis.text=element_blank())
 
-
-#check if all transcations are included (53 in this case)
-as.numeric(main_list[[3]][[1]]) == length(plot_info$`trans_sum$Amounts`)
-#check if sum of transcations is right
-sum(plot_info$`trans_sum$Amounts`)== as.numeric(main_list[[3]][[2]])
-as.numeric(main_list[[3]][[3]]) == as.numeric(main_list[[3]][[2]])
-
-#library(anytime)
-
-#plot_info$TransactionDate <- anytime(plot_info$TransactionDate)
-
-#max(plot_info$TransactionDate)
-#length(plot_info$TransactionDate)
-# Order given dataset by StandardAccountID and sum depending on credit/debit
+##########################################################################################
 
 #Sum by StandardAccountID - Debit
 SumBySAIDDebit <- aggregate(main_df$ClosingDebitBalance - main_df$ClosingCreditBalance,
