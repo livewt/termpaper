@@ -4,26 +4,27 @@ library(plotly)
 library(data.table)
 library(DT)
 library(shinyWidgets)
-#Open with encoding UTF-8 to get norwegian letters
 
-# Here, we choose the Telenor file as we run the app
-
+# Source the "Project.R" file with encoding UTF-8 to get norwegian letters.
+# We choose the "SAF-T Telenor 2019 (fictious)" file.
 
 source("Project.R", encoding = "UTF-8")
 
-  
-
 # Create ui
-ui =#Checks if all the error handling measures in project.R is passed
+
+ui = # Check if all the error handling measures in Project.R is passed
   if (the_true_test == TRUE & class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
   dashboardPage(
     skin = "black",
-    dashboardHeader(
+    dashboardHeader( # Create header
       title = "Financial Report",
       titleWidth = 250),
-    dashboardSidebar(
+    dashboardSidebar( # Create sidebar
       width = 250,
-      sidebarMenu(
+      sidebarMenu( # Create items in sidebar
+        menuItem("Start Here",
+                 tabName = "about",
+                 icon = icon("info-circle")),
         menuItem("Dashboard",
                  tabName = "dashboard",
                  icon = icon("dashboard")),
@@ -35,13 +36,10 @@ ui =#Checks if all the error handling measures in project.R is passed
                  icon = icon("cash-register")),
         menuItem("Balance Statement",
                  tabName = "balancestatement",
-                 icon = icon("balance-scale")),
-        menuItem("About",
-                 tabName = "about",
-                 icon = icon("info-circle")))),
+                 icon = icon("balance-scale")))),
 
     
-    dashboardBody(
+    dashboardBody( # Create the page's body
       fluidRow(
         tags$head(
           tags$style(HTML("hr {border-top: 1px solid #000000;}")), # make hr more visible
@@ -50,8 +48,36 @@ ui =#Checks if all the error handling measures in project.R is passed
                width: 90%;
             }"))
         ),
-        tabItems(
-          tabItem(tabName = "dashboard",
+        tabItems( # Add content to the "Start Here" page
+          tabItem(tabName = "about",
+                  h1(div(
+                    "Welcome!",
+                    style = "color:dark-blue",
+                    align = "center")),
+                  box(
+                    status = "primary",
+                    h5("This dashboard is meant for ****. The ","SAF-T Telenor 2019 (fictious)","
+                    file is filled with fictional numbers for the purpose of the dashboard.
+                    The dashboard works best when the window is maximized.
+                    Please refresh the page after resizing the window.")),
+                  box(
+                    status = "primary",
+                    title = "About the SAF-T format",
+                    h5(
+                      "Insert text about SAF-T here")),
+                  box(
+                    title = "Authors",
+                    status = "primary",
+                    h5(
+                      "Herdís Birta Jónsdóttir"),
+                    h5(
+                      "Live Wold Thorsø"),
+                    h5(
+                      "Morten Hønsi Følling"),
+                    h5(
+                      "Sindre Lunner Nyberg"))),
+          
+          tabItem(tabName = "dashboard", # Add content to the "Dashboard" page
                   h1(div("Profitability Ratios",
                          style = "color:dodgerblue",
                          align = "center")),
@@ -220,7 +246,7 @@ ui =#Checks if all the error handling measures in project.R is passed
                  h6(div(
                    "A good quick ratio is considered to be above 1"),
                    align = "center"))),
-          tabItem(tabName = "transactions",
+          tabItem(tabName = "transactions", # Add content to the "Transactions" page
                   box(
                     solidHeader = FALSE,
                     width = 12,
@@ -237,37 +263,23 @@ ui =#Checks if all the error handling measures in project.R is passed
                                       max(plot_info$`trans_sum$Amounts`)))
                   )),
   
-           tabItem(tabName = "balancestatement",
+           tabItem(tabName = "balancestatement", # Add content to the "Balance Statement" page"
               h2(
                  "Balance statement"),
               tabPanel("BalanseEiendeler", DT::dataTableOutput("BalanseEiendeler")),
                 hr(),
               tabPanel("BalanseEKGJ", DT::dataTableOutput("BalanseEKGJ"))),
-           tabItem(tabName = "incomestatement",
+           tabItem(tabName = "incomestatement", # Add content to the "Income Statement" page
               h4(
                 "Income statement"),
-             tabPanel("art.data", DT::dataTableOutput("art.data"))),
-           tabItem(tabName = "about",
-              box(
-                title = "About SAF-T",
-                h4(
-                  "Insert text about SAF-T here")),
-              box(
-                title = "Authors",
-                h4(
-                  "Herdís Birta Jónsdóttir"),
-                h4(
-                  "Live Wold Thorsø"),
-                h4(
-                  "Morten Hønsi Følling"),
-                h4(
-                  "Sindre Lunner Nyberg")))
+             tabPanel("art.data", DT::dataTableOutput("art.data")))
+           
 
       )
     )
   ))
   } else {
-    #If not, then output simple error window
+    #If a file with the wrong format is selected, the output is a simple error window
       fluidPage(
         titlePanel("Error! Incompatible file. Please close the window and try again."))
     
@@ -275,7 +287,7 @@ ui =#Checks if all the error handling measures in project.R is passed
 
 # Create server
 server = 
-  function(input,output){#Checks if all the error handling measures in project.R is passed
+  function(input,output){ # Check if all the error handling measures in Project.R is passed
     if (the_true_test == TRUE & class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){
     output$BalanseEiendeler <- DT::renderDataTable({
       DT::datatable(BalanseEiendeler) %>%
@@ -340,5 +352,3 @@ server =
 
 # Run app
 shinyApp(ui,server)
-
-

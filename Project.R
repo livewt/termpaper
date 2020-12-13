@@ -12,7 +12,7 @@ library(ggiraph)
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 
 the_true_test <- FALSE #placeholder used to error handling
-main <- FALSE # placeholder used for eurror handling
+main <- FALSE # placeholder used for error handling
 try(
 main <- xmlParse(choose_file), silent = T)
 if (class(main)[1] == "XMLInternalDocument" & class(main)[2] == "XMLAbstractDocument"){ #this throws out anything not XML
@@ -25,7 +25,7 @@ namespace <- paste("//", namespace, sep = "", ":Account")
 
 main_df <- xmlToDataFrame(nodes = getNodeSet(main, namespace)) #extracting all the "Account" nodes
 main_df <- main_df %>%
-  replace(is.na(.), 0) #theres not always registered nodes for opening/closing, debit/credit on all account nodes!. Thats also the reason for "warnings" when making DF.
+  replace(is.na(.), 0) #there is not always registered nodes for opening/closing, debit/credit on all account nodes!. Thats also the reason for "warnings" when making DF.
 
 #removing "helping account" if any
 try(
@@ -308,7 +308,7 @@ Return_equity <-
   (-Close_func(88) + Sum_Close_func(83,86))/
   ((-Open_func(20) - Close_func(20))/2)
 
-# Visualizations!
+# Visualizations:
 
 # Return on equity
 
