@@ -1,13 +1,4 @@
-library(XML)
-library(tidyverse)
-library(taRifx)
-library(bit64)
-library(magrittr)
-library(docstring)
-library(devtools)
-library(plotly)
-library(ggplot2)
-library(ggiraph)
+
 #making DF from saf-t xml file
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
 
