@@ -638,8 +638,8 @@ SumByAIDCredit$AccountID <- as.numeric(SumByAIDCredit$AccountID)
                                   'Skattekostnad på ordinært resultat',
                                   'Ekstraordinær inntekt',
                                   'Ekstraordinær kostnad',
-                                  'SKattekostnad på ekstraordinært resultat',
-                                   'Ãrsresultat', 'Overføringer/disponeringer')
+                                  'Skattekostnad på ekstraordinært resultat',
+                                   'Årsresultat', 'Overføringer/disponeringer')
 
 #Calculate numbers for income statement
 SI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=3000 & SumByAIDCredit[,1]<=3970),2]))
@@ -658,8 +658,8 @@ Res <- as.numeric(subset(`SumByAIDCredit`, AccountID == 8800)[,2])
 Disp <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8900 & SumByAIDDebit[,1]<=8990),2]))
 
 #Vector with the calculated numbers from above
-Tall <- c(SI, VK, LK, Avskr, Nedskr, AnnenDK, FI, FK, SKord, EkstraI, EkstraK,
-          SKekstra, Res, Disp)
+Tall <- c(SI, -VK, -LK, -Avskr, -Nedskr, -AnnenDK, FI, -FK, -SKord, EkstraI, -EkstraK,
+          -SKekstra, Res, -Disp)
 
 #Data frame with the vector with names and numbers
 Resultatregnskap <- data.frame(`Resultatregnskap etter art`, Tall, check.names = 'false')
