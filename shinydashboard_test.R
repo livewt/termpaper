@@ -65,13 +65,15 @@ ui =#Checks if all the error handling measures in project.R is passed
                                                       Close_GrossProfit),
                       "it was last year"),
                       align = "center"),
-                    profit_chart),
+                    div(profit_chart,
+                        align = "center")),
                   box(
                     title = "Totalkapitalens rentabilitet",
                     status = "info",
                     solidHeader = TRUE,
                     height = 295,
-                    roa,
+                    div(roa,
+                        align = "center"),
                     h6(div(
                       "A good return on assets is considered to be above 5%"),
                       align = "center")),
@@ -99,7 +101,8 @@ ui =#Checks if all the error handling measures in project.R is passed
                                     Close_GrossProfit_percent),
                        "it was last year"),
                        align = "center"),
-                    gross_percent_chart,
+                    div(gross_percent_chart,
+                        align = "center"),
                     h6(div(
                       "High: 20%, average: 10%, low: 5%"),
                       align = "center")),
@@ -113,7 +116,8 @@ ui =#Checks if all the error handling measures in project.R is passed
                                         Close_Operating_margin),
                            "it was last year"),
                        align = "center"),
-                    operating_chart,
+                    div(operating_chart,
+                        align = "center"),
                     h6(div(
                       "High: 20%, average: 10%, low: 5%"),
                       align = "center")),
@@ -155,13 +159,15 @@ ui =#Checks if all the error handling measures in project.R is passed
                                   Close_wages_sale_inc),
                      "it was at the beginning of the year",
                      align = "center")),
-                   w_to_s_chart),
+                   div(w_to_s_chart,
+                       align = "center")),
                   box(
                     title = "Egenkapitalens rentabilitet",
                     status = "warning",
                     solidHeader = TRUE,
                     height = 295,
-                    roe,
+                    div(roe,
+                        align = "center"),
                     h6(div(
                       "Return on equity is calculated pre-tax"),
                       align = "center")),
@@ -193,7 +199,8 @@ ui =#Checks if all the error handling measures in project.R is passed
                                 Close_Current_ratio),
                                 " it was at the beginning of the year"),
                    align = "center"),
-                 current_chart,
+                 div(current_chart,
+                     align = "center"),
                  h6(div(
                    "A good current ratio is considered to be between 1 and 2"),
                    align = "center")),
@@ -208,7 +215,8 @@ ui =#Checks if all the error handling measures in project.R is passed
                                 Close_Acid_test),
                    "it was at the beginning of the year"),
                    align = "center"),
-                 quick_chart,
+                 div(quick_chart,
+                     align = "center"),
                  h6(div(
                    "A good quick ratio is considered to be above 1"),
                    align = "center"))),
@@ -240,22 +248,28 @@ ui =#Checks if all the error handling measures in project.R is passed
                 "Income statement"),
              tabPanel("art.data", DT::dataTableOutput("art.data"))),
            tabItem(tabName = "about",
-              h4(
-                 "The SAF-Tfile used in this assignment is filled with fictional numbers
-                 for illustration purposes."),
-              h5(
-                 "Authors: Herdís Birta Jónsdóttir,
-                           Live Wold Thorsø,
-                           Morten Hønsi Følling and
-                           Sindre Lunner Nyberg.")))
+              box(
+                title = "About SAF-T",
+                h4(
+                  "Insert text about SAF-T here")),
+              box(
+                title = "Authors",
+                h4(
+                  "Herdís Birta Jónsdóttir"),
+                h4(
+                  "Live Wold Thorsø"),
+                h4(
+                  "Morten Hønsi Følling"),
+                h4(
+                  "Sindre Lunner Nyberg")))
 
       )
     )
-  )
+  ))
   } else {
     #If not, then output simple error window
       fluidPage(
-        titlePanel("Error! Incompatible file"))
+        titlePanel("Error! Incompatible file. Please close the window and try again."))
     
   }
 
