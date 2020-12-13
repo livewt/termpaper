@@ -62,19 +62,22 @@ ui = # Check if all the error handling measures in Project.R is passed
           tabItem(tabName = "about",
                   h1(div(
                     "Welcome!",
-                    style = "color:dark-blue",
+                    style = "color:navy",
                     align = "center")),
                   box(
                     status = "primary",
-                    h5("This dashboard is meant for ****. The ","SAF-T Telenor 2019 (fictious)","
-                    file is filled with fictional numbers for the purpose of the dashboard.
-                    The dashboard works best when the window is maximized.
-                    Please refresh the page after resizing the window.")),
+                    title = "How to use the dashboard",
+                    h5(
+                       "The dashboard works best when the window is maximized.
+                       Please refresh the page after resizing the window.")),
                   box(
                     status = "primary",
                     title = "About the SAF-T format",
                     h5(
-                      "Insert text about SAF-T here")),
+                      "This dashboard is meant for ****. The ",
+                      "SAF-T Telenor 2019 (fictious)","
+                      file is filled with fictional numbers for the
+                      purpose of the dashboard.")),
                   box(
                     title = "Authors",
                     status = "primary",
