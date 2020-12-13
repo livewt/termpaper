@@ -718,35 +718,36 @@ as.numeric(main_list[[3]][[3]]) == as.numeric(main_list[[3]][[2]])
 #length(plot_info$TransactionDate)
 # Order given dataset by StandardAccountID and sum depending on credit/debit
 
-# Sum by SAID - Debit
+#Sum by StandardAccountID - Debit
 SumBySAIDDebit <- aggregate(main_df$ClosingDebitBalance - main_df$ClosingCreditBalance,
                              by=list(StandardAccountID=main_df$StandardAccountID),
                              FUN=sum)
 SumBySAIDDebit$StandardAccountID <- as.numeric(SumBySAIDDebit$StandardAccountID)
 
-# Sum by SAID - Credit
+#Sum by StandardAccountID - Credit
 SumBySAIDCredit <- aggregate(main_df$ClosingCreditBalance - main_df$ClosingDebitBalance,
                        by=list(StandardAccountID=main_df$StandardAccountID),
                        FUN=sum)
 SumBySAIDCredit$StandardAccountID <- as.numeric(SumBySAIDCredit$StandardAccountID) 
 
-# Sum by Account ID - Debit
+#Sum by Account ID - Debit
 SumByAIDDebit <- aggregate(main_df$ClosingDebitBalance - main_df$ClosingCreditBalance,
                       by=list(AccountID=main_df$AccountID),
                       FUN=sum)
 SumByAIDDebit$AccountID <- as.numeric(SumByAIDDebit$AccountID)
 
-# Sum by Account ID - Credit
+#Sum by Account ID - Credit
 SumByAIDCredit <- aggregate(main_df$ClosingCreditBalance - main_df$ClosingDebitBalance,
                            by=list(AccountID=main_df$AccountID),
                            FUN=sum)
 SumByAIDCredit$AccountID <- as.numeric(SumByAIDCredit$AccountID)
 
 
-# --------------------
-# RESULTATREGNSKAP ETTER ART
-# --------------------
+#--------------------
+#RESULTATREGNSKAP ETTER ART
+#--------------------
 
+#Vector with row names for income statement
 `Resultatregnskap etter art` <- c('Salgsinntekt', 'Varekostnad', 'Lønnskostnad',
                                   'Avskrivning', 'Nedskrivning',
                                   'Annen driftskostnad', 'Finansinntekt',
@@ -757,7 +758,7 @@ SumByAIDCredit$AccountID <- as.numeric(SumByAIDCredit$AccountID)
                                   'SKattekostnad på ekstraordinært resultat',
                                    'Ãrsresultat', 'Overføringer/disponeringer')
 
-
+#Calculate numbers for income statement
 SI <- as.numeric(sum(SumByAIDCredit[which(SumByAIDCredit[,1]>=3000 & SumByAIDCredit[,1]<=3970),2]))
 VK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=4000 & SumByAIDDebit[,1]<=4990),2]))
 LK <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=5000 & SumByAIDDebit[,1]<=5930),2]))
@@ -773,11 +774,11 @@ SKekstra <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8600 & SumByAI
 Res <- as.numeric(subset(`SumByAIDCredit`, AccountID == 8800)[,2])
 Disp <- as.numeric(sum(SumByAIDDebit[which(SumByAIDDebit[,1]>=8900 & SumByAIDDebit[,1]<=8990),2]))
 
-
+#Vector with the calculated numbers from above
 Tall <- c(SI, VK, LK, Avskr, Nedskr, AnnenDK, FI, FK, SKord, EkstraI, EkstraK,
           SKekstra, Res, Disp)
 
-
+#Data frame with the vector with names and numbers
 Resultatregnskap <- data.frame(`Resultatregnskap etter art`, Tall, check.names = 'false')
 
 
@@ -785,6 +786,7 @@ Resultatregnskap <- data.frame(`Resultatregnskap etter art`, Tall, check.names =
 # EIENDELER
 # --------------------
 
+#Vector with row names for balance statement assets
 Eiendeler <- c('Immaterielle eiendeler o.l',
                'Tomter, bygninger og annen fast eiendom',
                'Transportmidler, inventar og maskiner o.l.', 
@@ -796,22 +798,26 @@ Eiendeler <- c('Immaterielle eiendeler o.l',
                'Kortsiktige finansinvesteringer', 
                'Bankinnskudd, kontanter og lignende')
 
+#Vector with numbers for balance statement assets
 StandardAccountID <- c(10:19)
 
-`Eiendeler tall` <- 0 # placeholder
+`Eiendeler tall` <- 0 #Placeholder
 
+#Data frame with vectors with row names and numbers
 BalanseEiendeler <- data.frame(Eiendeler, StandardAccountID, 
                                `Eiendeler tall`, check.names = 'false')
 
-# Get sum from SumBySAID and insert into BalanseEiendeler
+#Get sum from SumBySAID and insert into BalanseEiendeler
 setDT(BalanseEiendeler)[SumBySAIDDebit, `Eiendeler tall` := x, on = .(StandardAccountID)]
 
+#Removes StandardAccountID from data frame
 BalanseEiendeler$StandardAccountID <- NULL
 
 # --------------------
 # EGENKAPITAL OG GJELD
 # --------------------
 
+#Vector with row names for balance statement equity and debt
 `Egenkapital og Gjeld` <- c('Egenkapital AS/ASA', 'Avsetning for forpliktelser',
                             'Annen langsiktig gjeld', 
                             'Kortsiktige konvertible lån, obligasjonslån og gjeld til kredittinstitusjoner',
@@ -820,16 +826,19 @@ BalanseEiendeler$StandardAccountID <- NULL
                             'Skyldige offentlige avgifter', 'Utbytte',
                             'Annen kortsiktig gjeld')
 
+#Vector with numbers for balance statement equity and debt
 StandardAccountID <- c(20:29)
 
-`EKGJ tall` <- 0 # placeholder
+`EKGJ tall` <- 0 #Placeholder
 
+#Data fram with vectors row names and numbers
 BalanseEKGJ <- data.frame(`Egenkapital og Gjeld`, StandardAccountID, 
                           `EKGJ tall`, check.names = 'false')
 
-# Get sum from SumBySAID and insert into BalanseEKGJ
+#Get sum from SumBySAID and insert into BalanseEKGJ
 setDT(BalanseEKGJ)[SumBySAIDCredit, `EKGJ tall` := x, on = .(StandardAccountID)]
 
+#Removes StandardAccountID from data frame
 BalanseEKGJ$StandardAccountID <- NULL
 
 }
