@@ -454,9 +454,9 @@ quick_chart =
 
 # Gross profit
 
-profit_when = c("I fjor", "I år")
-profit_value = as.numeric(c(Open_GrossProfit,
-                            Close_GrossProfit))
+profit_when = c("I år", "I fjor")
+profit_value = as.numeric(c(Close_GrossProfit,
+                            Open_GrossProfit))
 profit = 
   data.frame(profit_when,
              profit_value)
