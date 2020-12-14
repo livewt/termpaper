@@ -265,13 +265,13 @@ ui = # Check if all the error handling measures in Project.R is passed
                     width = 12,
                     girafeOutput("trans_plot"),
                     dateRangeInput(inputId = "date",
-                                   label = "Select date",
+                                   label = "Velg datointervall",
                                    start = min(plot_info$TransactionDate),
                                    end = max(plot_info$TransactionDate),
                                    min = min(plot_info$TransactionDate),
                                    max = max(plot_info$TransactionDate)),
                     numericRangeInput(inputId = "monetary",
-                                      label ="Choose transcation amount range",
+                                      label ="Velg beløpintervall",
                                       value = c(min(plot_info$`trans_sum$Amounts`),
                                       max(plot_info$`trans_sum$Amounts`)))
                   )),
@@ -294,7 +294,7 @@ ui = # Check if all the error handling measures in Project.R is passed
   } else {
     #If a file with the wrong format is selected, the output is a simple error window
       fluidPage(
-        titlePanel("Error! Incompatible file. Please close the window and try again."))
+        titlePanel("Error! Filen er ikke kompatibel. Vennligst lukk vinduet og velg en annen fil."))
     
   }
 
@@ -338,18 +338,18 @@ server =
       if (nrow(trans_subset()) >0){#check if the subsetting doesnt remove all rows
       plottt <- ggplot(data = trans_subset()) +
         geom_point_interactive(aes(x = 1:length(`trans_sum$Amounts`), y = `trans_sum$Amounts`,
-                                   tooltip = c(paste0("Description: ", Description,
-                                   "\n Transaction ID: ", TransactionID,
-                                   "\n Amount: ", as.integer(`trans_sum$Amounts`), " NOK")),
+                                   tooltip = c(paste0("Tekst: ", Description,
+                                   "\n Transaksjons ID: ", TransactionID,
+                                   "\n Beløp: ", as.integer(`trans_sum$Amounts`), " NOK")),
                                    data_id = TransactionID))+
-        ylab("Amount")+
+        ylab("Beløp")+
         xlab(" ")+
-        ggtitle("Hover over observations to view description of the transaction")+
+        ggtitle("Beveg musa over observasjonene for å se transaksjonsinfo")+
         (if (nrow(trans_subset())==1){
-          labs(subtitle = paste0("Currently viewing ",nrow(trans_subset())," transaction"))
+          labs(subtitle = paste0("Du ser nå ",nrow(trans_subset())," transaksjon"))
         }
         else {
-            labs(subtitle = paste0("Currently viewing ",nrow(trans_subset())," transactions"))
+            labs(subtitle = paste0("Du ser nå ",nrow(trans_subset())," transaksjoner"))
           })+
         scale_y_continuous(labels = scales::comma)+
         theme(axis.text.x=element_blank())
