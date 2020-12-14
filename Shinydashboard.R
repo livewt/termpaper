@@ -207,7 +207,7 @@ ui = # Check if all the error handling measures in Project.R is passed
                  width = 3,
                  color = "orange"),
                
-               h1(div("Likviditetsnøkkeltall",
+               h1(div("Likviditet",
                       style = "color:green",
                       align = "center")),
                box(
