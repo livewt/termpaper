@@ -16,7 +16,7 @@ library(DT)
 library(shinyWidgets)
 
 # Source the "Project.R" file with encoding UTF-8 to get norwegian letters.
-# We choose the "SAF-T Telenor 2019 (fictious)" file.
+# We choose the "SAF-T fictitious company.xml" file.
 
 source("Project.R", encoding = "UTF-8")
 
@@ -68,16 +68,16 @@ ui = # Check if all the error handling measures in Project.R is passed
                     status = "primary",
                     title = "How to use the dashboard",
                     h5(
-                       "The dashboard works best when the window is maximized.
-                       Please refresh the page after resizing the window.")),
+                       "Dashboardet fungerer best med maksimert vindu.
+                       Dersom man forandrer størrelse på vinduet, kan det være lurt å trykke på oppdater")),
                   box(
                     status = "primary",
                     title = "About the SAF-T format",
                     h5(
-                      "This dashboard is meant for ****. The ",
-                      "SAF-T Telenor 2019 (fictious)","
-                      file is filled with fictional numbers for the
-                      purpose of the dashboard.")),
+                      "Dashboardet er ment for analyse av SAF-T regnskap. SAF-T Regnskap (Financial)
+                      er et standardformat for utveksling av regnskapsdata. 
+                      SAF-T, eller Standard Audit File-Tax, er utviklet i fellesskap av bransjeorganisasjoner,
+                      systemleverandører og Skatteetaten, etter anbefaling fra OECD.")),
                   box(
                     title = "Authors",
                     status = "primary",
