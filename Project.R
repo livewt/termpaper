@@ -15,8 +15,9 @@ library(data.table)
 library(DT)
 library(shinyWidgets)
 
-#making DF from saf-t xml file
-choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
+
+#select your saf-t file (here: SAF-T fictitious company.xml)
+choose_file <- file.choose()
 
 the_true_test <- FALSE #placeholder used to error handling
 main <- FALSE # placeholder used for error handling
@@ -562,10 +563,6 @@ higher_lower = function(open,close){
 
 
 #######################transaction plot##############################
-library(XML)
-library(tidyverse)
-library(taRifx)
-library(bit64)
 
 #making list of the same xml file as in the very start of this code.
 main_list <- 
