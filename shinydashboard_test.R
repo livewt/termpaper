@@ -1,19 +1,3 @@
-library(XML)
-library(tidyverse)
-library(taRifx)
-library(bit64)
-library(magrittr)
-library(docstring)
-library(devtools)
-library(plotly)
-library(ggplot2)
-library(ggiraph)
-library(shiny)
-library(shinydashboard)
-library(plotly)
-library(data.table)
-library(DT)
-library(shinyWidgets)
 
 # Source the "Project.R" file with encoding UTF-8 to get norwegian letters.
 # We choose the "SAF-T fictitious company.xml" file.
@@ -27,24 +11,24 @@ ui = # Check if all the error handling measures in Project.R is passed
   dashboardPage(
     skin = "black",
     dashboardHeader( # Create header
-      title = "Financial Report",
+      title = "SAF-T Analyseprogram",
       titleWidth = 250),
     dashboardSidebar( # Create sidebar
       width = 250,
       sidebarMenu( # Create items in sidebar
-        menuItem("Start Here",
+        menuItem("Startside",
                  tabName = "about",
                  icon = icon("info-circle")),
         menuItem("Dashboard",
                  tabName = "dashboard",
                  icon = icon("dashboard")),
-        menuItem("Transactions",
+        menuItem("Transaksjoner",
                  tabName = "transactions",
                  icon = icon("people-arrows")),
-        menuItem("Income Statement",
+        menuItem("Resultatregnskap",
                  tabName = "incomestatement",
                  icon = icon("cash-register")),
-        menuItem("Balance Statement",
+        menuItem("Balanseoppstilling",
                  tabName = "balancestatement",
                  icon = icon("balance-scale")))),
 
@@ -61,26 +45,24 @@ ui = # Check if all the error handling measures in Project.R is passed
         tabItems( # Add content to the "Start Here" page
           tabItem(tabName = "about",
                   h1(div(
-                    "Welcome!",
+                    "Velkommen!",
                     style = "color:navy",
                     align = "center")),
                   box(
-                    status = "primary",
-                    title = "How to use the dashboard",
+                    background = "navy",
+                    title = "Hvordan bruke SAF-T dashboardet",
                     h5(
+                        "Dashboardet er ment for analyse av SAF-T regnskap. SAF-T Regnskap (Financial)
+                        er et standardformat for utveksling av regnskapsdata. 
+                        SAF-T, eller Standard Audit File-Tax, er utviklet i fellesskap av bransjeorganisasjoner,
+                        systemleverandører og Skatteetaten, etter anbefaling fra OECD."),
+                      h5(
                        "Dashboardet fungerer best med maksimert vindu.
-                       Dersom man forandrer størrelse på vinduet, kan det være lurt å trykke på oppdater")),
+                       Dersom man forandrer størrelse på vinduet, kan det være lurt å trykke på oppdater.")),
                   box(
-                    status = "primary",
-                    title = "About the SAF-T format",
-                    h5(
-                      "Dashboardet er ment for analyse av SAF-T regnskap. SAF-T Regnskap (Financial)
-                      er et standardformat for utveksling av regnskapsdata. 
-                      SAF-T, eller Standard Audit File-Tax, er utviklet i fellesskap av bransjeorganisasjoner,
-                      systemleverandører og Skatteetaten, etter anbefaling fra OECD.")),
-                  box(
-                    title = "Authors",
-                    status = "primary",
+                    title = "Studenter",
+                    background = "navy",
+                    height = 210,
                     h5(
                       "Herdís Birta Jónsdóttir"),
                     h5(
@@ -143,7 +125,7 @@ ui = # Check if all the error handling measures in Project.R is passed
                     div(gross_percent_chart,
                         align = "center"),
                     h6(div(
-                      "High: 20%, average: 10%, low: 5%"),
+                      "Høy: 20%, Gjennomsnitt: 10%, Lav: 5%"),
                       align = "center")),
                   box(
                     title = "Driftsmargin",
@@ -191,7 +173,7 @@ ui = # Check if all the error handling measures in Project.R is passed
                    title = "Lønnskostnader i % av salgsinntekt",
                    status = "warning",
                    solidHeader = TRUE,
-                   height = 417,
+                   height = 438,
                    h5(div(
                      "Lønnskostnader i % av salgsinntekt er",
                      higher_lower(Open_wages_sale_inc,
@@ -277,14 +259,14 @@ ui = # Check if all the error handling measures in Project.R is passed
                   )),
   
            tabItem(tabName = "balancestatement", # Add content to the "Balance Statement" page"
-              h2(
-                 "Balance statement"),
+              h1(
+                 "Balanseoppstilling"),
               tabPanel("BalanseEiendeler", DT::dataTableOutput("BalanseEiendeler")),
                 hr(),
               tabPanel("BalanseEKGJ", DT::dataTableOutput("BalanseEKGJ"))),
            tabItem(tabName = "incomestatement", # Add content to the "Income Statement" page
-              h4(
-                "Income statement"),
+              h1(
+                "Resultatregnskap"),
              tabPanel("art.data", DT::dataTableOutput("art.data")))
            
 

@@ -1,3 +1,19 @@
+library(XML)
+library(tidyverse)
+library(taRifx)
+library(bit64)
+library(magrittr)
+library(docstring)
+library(devtools)
+library(plotly)
+library(ggplot2)
+library(ggiraph)
+library(shiny)
+library(shinydashboard)
+library(plotly)
+library(data.table)
+library(DT)
+library(shinyWidgets)
 
 #making DF from saf-t xml file
 choose_file <- choose.files(caption ="Select your SAF-T file (xml format)")
@@ -16,7 +32,9 @@ namespace <- paste("//", namespace, sep = "", ":Account")
 
 main_df <- xmlToDataFrame(nodes = getNodeSet(main, namespace)) #extracting all the "Account" nodes
 main_df <- main_df %>%
-  replace(is.na(.), 0) #there is not always registered nodes for opening/closing, debit/credit on all account nodes!. Thats also the reason for "warnings" when making DF.
+  replace(is.na(.), 0)
+
+#there is not always registered nodes for opening/closing, debit/credit on all account nodes!. Thats also the reason for "warnings" when making DF.
 
 #removing "helping account" if any
 try(
@@ -105,7 +123,6 @@ charToInt64 <- function(s){
 
 
 docstring(charToInt64)
-?charToInt64
 
 #Converting chr to integer64 for all balances
 main_df$OpeningDebitBalance <- charToInt64(main_df$OpeningDebitBalance)
@@ -350,7 +367,7 @@ roa =
 
 # Wages to sales ratio
 
-wtos_when = c("Beginning of Year", "End of Year")
+wtos_when = c("Begynnelsen av året", "Slutten av året")
 wtos_value = c(Open_wages_sale_inc*100,
                Close_wages_sale_inc*100)
 w_to_s = 
@@ -363,7 +380,7 @@ w_to_s$wtos_value = round(w_to_s$wtos_value,
 
 w_to_s_chart = 
   plot_ly(w_to_s,
-          x = c("Beginning of Year","End of Year"),
+          x = wtos_when,
           y = wtos_value,
           type = "bar",
           marker = list(color = 
@@ -437,7 +454,7 @@ quick_chart =
 
 # Gross profit
 
-profit_when = c("Last Year", "This Year")
+profit_when = c("I fjor", "I år")
 profit_value = as.numeric(c(Open_GrossProfit,
                             Close_GrossProfit))
 profit = 
@@ -446,7 +463,7 @@ profit =
 
 profit_chart = 
   plot_ly(profit,
-          x = c("Last Year", "This Year"),
+          x = profit_when,
           y = profit_value,
           type = "bar",
           marker = list(color = 
@@ -726,3 +743,4 @@ BalanseEKGJ$StandardAccountID <- NULL
 
 }
 }
+
