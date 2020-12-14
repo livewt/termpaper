@@ -531,13 +531,13 @@ gross_percent_chart =
 higher_lower = function(open,close){
   for(i in 1:length(c(open,close))){
     if(open - close > 0){
-      solution = c("lower than")
+      solution = c("lavere enn")
       break}
     if(close - open > 0){
-      solution = c("higher than")
+      solution = c("høyere enn")
       break}
     else
-      solution = ("equal to what")
+      solution = ("lik det")
       }
   solution
 }
