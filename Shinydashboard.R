@@ -73,7 +73,7 @@ ui = # Check if all the error handling measures in Project.R is passed
                       "Sindre Lunner Nyberg"))),
           
           tabItem(tabName = "dashboard", # Add content to the "Dashboard" page
-                  h1(div("Profitability Ratios",
+                  h1(div("Lønnsomhet",
                          style = "color:dodgerblue",
                          align = "center")),
                   box(
@@ -142,7 +142,7 @@ ui = # Check if all the error handling measures in Project.R is passed
                     h6(div(
                       "Høy: 20%, Gjennomsnitt: 10%, Lav: 5%"),
                       align = "center")),
-                  h1(div("Leverage Ratios",
+                  h1(div("Gearing",
                          style = "color:darkred",
                          align = "center")),
                   valueBox(
@@ -166,7 +166,7 @@ ui = # Check if all the error handling measures in Project.R is passed
                     icon = icon("chart-line"),
                     width = 4,
                     color = "red"),
-                  h1(div("Efficiency Ratios",
+                  h1(div("Effektivitet",
                          style = "color:darkorange",
                          align = "center")),
                   box(
