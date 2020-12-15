@@ -320,13 +320,13 @@ server =
       if (nrow(trans_subset()) >0){#check if the subsetting doesnt remove all rows
       plottt <- ggplot(data = trans_subset()) +
         geom_point_interactive(aes(x = 1:length(`trans_sum$Amounts`), y = `trans_sum$Amounts`,
-                                   tooltip = c(paste0("Tekst: ", Description,
-                                   "\n Transaksjons ID: ", TransactionID,
+                                   tooltip = c(paste0("Beskrivelse: ", Description,
+                                   "\n Transaksjons-ID: ", TransactionID,
                                    "\n Beløp: ", as.integer(`trans_sum$Amounts`), " NOK")),
                                    data_id = TransactionID))+
         ylab("Beløp")+
         xlab(" ")+
-        ggtitle("Beveg musa over observasjonene for å se transaksjonsinfo")+
+        ggtitle("Beveg musa over transaksjonene for mer info")+
         (if (nrow(trans_subset())==1){
           labs(subtitle = paste0("Du ser nå ",nrow(trans_subset())," transaksjon"))
         }
